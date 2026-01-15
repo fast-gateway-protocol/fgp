@@ -1,0 +1,25 @@
+[package]
+name = "fgp-keychain"
+version = "1.0.0"
+edition = "2021"
+description = "FGP Keychain daemon - fast access to macOS Keychain"
+license = "MIT"
+repository = "https://github.com/fast-gateway-protocol/fgp"
+
+[[bin]]
+name = "fgp-keychain"
+path = "src/main.rs"
+
+[[bin]]
+name = "fgp-keychain-daemon"
+path = "src/bin/fgp-keychain-daemon.rs"
+
+[dependencies]
+fgp-daemon = { path = "../daemon" }
+security-framework = "3.0"
+anyhow = "1.0"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
