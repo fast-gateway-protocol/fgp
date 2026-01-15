@@ -8,7 +8,7 @@ FGP integrates with AI coding assistants and IDEs to provide fast tool access.
 |----------|--------|-------|
 | [Claude Code](./claude-code.md) | Full support | MCP bridge + skills |
 | [Cursor](./cursor.md) | Full support | MCP bridge |
-| Windsurf | Coming soon | MCP bridge |
+| [Windsurf](./windsurf.md) | Full support | Rules + shell |
 | VS Code | Planned | Extension |
 
 ## How It Works

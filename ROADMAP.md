@@ -2,6 +2,30 @@
 
 This document outlines the planned development direction for the Fast Gateway Protocol project.
 
+## Repositories
+
+Core:
+- [daemon](https://github.com/fast-gateway-protocol/daemon)
+- [daemon-py](https://github.com/fast-gateway-protocol/daemon-py)
+- [protocol](https://github.com/fast-gateway-protocol/protocol)
+- [cli](https://github.com/fast-gateway-protocol/cli)
+
+Daemons:
+- [browser](https://github.com/fast-gateway-protocol/browser)
+- [gmail](https://github.com/fast-gateway-protocol/gmail)
+- [calendar](https://github.com/fast-gateway-protocol/calendar)
+- [github](https://github.com/fast-gateway-protocol/github)
+- [imessage](https://github.com/fast-gateway-protocol/imessage)
+- [fly](https://github.com/fast-gateway-protocol/fly)
+- [neon](https://github.com/fast-gateway-protocol/neon)
+- [vercel](https://github.com/fast-gateway-protocol/vercel)
+- [slack](https://github.com/fast-gateway-protocol/slack)
+
+Tooling:
+- [dashboard](https://github.com/fast-gateway-protocol/dashboard)
+- [workflow](https://github.com/fast-gateway-protocol/workflow)
+- [homebrew-fgp](https://github.com/fast-gateway-protocol/homebrew-fgp)
+
 ## Vision
 
 Make FGP the standard protocol for AI agent tool integrations - replacing slow stdio-based approaches with persistent, low-latency daemons.
@@ -13,6 +37,7 @@ Make FGP the standard protocol for AI agent tool integrations - replacing slow s
 ### Stable
 - Core daemon SDK (Rust)
 - Browser Gateway (Chrome DevTools Protocol)
+- iMessage daemon (macOS)
 - NDJSON-over-UNIX-socket protocol
 
 ### Beta
@@ -22,42 +47,47 @@ Make FGP the standard protocol for AI agent tool integrations - replacing slow s
 
 ### Alpha
 - Fly.io, Neon, Vercel daemons
+- Slack daemon
 - CLI (`fgp` command)
+- Workflow composition library (`fgp-workflow`)
+- Dashboard UI (`fgp-dashboard`)
 
 ---
 
 ## Near-Term Priorities
 
 ### Documentation & Developer Experience
-- [ ] Hosted documentation site (MkDocs on GitHub Pages)
-- [ ] Protocol reference documentation
-- [ ] Deployment guide (systemd, Docker, launchd)
-- [ ] Troubleshooting guide
+- [x] Hosted documentation site (MkDocs on GitHub Pages)
+- [x] Protocol reference documentation
+- [x] Deployment guide (systemd, Docker, launchd)
+- [ ] Troubleshooting guide (dedicated doc)
 
 ### Distribution
-- [ ] Pre-built binary releases (GitHub Releases)
-- [ ] One-line installer (`curl | sh`)
+- [x] Pre-built binary releases (GitHub Releases)
+- [x] One-line installer (`curl | sh`)
 - [ ] Docker images for each daemon
-- [ ] Homebrew formula
+- [x] Homebrew formula (tap repo)
 
 ### Ecosystem
-- [ ] Integration examples for Claude Code, Cursor, Windsurf
+- [x] Integration examples for Claude Code
+- [x] Integration examples for Cursor
+- [x] Integration examples for Windsurf
 - [ ] Migration guide from MCP stdio servers
-- [ ] Plugin/extension system for custom daemons
+- [ ] Plugin/extension system for custom daemons (scaffolding + manifest install exist)
 
 ---
 
 ## Medium-Term Goals
 
 ### New Daemons
-- [ ] Slack daemon
+- [x] Slack daemon
 - [ ] Linear daemon
 - [ ] Notion daemon
 - [ ] Postgres daemon (direct, not via Neon)
 
 ### Performance & Reliability
 - [ ] Connection pooling
-- [ ] Health monitoring dashboard
+- [x] Health monitoring dashboard
 - [ ] Automatic daemon restart on failure
 - [ ] Metrics/telemetry (opt-in)
 
@@ -71,7 +101,7 @@ Make FGP the standard protocol for AI agent tool integrations - replacing slow s
 ## Long-Term Vision
 
 ### Protocol Evolution
-- Multi-daemon orchestration
+- Multi-daemon orchestration (workflow library exists; protocol support TBD)
 - Streaming responses for long-running operations
 - Cross-machine daemon communication (TCP option)
 
