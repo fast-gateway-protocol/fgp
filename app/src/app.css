@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Custom styles for menu bar popover */
+:root {
+  --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-system);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Popover container */
+.popover-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .popover-container {
+    background-color: rgba(17, 24, 39, 0.8);
+  }
+}
+
+/* Status indicator pulse animation */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Toggle switch styles */
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  height: 20px;
+  width: 36px;
+  align-items: center;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.toggle-switch:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.toggle-switch.enabled {
+  background-color: #22c55e;
+}
+
+.toggle-switch.disabled {
+  background-color: #d1d5db;
+}
+
+@media (prefers-color-scheme: dark) {
+  .toggle-switch.disabled {
+    background-color: #4b5563;
+  }
+}
+
+.toggle-switch-knob {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  transform: translateX(2px);
+  border-radius: 9999px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+.toggle-switch.enabled .toggle-switch-knob {
+  transform: translateX(18px);
+}
