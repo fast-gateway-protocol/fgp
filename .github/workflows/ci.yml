@@ -11,7 +11,7 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
-  # Lint and format check
+  # Lint and format check for Rust crates
   lint:
     name: Lint
     runs-on: macos-latest
@@ -23,24 +23,21 @@ jobs:
         with:
           components: clippy, rustfmt
 
-      - name: Check formatting (daemon)
-        run: cargo fmt --check --manifest-path daemon/Cargo.toml
+      - name: Check formatting (travel)
+        run: cargo fmt --check --manifest-path travel/Cargo.toml
 
-      - name: Check formatting (browser)
-        run: cargo fmt --check --manifest-path browser/Cargo.toml
+      - name: Check formatting (app)
+        run: cargo fmt --check --manifest-path app/src-tauri/Cargo.toml
 
-      - name: Check formatting (cli)
-        run: cargo fmt --check --manifest-path cli/Cargo.toml
+      - name: Clippy (travel)
+        run: cargo clippy --manifest-path travel/Cargo.toml -- -D warnings
 
-      - name: Clippy (daemon)
-        run: cargo clippy --manifest-path daemon/Cargo.toml -- -D warnings
+      - name: Clippy (app)
+        run: cargo clippy --manifest-path app/src-tauri/Cargo.toml -- -D warnings
 
-      - name: Clippy (browser)
-        run: cargo clippy --manifest-path browser/Cargo.toml -- -D warnings
-
-  # Build and test core SDK
-  daemon-sdk:
-    name: Daemon SDK
+  # Build and test travel daemon
+  travel-daemon:
+    name: Travel Daemon
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,28 +51,34 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            daemon/target
-          key: ${{ runner.os }}-cargo-daemon-${{ hashFiles('daemon/Cargo.lock') }}
+            travel/target
+          key: ${{ runner.os }}-cargo-travel-${{ hashFiles('travel/Cargo.lock') }}
 
-      - name: Build daemon SDK
-        run: cargo build --manifest-path daemon/Cargo.toml --release
+      - name: Build travel daemon
+        run: cargo build --manifest-path travel/Cargo.toml --release
 
-      - name: Test daemon SDK
-        run: cargo test --manifest-path daemon/Cargo.toml
+      - name: Test travel daemon
+        run: cargo test --manifest-path travel/Cargo.toml
 
-      - name: Build with async-client feature
-        run: cargo build --manifest-path daemon/Cargo.toml --features async-client
-
-  # Build browser daemon
-  browser-daemon:
-    name: Browser Daemon
+  # Build Tauri app
+  tauri-app:
+    name: Tauri App
     runs-on: macos-latest
-    needs: daemon-sdk
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Cache cargo registry
         uses: actions/cache@v4
@@ -83,68 +86,11 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            browser/target
-          key: ${{ runner.os }}-cargo-browser-${{ hashFiles('browser/Cargo.lock') }}
+            app/src-tauri/target
+          key: ${{ runner.os }}-cargo-tauri-${{ hashFiles('app/src-tauri/Cargo.lock') }}
 
-      - name: Build browser daemon
-        run: cargo build --manifest-path browser/Cargo.toml --release
+      - name: Install frontend dependencies
+        run: cd app && pnpm install
 
-      - name: Test browser daemon
-        run: cargo test --manifest-path browser/Cargo.toml
-
-  # Build service daemons
-  service-daemons:
-    name: Service Daemons
-    runs-on: macos-latest
-    needs: daemon-sdk
-    strategy:
-      fail-fast: false
-      matrix:
-        daemon: [gmail, calendar, github, fly, neon, vercel]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache cargo registry
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ${{ matrix.daemon }}/target
-          key: ${{ runner.os }}-cargo-${{ matrix.daemon }}-${{ hashFiles(format('{0}/Cargo.lock', matrix.daemon)) }}
-
-      - name: Build ${{ matrix.daemon }} daemon
-        run: cargo build --manifest-path ${{ matrix.daemon }}/Cargo.toml --release
-
-      - name: Test ${{ matrix.daemon }} daemon
-        run: cargo test --manifest-path ${{ matrix.daemon }}/Cargo.toml
-
-  # Build CLI
-  cli:
-    name: CLI Tool
-    runs-on: macos-latest
-    needs: daemon-sdk
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache cargo registry
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            cli/target
-          key: ${{ runner.os }}-cargo-cli-${{ hashFiles('cli/Cargo.lock') }}
-
-      - name: Build CLI
-        run: cargo build --manifest-path cli/Cargo.toml --release
-
-      - name: Test CLI
-        run: cargo test --manifest-path cli/Cargo.toml
-
+      - name: Build Tauri app (check only)
+        run: cargo check --manifest-path app/src-tauri/Cargo.toml
