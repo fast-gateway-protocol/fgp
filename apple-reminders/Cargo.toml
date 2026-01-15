@@ -1,0 +1,49 @@
+[package]
+name = "fgp-apple-reminders"
+version = "1.0.0"
+edition = "2021"
+description = "FGP Apple Reminders daemon - fast access via EventKit"
+license = "MIT"
+repository = "https://github.com/fast-gateway-protocol/fgp"
+
+[[bin]]
+name = "fgp-apple-reminders"
+path = "src/main.rs"
+
+[[bin]]
+name = "fgp-apple-reminders-daemon"
+path = "src/bin/fgp-apple-reminders-daemon.rs"
+
+[dependencies]
+fgp-daemon = { path = "../daemon" }
+anyhow = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# EventKit bindings
+objc2 = "0.6"
+block2 = "0.6"
+objc2-foundation = { version = "0.3", features = [
+    "NSArray",
+    "NSString",
+    "NSDate",
+    "NSCalendar",
+    "NSPredicate",
+    "NSError",
+    "block2",
+] }
+objc2-event-kit = { version = "0.3", features = [
+    "EKEventStore",
+    "EKCalendar",
+    "EKReminder",
+    "EKCalendarItem",
+    "EKObject",
+    "EKSource",
+    "EKAlarm",
+    "EKRecurrenceRule",
+    "EKRecurrenceEnd",
+] }
