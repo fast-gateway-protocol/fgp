@@ -1,0 +1,109 @@
+---
+description: Fast flight and hotel search via FGP daemon with token-optimized methods
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Travel FGP Integration
+
+Use `fgp call travel.*` commands for fast flight and hotel search via persistent daemon.
+
+## Available Methods
+
+### Standard Methods
+
+| Method | Description |
+|--------|-------------|
+| `travel.find_location` | Search airports/cities (instant, local DB) |
+| `travel.search_flights` | One-way flight search |
+| `travel.search_roundtrip` | Round-trip flight search |
+| `travel.search_hotels` | Hotel search by city |
+| `travel.hotel_rates` | Real-time hotel rates |
+
+### Efficiency Methods (Use These First!)
+
+| Method | Description | Token Savings |
+|--------|-------------|---------------|
+| `travel.price_check` | Ultra-light price check | **10x** |
+| `travel.search_cheapest_day` | Find cheapest day | **30x** |
+| `travel.search_cheapest_route` | Find cheapest destination | **5x** |
+| `travel.search_flexible_dates` | Search ±N days | **7x** |
+| `travel.search_direct_only` | Non-stop flights | **2-3x** |
+| `travel.batch_search` | Multiple searches | Reduced overhead |
+
+## Commands
+
+### Price Check (Recommended for simple price queries)
+```bash
+fgp call travel.price_check -p '{"origin": "SFO", "destination": "LAX", "date": "2026-02-15"}'
+```
+Returns: `{"price": 83.0, "stops": 0}` (~55 tokens)
+
+### Find Location
+```bash
+fgp call travel.find_location -p '{"term": "Berlin", "limit": 5}'
+```
+
+### Search Flights
+```bash
+fgp call travel.search_flights -p '{"origin": "SFO", "destination": "BER", "departure_from": "2026-02-15", "limit": 5}'
+```
+
+### Search Cheapest Day
+```bash
+fgp call travel.search_cheapest_day -p '{"origin": "SFO", "destination": "BER", "date_from": "2026-02-01", "date_to": "2026-02-28"}'
+```
+Returns cheapest day in range with full price calendar.
+
+### Search Cheapest Route
+```bash
+fgp call travel.search_cheapest_route -p '{"origin": "SFO", "destinations": ["LAX", "SEA", "DEN", "PHX"], "date": "2026-02-15"}'
+```
+Compares multiple destinations in parallel.
+
+### Flexible Dates
+```bash
+fgp call travel.search_flexible_dates -p '{"origin": "SFO", "destination": "BER", "date": "2026-02-15", "flexibility": 3}'
+```
+Searches ±3 days around target date.
+
+### Direct Flights Only
+```bash
+fgp call travel.search_direct_only -p '{"origin": "SFO", "destination": "LAX", "date": "2026-02-15"}'
+```
+
+### Batch Search
+```bash
+fgp call travel.batch_search -p '{"searches": [{"origin": "SFO", "destination": "LAX", "date": "2026-02-15"}, {"origin": "SFO", "destination": "SEA", "date": "2026-02-15"}]}'
+```
+
+### Hotel Search
+```bash
+fgp call travel.search_hotels -p '{"location": "Berlin", "limit": 5}'
+```
+
+### Hotel Rates
+```bash
+fgp call travel.hotel_rates -p '{"hotel_key": "abc123", "checkin": "2026-02-15", "checkout": "2026-02-18"}'
+```
+
+## Method Selection Guide
+
+| User Request | Best Method |
+|--------------|-------------|
+| "What's the price to X?" | `price_check` |
+| "Which day is cheapest?" | `search_cheapest_day` |
+| "Where can I fly cheap?" | `search_cheapest_route` |
+| "Flexible on dates" | `search_flexible_dates` |
+| "Non-stop only" | `search_direct_only` |
+| "Show flight details" | `search_flights` |
+
+## Setup
+
+1. Build daemon: `cd travel && cargo build --release`
+2. Start daemon: `./target/release/fgp-travel start`
+3. Test: `fgp call travel.find_location -p '{"term": "SFO"}'`
+
+## Response Format
+
+All commands return JSON. Efficiency methods return minimal responses to save tokens.

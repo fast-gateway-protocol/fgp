@@ -83,6 +83,14 @@
     "claude-code": {
       "source": "./skills/claude-code/",
       "target": "~/.claude/skills/travel-fgp/"
+    },
+    "windsurf": {
+      "source": "./skills/windsurf/",
+      "target": "~/.windsurf/rules/travel.md"
+    },
+    "cursor": {
+      "source": "./skills/cursor/",
+      "target": "~/.cursor/rules/travel.mdc"
     }
   },
   "auth": {
