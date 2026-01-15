@@ -1,0 +1,89 @@
+{
+  "name": "travel",
+  "version": "1.0.0",
+  "description": "FGP daemon for flight and hotel search via Kiwi/Skypicker and Xotelo APIs",
+  "protocol": "fgp@1",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-travel",
+    "socket": "travel/daemon.sock"
+  },
+  "methods": [
+    {
+      "name": "travel.find_location",
+      "description": "Search airports/cities by name (instant, local DB)"
+    },
+    {
+      "name": "travel.search_flights",
+      "description": "One-way flight search"
+    },
+    {
+      "name": "travel.search_roundtrip",
+      "description": "Round-trip flight search"
+    },
+    {
+      "name": "travel.search_hotels",
+      "description": "Hotel search by city"
+    },
+    {
+      "name": "travel.hotel_rates",
+      "description": "Real-time hotel rates for specific hotel"
+    },
+    {
+      "name": "travel.price_check",
+      "description": "Ultra-light price check (~55 tokens, 10x more efficient)"
+    },
+    {
+      "name": "travel.search_cheapest_day",
+      "description": "Find cheapest day in date range (parallel search)"
+    },
+    {
+      "name": "travel.search_cheapest_route",
+      "description": "Find cheapest destination from multiple options"
+    },
+    {
+      "name": "travel.search_flexible_dates",
+      "description": "Search +/-N days around target date"
+    },
+    {
+      "name": "travel.search_direct_only",
+      "description": "Non-stop flights only"
+    },
+    {
+      "name": "travel.batch_search",
+      "description": "Multiple searches in one call"
+    },
+    {
+      "name": "travel.cache_stats",
+      "description": "Cache hit/miss statistics"
+    },
+    {
+      "name": "travel.cache_clear",
+      "description": "Clear response cache"
+    }
+  ],
+  "data": {
+    "locations": {
+      "entries": 7988,
+      "description": "Airports and cities for instant lookup"
+    },
+    "hotel_locations": {
+      "entries": 224,
+      "description": "TripAdvisor city codes"
+    },
+    "airlines": {
+      "entries": 1094,
+      "description": "IATA airline codes"
+    },
+    "countries": {
+      "entries": 249,
+      "description": "ISO 3166 country codes"
+    }
+  },
+  "auth": {
+    "type": "none",
+    "note": "Uses public Kiwi/Skypicker and Xotelo APIs"
+  },
+  "platforms": ["darwin", "linux", "windows"],
+  "repository": "https://github.com/fast-gateway-protocol/travel",
+  "license": "MIT"
+}

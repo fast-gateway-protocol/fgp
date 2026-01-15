@@ -9,6 +9,8 @@
 
 FGP replaces slow MCP stdio servers with persistent UNIX socket daemons. Instead of spawning a new process for each tool call (~2.3s overhead), FGP keeps daemons warm and ready (~10-50ms latency).
 
+This repo is the umbrella docs/meta repo. Service implementations and tools live in separate repositories under the Fast Gateway Protocol org.
+
 ## Performance
 
 <p align="center">
@@ -86,6 +88,8 @@ Fast iMessage operations via direct SQLite queries to `chat.db`:
 
 **Key insight:** Latency is dominated by external API calls, not FGP overhead (~5-10ms). Local daemons (iMessage, Browser) are fastest. For MCP, add ~2.3s cold-start to every call.
 
+Additional alpha daemons (Fly, Neon, Vercel, Slack) are available; see the Status section for current performance ranges.
+
 ## Why FGP?
 
 LLM agents make many sequential tool calls. Cold-start overhead compounds:
@@ -104,18 +108,18 @@ LLM agents make many sequential tool calls. Cold-start overhead compounds:
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                       AI Agent / Claude                          │
-├─────────────────────────────────────────────────────────────────┤
-│                      FGP UNIX Sockets                            │
-│   ~/.fgp/services/{browser,gmail,calendar,github,imessage}/     │
-├──────────┬──────────┬──────────┬──────────┬──────────┬─────────┤
-│ Browser  │  Gmail   │ Calendar │  GitHub  │ iMessage │   ...   │
-│ Daemon   │  Daemon  │  Daemon  │  Daemon  │  Daemon  │         │
-│ (Rust)   │  (PyO3)  │  (PyO3)  │  (Rust)  │  (Rust)  │         │
-├──────────┴──────────┴──────────┴──────────┴──────────┴─────────┤
-│    Chrome    │    Google APIs    │  gh CLI  │ chat.db + AS     │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                           AI Agent / Claude                              │
+├──────────────────────────────────────────────────────────────────────────┤
+│                          FGP UNIX Sockets                                │
+│   ~/.fgp/services/{browser,gmail,calendar,github,imessage,travel,...}   │
+├──────────┬──────────┬──────────┬──────────┬──────────┬──────────┬───────┤
+│ Browser  │  Gmail   │ Calendar │  GitHub  │ iMessage │  Travel  │  ...  │
+│ Daemon   │  Daemon  │  Daemon  │  Daemon  │  Daemon  │  Daemon  │       │
+│ (Rust)   │  (PyO3)  │  (PyO3)  │  (Rust)  │  (Rust)  │  (Rust)  │       │
+├──────────┴──────────┴──────────┴──────────┴──────────┴──────────┴───────┤
+│    Chrome    │    Google APIs    │  gh CLI  │ chat.db  │ Kiwi/Xotelo    │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Key design decisions:**
@@ -228,6 +232,30 @@ fgp call imessage.analytics '{"days": 30}'
 fgp call imessage.bundle '{"include": "unread_count,recent,analytics"}'
 ```
 
+### Travel Daemon (Flights & Hotels)
+
+```bash
+cd travel && cargo build --release
+
+# Start daemon
+./target/release/fgp-travel start
+
+# Use it - Location search (instant, local DB)
+fgp call travel.find_location '{"term": "SFO"}'
+
+# Flight search
+fgp call travel.search_flights '{"origin": "SFO", "destination": "BER", "departure_from": "2026-02-15"}'
+
+# Ultra-light price check (~55 tokens, 10x more efficient)
+fgp call travel.price_check '{"origin": "SFO", "destination": "LAX", "date": "2026-02-15"}'
+
+# Find cheapest day in a month (parallel search)
+fgp call travel.search_cheapest_day '{"origin": "SFO", "destination": "BER", "date_from": "2026-02-01", "date_to": "2026-02-28"}'
+
+# Hotel search
+fgp call travel.search_hotels '{"location": "Berlin", "limit": 5}'
+```
+
 ## FGP Protocol
 
 All daemons use the same NDJSON-over-UNIX-socket protocol.
@@ -247,22 +275,30 @@ All daemons use the same NDJSON-over-UNIX-socket protocol.
 - `methods` - List available methods
 - `stop` - Graceful shutdown
 
-## Repository Structure
+## Ecosystem Repositories
 
-```
-fgp/
-├── daemon/          # Core SDK (Rust) - Build your own FGP daemons
-├── daemon-py/       # Python SDK - For Python-based daemons
-├── protocol/        # FGP protocol specification
-├── cli/             # `fgp` CLI for daemon management
-│
-├── browser/         # Browser automation (Chrome DevTools Protocol)
-├── gmail/           # Gmail daemon (Google API)
-├── calendar/        # Google Calendar daemon
-├── github/          # GitHub daemon (GraphQL + REST)
-├── imessage/        # iMessage daemon (macOS - SQLite + AppleScript)
-└── ...
-```
+Core:
+- [daemon](https://github.com/fast-gateway-protocol/daemon) - Rust SDK
+- [daemon-py](https://github.com/fast-gateway-protocol/daemon-py) - Python SDK
+- [protocol](https://github.com/fast-gateway-protocol/protocol) - Protocol spec
+- [cli](https://github.com/fast-gateway-protocol/cli) - `fgp` CLI
+
+Daemons:
+- [browser](https://github.com/fast-gateway-protocol/browser)
+- [gmail](https://github.com/fast-gateway-protocol/gmail)
+- [calendar](https://github.com/fast-gateway-protocol/calendar)
+- [github](https://github.com/fast-gateway-protocol/github)
+- [imessage](https://github.com/fast-gateway-protocol/imessage)
+- [travel](https://github.com/fast-gateway-protocol/travel) - Flight & hotel search (Kiwi/Xotelo APIs)
+- [fly](https://github.com/fast-gateway-protocol/fly)
+- [neon](https://github.com/fast-gateway-protocol/neon)
+- [vercel](https://github.com/fast-gateway-protocol/vercel)
+- [slack](https://github.com/fast-gateway-protocol/slack)
+
+Tooling:
+- [dashboard](https://github.com/fast-gateway-protocol/dashboard) - Local monitoring UI
+- [workflow](https://github.com/fast-gateway-protocol/workflow) - Workflow composition library
+- [Homebrew tap](https://github.com/fast-gateway-protocol/homebrew-fgp) - Formulae for `brew install`
 
 ## Status
 
@@ -273,7 +309,14 @@ fgp/
 | gmail | Beta | 116ms thread read, 881ms inbox |
 | calendar | Beta | 177ms search, 233ms avg |
 | github | Beta | 390ms issues, 474ms avg |
+| travel | Beta | 1-10ms location, 400-600ms flights |
+| fly | Alpha | 140ms user, 191ms avg |
+| neon | Alpha | 86ms user, 120ms avg |
+| vercel | Alpha | 55ms deployments, 82ms avg |
+| slack | Alpha | Not benchmarked yet |
 | daemon SDK | Stable | Core library |
+| daemon-py SDK | Beta | Python daemon SDK |
+| mcp-bridge | Beta | MCP compatibility |
 | cli | WIP | Daemon management |
 
 ## Building a New Daemon
@@ -310,3 +353,4 @@ MIT
 - [daemon](https://github.com/fast-gateway-protocol/daemon) - Core SDK
 - [browser](https://github.com/fast-gateway-protocol/browser) - Browser daemon (292x faster)
 - [imessage](https://github.com/fast-gateway-protocol/imessage) - iMessage daemon (480x faster, macOS)
+- [travel](https://github.com/fast-gateway-protocol/travel) - Flight & hotel search with token-optimized methods
