@@ -1,75 +1,6 @@
 import { createRootRoute, Outlet, Link } from '@tanstack/react-router';
-import { Github, Menu, X, Home, RefreshCw, User, LogOut, Package } from 'lucide-react';
+import { Github, Menu, X, Home, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
-import { AuthProvider, useAuth } from '@/context/AuthContext';
-
-function UserMenu() {
-  const { user, isAuthenticated, isLoading, login, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  if (isLoading) {
-    return (
-      <div className="w-8 h-8 rounded-full bg-[var(--color-surface-elevated)] animate-pulse" />
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <button onClick={login} className="btn btn-secondary btn-compact flex items-center gap-2">
-        <Github className="w-4 h-4" />
-        Sign in
-      </button>
-    );
-  }
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="flex items-center gap-2 p-1 rounded-full hover:bg-[var(--color-surface-hover)] transition-colors"
-      >
-        {user?.avatar_url ? (
-          <img src={user.avatar_url} alt={user.name || 'User'} className="w-8 h-8 rounded-full" />
-        ) : (
-          <div className="w-8 h-8 rounded-full bg-[var(--color-surface-elevated)] flex items-center justify-center">
-            <User className="w-4 h-4 text-[var(--color-text-muted)]" />
-          </div>
-        )}
-      </button>
-      {menuOpen && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-          <div className="absolute right-0 mt-2 w-48 py-2 bg-[var(--color-surface-elevated)] border border-[var(--color-border)] rounded-lg shadow-xl z-50">
-            <div className="px-4 py-2 border-b border-[var(--color-border)]">
-              <div className="font-medium truncate">{user?.name || user?.email}</div>
-              {user?.github_username && (
-                <div className="text-xs text-[var(--color-text-muted)]">@{user.github_username}</div>
-              )}
-            </div>
-            <Link
-              to="/dashboard"
-              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-[var(--color-surface-hover)] transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              <Package className="w-4 h-4" />
-              My Purchases
-            </Link>
-            <button
-              onClick={() => {
-                logout();
-                setMenuOpen(false);
-              }}
-              className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left text-[var(--color-error)] hover:bg-[var(--color-surface-hover)] transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign out
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
 
 // 404 Not Found Component
 function NotFoundComponent() {
@@ -139,12 +70,6 @@ function RootComponent() {
                 Marketplace
               </Link>
               <Link
-                to="/app"
-                className="nav-link"
-              >
-                App
-              </Link>
-              <Link
                 to="/docs"
                 className="nav-link"
               >
@@ -159,7 +84,9 @@ function RootComponent() {
                 <Github className="w-5 h-5" />
                 GitHub
               </a>
-              <UserMenu />
+              <Link to="/docs" className="btn btn-secondary btn-compact">
+                Get started
+              </Link>
             </div>
 
             {/* Mobile menu button */}
@@ -185,13 +112,6 @@ function RootComponent() {
                 Marketplace
               </Link>
               <Link
-                to="/app"
-                className="nav-link py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                App
-              </Link>
-              <Link
                 to="/docs"
                 className="nav-link py-2"
                 onClick={() => setMobileMenuOpen(false)}
@@ -207,9 +127,9 @@ function RootComponent() {
                 <Github className="w-5 h-5" />
                 GitHub
               </a>
-              <div className="pt-2 border-t border-[var(--color-border)]">
-                <UserMenu />
-              </div>
+              <Link to="/docs" className="btn btn-secondary btn-compact w-full justify-center">
+                Get started
+              </Link>
             </div>
           </div>
         )}
@@ -247,16 +167,8 @@ function RootComponent() {
   );
 }
 
-function RootWithAuth() {
-  return (
-    <AuthProvider>
-      <RootComponent />
-    </AuthProvider>
-  );
-}
-
 export const Route = createRootRoute({
-  component: RootWithAuth,
+  component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });

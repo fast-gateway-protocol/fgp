@@ -27,6 +27,7 @@
   --color-accent: #ff5a5f;
   --color-accent-hover: #ff7a7e;
   --color-accent-muted: rgba(255, 90, 95, 0.18);
+  --color-accent-ink: #120c0c;
 
   /* Secondary Accent — Warm highlight */
   --color-accent-secondary: #ff9a3c;
@@ -355,7 +356,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-primary {
   background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
-  color: #120c0c;
+  color: var(--color-accent-ink);
   box-shadow: 0 10px 24px rgba(255, 90, 95, 0.25);
 }
 

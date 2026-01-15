@@ -130,7 +130,7 @@ function HomePage() {
                 transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Link to="/docs" className="btn btn-primary">
-                  Install CLI
+                  Read the docs
                 </Link>
                 <Link to="/marketplace" className="btn btn-secondary">
                   Browse daemons
