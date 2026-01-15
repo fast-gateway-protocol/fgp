@@ -19,7 +19,7 @@ SERVICES_DIR="$FGP_HOME/services"
 GITHUB_ORG="fast-gateway-protocol"
 
 # Available daemons
-AVAILABLE_DAEMONS="browser cli gmail calendar github fly neon vercel"
+AVAILABLE_DAEMONS="browser cli gmail calendar github travel fly neon vercel"
 
 print_banner() {
     echo -e "${BLUE}"
@@ -219,6 +219,7 @@ print_usage() {
     echo "  gmail     - Gmail API daemon"
     echo "  calendar  - Google Calendar daemon"
     echo "  github    - GitHub API daemon"
+    echo "  travel    - Flight & hotel search daemon (Kiwi/Xotelo APIs)"
     echo "  fly       - Fly.io daemon"
     echo "  neon      - Neon Postgres daemon"
     echo "  vercel    - Vercel daemon"
