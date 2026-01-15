@@ -296,7 +296,9 @@ mdfind -count "kMDItemContentType == 'public.jpeg'" → 69ms
 
 ---
 
-### 8. System Info Cache Daemon
+### 8. System Info Cache Daemon ✅ IMPLEMENTED
+
+**Status:** DONE - Full CLI with 10 query methods, TTL-based caching via moka
 
 **Purpose:** Aggregate slow system queries with caching
 
@@ -347,7 +349,7 @@ mdfind -count "kMDItemContentType == 'public.jpeg'" → 69ms
 | **P1** | Notes ✅ | ~~2-3 weeks~~ DONE | Medium | rusqlite + prost | Medium |
 | **P2** | Calendar | 2 weeks | Medium | objc2-event-kit | Medium |
 | **P2** | Reminders | 2 weeks | Medium | objc2-event-kit | Medium |
-| **P2** | System Cache | 1-2 weeks | Medium | None | Low |
+| **P2** | System Cache ✅ | ~~1-2 weeks~~ DONE | Medium | moka (caching) | Low |
 
 **Key changes after research:**
 - Photos moved to P1 - Direct SQLite access confirmed working (35K+ photos accessible)
@@ -399,6 +401,7 @@ mdfind -count "kMDItemContentType == 'public.jpeg'" → 69ms
 
 ## Changelog
 
+- 01/15/2026 07:29 AM PST - **System Cache daemon implemented** - Full CLI with hardware, disks, network, processes, apps, battery, stats, invalidate, cache, bundle methods. TTL-based caching via moka crate. Latencies: stats 15ms, disks 4ms, network 65ms, processes 45ms, bundle 321ms. No special permissions required.
 - 01/15/2026 05:28 AM PST - **Notes daemon implemented** - Full CLI with list, recent, search, read, by_folder, pinned, folders, stats methods. ~12ms average latency. Parses gzipped protobuf for full note content. Requires Full Disk Access.
 - 01/15/2026 04:38 AM PST - **Spotlight daemon implemented** - Full CLI with search, by_name, by_extension, by_kind, recent, apps, directories, by_size methods. ~30ms average latency. Uses mdquery-rs crate. No special permissions required.
 - 01/15/2026 04:24 AM PST - **Photos daemon implemented** - Full CLI with recent, favorites, by-date, by-location, albums, album-photos, people, person-photos, stats methods. ~42ms average latency. 26K+ photos accessible. Requires Full Disk Access.

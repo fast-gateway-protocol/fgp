@@ -1,0 +1,46 @@
+[package]
+name = "fgp-system"
+version = "1.0.0"
+edition = "2021"
+description = "FGP daemon for cached macOS system information"
+license = "MIT"
+authors = ["Wolfgang Schoenberger"]
+repository = "https://github.com/fast-gateway-protocol/system"
+
+[dependencies]
+# FGP daemon framework
+fgp-daemon = { path = "../daemon" }
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Error handling
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Caching
+moka = { version = "0.12", features = ["sync"] }
+
+# Process execution
+which = "6"
+
+[[bin]]
+name = "fgp-system"
+path = "src/main.rs"
+
+[[bin]]
+name = "fgp-system-daemon"
+path = "src/bin/fgp-system-daemon.rs"
