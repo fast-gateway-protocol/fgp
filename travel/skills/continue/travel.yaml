@@ -1,0 +1,113 @@
+# Continue rules for Travel FGP integration
+# Place in ~/.continue/rules/
+
+rules:
+  - name: fgp-travel
+    description: "Fast flight and hotel search via FGP daemon with token-optimized methods"
+    instructions: |
+      Use `fgp call travel.<method> -p '{params}'` for travel search operations.
+
+      ## Available Methods
+
+      ### Standard Methods
+
+      | Method | Description | Tokens |
+      |--------|-------------|--------|
+      | `travel.find_location` | Search airports/cities (instant) | 90-700 |
+      | `travel.search_flights` | One-way flight search | 500-3,500 |
+      | `travel.search_roundtrip` | Round-trip flight search | 600-6,000 |
+      | `travel.search_hotels` | Hotel search by city | 750-1,500 |
+      | `travel.hotel_rates` | Real-time hotel rates | 200-800 |
+
+      ### Efficiency Methods (Prefer These!)
+
+      | Method | Description | Savings |
+      |--------|-------------|---------|
+      | `travel.price_check` | Ultra-light price check | **10x** |
+      | `travel.search_cheapest_day` | Find cheapest day | **30x** |
+      | `travel.search_cheapest_route` | Find cheapest destination | **5x** |
+      | `travel.search_flexible_dates` | Search ±N days | **7x** |
+      | `travel.search_direct_only` | Non-stop flights | **2-3x** |
+      | `travel.batch_search` | Multiple searches | Reduced overhead |
+
+      ## Commands
+
+      ### Price Check (Recommended for simple queries)
+      ```bash
+      fgp call travel.price_check -p '{"origin": "SFO", "destination": "LAX", "date": "2026-02-15"}'
+      ```
+      Returns: `{"price": 83.0, "stops": 0}` (~55 tokens)
+
+      ### Find Location (Instant, local DB)
+      ```bash
+      fgp call travel.find_location -p '{"term": "Berlin", "limit": 5}'
+      ```
+
+      ### Search Flights
+      ```bash
+      fgp call travel.search_flights -p '{"origin": "SFO", "destination": "BER", "departure_from": "2026-02-15", "limit": 5}'
+      ```
+
+      ### Search Cheapest Day (30x more efficient)
+      ```bash
+      fgp call travel.search_cheapest_day -p '{"origin": "SFO", "destination": "BER", "date_from": "2026-02-01", "date_to": "2026-02-28"}'
+      ```
+
+      ### Search Cheapest Route (5x more efficient)
+      ```bash
+      fgp call travel.search_cheapest_route -p '{"origin": "SFO", "destinations": ["LAX", "SEA", "DEN", "PHX"], "date": "2026-02-15"}'
+      ```
+
+      ### Flexible Dates (7x more efficient)
+      ```bash
+      fgp call travel.search_flexible_dates -p '{"origin": "SFO", "destination": "BER", "date": "2026-02-15", "flexibility": 3}'
+      ```
+
+      ### Direct Flights Only
+      ```bash
+      fgp call travel.search_direct_only -p '{"origin": "SFO", "destination": "LAX", "date": "2026-02-15"}'
+      ```
+
+      ### Batch Search (Multiple routes)
+      ```bash
+      fgp call travel.batch_search -p '{"searches": [{"origin": "SFO", "destination": "LAX", "date": "2026-02-15"}, {"origin": "SFO", "destination": "SEA", "date": "2026-02-15"}]}'
+      ```
+
+      ### Hotel Search
+      ```bash
+      fgp call travel.search_hotels -p '{"location": "Berlin", "limit": 5}'
+      ```
+
+      ### Hotel Rates
+      ```bash
+      fgp call travel.hotel_rates -p '{"hotel_key": "abc123", "checkin": "2026-02-15", "checkout": "2026-02-18"}'
+      ```
+
+      ## Method Selection Guide
+
+      | User Request | Best Method |
+      |--------------|-------------|
+      | "What's the price to X?" | `price_check` |
+      | "Which day is cheapest?" | `search_cheapest_day` |
+      | "Where can I fly cheap?" | `search_cheapest_route` |
+      | "Flexible on dates" | `search_flexible_dates` |
+      | "Non-stop only" | `search_direct_only` |
+      | "Show flight details" | `search_flights` |
+
+      ## Response Format
+
+      All commands return JSON. Efficiency methods return minimal responses to save tokens.
+
+      ## Troubleshooting
+
+      - Check daemon: `fgp status travel`
+      - Start daemon: `fgp start travel`
+      - Location not found: Use 3-letter IATA airport code
+
+      ## Performance
+
+      - Location search: 1-10ms (local database)
+      - Price check: 400-600ms
+      - Flight search: 400-1000ms
+      - Cheapest day (28 days): 1-2s (parallel)
+      - Cache hit: <1ms

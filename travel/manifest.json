@@ -91,6 +91,10 @@
     "cursor": {
       "source": "./skills/cursor/",
       "target": "~/.cursor/rules/travel.mdc"
+    },
+    "continue": {
+      "source": "./skills/continue/",
+      "target": "~/.continue/rules/travel.yaml"
     }
   },
   "auth": {
