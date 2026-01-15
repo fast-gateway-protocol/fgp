@@ -93,7 +93,7 @@ export const packages: Package[] = [
   },
   {
     name: 'gmail',
-    version: '1.0.0',
+    version: '0.1.0',
     description: 'Fast Gmail integration via FGP daemon - read, search, and send emails',
     repository: 'https://github.com/fast-gateway-protocol/gmail',
     license: 'MIT',
@@ -150,7 +150,7 @@ export const packages: Package[] = [
   },
   {
     name: 'calendar',
-    version: '1.0.0',
+    version: '0.1.0',
     description: 'Fast Google Calendar integration - events, scheduling, and free slots',
     repository: 'https://github.com/fast-gateway-protocol/calendar',
     license: 'MIT',
@@ -210,7 +210,7 @@ export const packages: Package[] = [
   },
   {
     name: 'github',
-    version: '1.0.0',
+    version: '0.1.0',
     description: 'GitHub operations via gh CLI - repos, issues, PRs, and notifications',
     repository: 'https://github.com/fast-gateway-protocol/github',
     license: 'MIT',
