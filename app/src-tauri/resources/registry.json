@@ -1,23 +1,23 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-01-14T00:00:00Z",
+  "updated_at": "2026-01-15T00:00:00Z",
   "packages": [
     {
       "name": "browser",
       "display_name": "Browser Gateway",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "description": "Fast browser automation via Chrome DevTools Protocol. 292x faster than Playwright MCP.",
       "icon": "globe",
       "author": "FGP Team",
       "repository": "https://github.com/fast-gateway-protocol/browser",
       "platforms": {
         "darwin-aarch64": {
-          "url": "https://github.com/fast-gateway-protocol/browser/releases/download/v1.0.0/browser-gateway-darwin-aarch64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/browser/releases/download/v0.1.0/browser-gateway-macos-arm64.tar.gz",
+          "sha256": "ef223284d795aead0b9d679a0cc2b9838c3efd05e7c7e55e4fce773e048f67c2"
         },
         "darwin-x86_64": {
-          "url": "https://github.com/fast-gateway-protocol/browser/releases/download/v1.0.0/browser-gateway-darwin-x86_64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/browser/releases/download/v0.1.0/browser-gateway-macos-x64.tar.gz",
+          "sha256": "87d24b6e401b62ee5a78d0868458c3b57b4e05bb5570f5442fb4d75ce3553a5f"
         }
       },
       "methods_count": 18,
@@ -28,19 +28,19 @@
     {
       "name": "gmail",
       "display_name": "Gmail Gateway",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "description": "Fast Gmail operations via Google API. Read, send, and search emails with 69x speedup.",
       "icon": "mail",
       "author": "FGP Team",
       "repository": "https://github.com/fast-gateway-protocol/gmail",
       "platforms": {
         "darwin-aarch64": {
-          "url": "https://github.com/fast-gateway-protocol/gmail/releases/download/v1.0.0/gmail-gateway-darwin-aarch64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/gmail/releases/download/v0.1.0/fgp-gmail-macos-arm64.tar.gz",
+          "sha256": "575bf815ca63e3698fd2c509fcae1b3df5d7aa908d7c9655ef6e880decf4cb9d"
         },
         "darwin-x86_64": {
-          "url": "https://github.com/fast-gateway-protocol/gmail/releases/download/v1.0.0/gmail-gateway-darwin-x86_64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/gmail/releases/download/v0.1.0/fgp-gmail-macos-x64.tar.gz",
+          "sha256": "e337c7c982d80220748fab8eeb04665befdf5cc299ce3db2aab490557d302439"
         }
       },
       "methods_count": 6,
@@ -51,19 +51,19 @@
     {
       "name": "calendar",
       "display_name": "Calendar Gateway",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "description": "Google Calendar integration. Create, update, and query calendar events.",
       "icon": "calendar",
       "author": "FGP Team",
       "repository": "https://github.com/fast-gateway-protocol/calendar",
       "platforms": {
         "darwin-aarch64": {
-          "url": "https://github.com/fast-gateway-protocol/calendar/releases/download/v1.0.0/calendar-gateway-darwin-aarch64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/calendar/releases/download/v0.1.0/fgp-calendar-macos-arm64.tar.gz",
+          "sha256": "f89df7c2b56ed96d38f3a86b39a84fd11ba020fd4b70e73d4b4fc26371775382"
         },
         "darwin-x86_64": {
-          "url": "https://github.com/fast-gateway-protocol/calendar/releases/download/v1.0.0/calendar-gateway-darwin-x86_64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/calendar/releases/download/v0.1.0/fgp-calendar-macos-x64.tar.gz",
+          "sha256": "70d922e2d02342fcd357c8d132e75dd561cdeb216265504fa39fdc848551d340"
         }
       },
       "methods_count": 4,
@@ -74,19 +74,19 @@
     {
       "name": "github",
       "display_name": "GitHub Gateway",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "description": "GitHub operations via GraphQL and REST. Issues, PRs, repos with 75x speedup.",
       "icon": "code",
       "author": "FGP Team",
       "repository": "https://github.com/fast-gateway-protocol/github",
       "platforms": {
         "darwin-aarch64": {
-          "url": "https://github.com/fast-gateway-protocol/github/releases/download/v1.0.0/github-gateway-darwin-aarch64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/github/releases/download/v0.1.0/fgp-github-macos-arm64.tar.gz",
+          "sha256": "5219f8e5514af6c7f1ad0d4f424b3ed35bbc80d076910b9049cb4da4948fd026"
         },
         "darwin-x86_64": {
-          "url": "https://github.com/fast-gateway-protocol/github/releases/download/v1.0.0/github-gateway-darwin-x86_64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/github/releases/download/v0.1.0/fgp-github-macos-x64.tar.gz",
+          "sha256": "bba28b059920d35c837498510d6cb8f24196ba7683f482bfcabe37da7cb9b7b4"
         }
       },
       "methods_count": 8,
@@ -97,19 +97,19 @@
     {
       "name": "fly",
       "display_name": "Fly.io Gateway",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "description": "Fly.io deployment operations. Manage apps, machines, and deployments.",
       "icon": "cloud",
       "author": "FGP Team",
       "repository": "https://github.com/fast-gateway-protocol/fly",
       "platforms": {
         "darwin-aarch64": {
-          "url": "https://github.com/fast-gateway-protocol/fly/releases/download/v1.0.0/fly-gateway-darwin-aarch64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/fly/releases/download/v0.1.0/fgp-fly-macos-arm64.tar.gz",
+          "sha256": "cbf40063401d8d81f8bc32fbc793755eda0f2942b41149ec6eed145e1475798e"
         },
         "darwin-x86_64": {
-          "url": "https://github.com/fast-gateway-protocol/fly/releases/download/v1.0.0/fly-gateway-darwin-x86_64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/fly/releases/download/v0.1.0/fgp-fly-macos-x64.tar.gz",
+          "sha256": "38109873041382b3c44f40f951aa113b27afef2ebcdb537d450082a8b6b0c310"
         }
       },
       "methods_count": 6,
@@ -120,19 +120,19 @@
     {
       "name": "neon",
       "display_name": "Neon Gateway",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "description": "Neon Postgres operations. Run SQL, manage branches, and optimize queries.",
       "icon": "database",
       "author": "FGP Team",
       "repository": "https://github.com/fast-gateway-protocol/neon",
       "platforms": {
         "darwin-aarch64": {
-          "url": "https://github.com/fast-gateway-protocol/neon/releases/download/v1.0.0/neon-gateway-darwin-aarch64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/neon/releases/download/v0.1.0/fgp-neon-macos-arm64.tar.gz",
+          "sha256": "56fb985b1cf480123c0563c42d78fed14d836f9108b7e73a6f6c79acb6e75cc0"
         },
         "darwin-x86_64": {
-          "url": "https://github.com/fast-gateway-protocol/neon/releases/download/v1.0.0/neon-gateway-darwin-x86_64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/neon/releases/download/v0.1.0/fgp-neon-macos-x64.tar.gz",
+          "sha256": "bf468b5a203dd73d43ae75f6f2a9ae0a38bc6b20c9f00ebac613c50ca1f46429"
         }
       },
       "methods_count": 10,
@@ -143,19 +143,19 @@
     {
       "name": "vercel",
       "display_name": "Vercel Gateway",
-      "version": "1.0.0",
+      "version": "0.1.0",
       "description": "Vercel deployment operations. Deploy, manage domains, and check logs.",
       "icon": "triangle",
       "author": "FGP Team",
       "repository": "https://github.com/fast-gateway-protocol/vercel",
       "platforms": {
         "darwin-aarch64": {
-          "url": "https://github.com/fast-gateway-protocol/vercel/releases/download/v1.0.0/vercel-gateway-darwin-aarch64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/vercel/releases/download/v0.1.0/fgp-vercel-macos-arm64.tar.gz",
+          "sha256": "d0e62cde6f609d47eab25c3b200a14a6d06ff9682c4b6613ef8a1c5ab731b52d"
         },
         "darwin-x86_64": {
-          "url": "https://github.com/fast-gateway-protocol/vercel/releases/download/v1.0.0/vercel-gateway-darwin-x86_64.tar.gz",
-          "sha256": "placeholder"
+          "url": "https://github.com/fast-gateway-protocol/vercel/releases/download/v0.1.0/fgp-vercel-macos-x64.tar.gz",
+          "sha256": "e305c7ef0074eb64237556d12e475933cc7fbd23c25aa45a3111a21b80d3132a"
         }
       },
       "methods_count": 5,
