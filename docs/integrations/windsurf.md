@@ -192,5 +192,5 @@ Here's a complete workflow using FGP in Windsurf:
 ## Next Steps
 
 - [FGP CLI Reference](../reference/cli.md)
-- [Available Daemons](../daemons/index.md)
-- [Protocol Specification](../protocol/specification.md)
+- [Browser Daemon](../daemons/browser.md)
+- [Protocol Overview](../protocol/overview.md)
