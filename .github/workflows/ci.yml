@@ -1,0 +1,172 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  # Lint and format check
+  lint:
+    name: Lint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Check formatting (daemon)
+        run: cargo fmt --check --manifest-path daemon/Cargo.toml
+
+      - name: Check formatting (browser)
+        run: cargo fmt --check --manifest-path browser/Cargo.toml
+
+      - name: Check formatting (cli)
+        run: cargo fmt --check --manifest-path cli/Cargo.toml
+
+      - name: Clippy (daemon)
+        run: cargo clippy --manifest-path daemon/Cargo.toml -- -D warnings
+
+      - name: Clippy (browser)
+        run: cargo clippy --manifest-path browser/Cargo.toml -- -D warnings
+
+  # Build and test core SDK
+  daemon-sdk:
+    name: Daemon SDK
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            daemon/target
+          key: ${{ runner.os }}-cargo-daemon-${{ hashFiles('daemon/Cargo.lock') }}
+
+      - name: Build daemon SDK
+        run: cargo build --manifest-path daemon/Cargo.toml --release
+
+      - name: Test daemon SDK
+        run: cargo test --manifest-path daemon/Cargo.toml
+
+      - name: Build with async-client feature
+        run: cargo build --manifest-path daemon/Cargo.toml --features async-client
+
+  # Build browser daemon
+  browser-daemon:
+    name: Browser Daemon
+    runs-on: macos-latest
+    needs: daemon-sdk
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            browser/target
+          key: ${{ runner.os }}-cargo-browser-${{ hashFiles('browser/Cargo.lock') }}
+
+      - name: Build browser daemon
+        run: cargo build --manifest-path browser/Cargo.toml --release
+
+      - name: Test browser daemon
+        run: cargo test --manifest-path browser/Cargo.toml
+
+  # Build service daemons
+  service-daemons:
+    name: Service Daemons
+    runs-on: macos-latest
+    needs: daemon-sdk
+    strategy:
+      fail-fast: false
+      matrix:
+        daemon: [gmail, calendar, github, fly, neon, vercel]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ${{ matrix.daemon }}/target
+          key: ${{ runner.os }}-cargo-${{ matrix.daemon }}-${{ hashFiles(format('{0}/Cargo.lock', matrix.daemon)) }}
+
+      - name: Build ${{ matrix.daemon }} daemon
+        run: cargo build --manifest-path ${{ matrix.daemon }}/Cargo.toml --release
+
+      - name: Test ${{ matrix.daemon }} daemon
+        run: cargo test --manifest-path ${{ matrix.daemon }}/Cargo.toml
+
+  # Build CLI
+  cli:
+    name: CLI Tool
+    runs-on: macos-latest
+    needs: daemon-sdk
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            cli/target
+          key: ${{ runner.os }}-cargo-cli-${{ hashFiles('cli/Cargo.lock') }}
+
+      - name: Build CLI
+        run: cargo build --manifest-path cli/Cargo.toml --release
+
+      - name: Test CLI
+        run: cargo test --manifest-path cli/Cargo.toml
+
+  # Python SDK checks
+  python-sdk:
+    name: Python SDK
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd daemon-py
+          pip install -e ".[dev]" || pip install -e .
+
+      - name: Type check with mypy
+        run: |
+          cd daemon-py
+          pip install mypy
+          mypy fgp_daemon --ignore-missing-imports || true

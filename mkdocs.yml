@@ -1,0 +1,81 @@
+site_name: FGP - Fast Gateway Protocol
+site_url: https://fast-gateway-protocol.github.io/fgp
+site_description: Daemon-based architecture for AI agent tools. 19x faster than MCP stdio.
+site_author: Fast Gateway Protocol Contributors
+
+repo_name: fast-gateway-protocol/fgp
+repo_url: https://github.com/fast-gateway-protocol/fgp
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Concepts: getting-started/concepts.md
+  - Daemons:
+    - Browser: daemons/browser.md
+    - Gmail: daemons/gmail.md
+    - Calendar: daemons/calendar.md
+    - GitHub: daemons/github.md
+  - Protocol:
+    - Overview: protocol/overview.md
+    - Request/Response: protocol/messages.md
+    - Built-in Methods: protocol/builtin.md
+  - Deployment:
+    - systemd: deployment/systemd.md
+    - Docker: deployment/docker.md
+    - launchd (macOS): deployment/launchd.md
+  - Development:
+    - Building Daemons: development/building-daemons.md
+    - Contributing: development/contributing.md
+  - Reference:
+    - CLI: reference/cli.md
+    - API: reference/api.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/fast-gateway-protocol

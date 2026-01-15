@@ -1,0 +1,21 @@
+# Service repos (have their own git repos)
+browser/
+calendar/
+cli/
+daemon/
+daemon-py/
+fly/
+github/
+gmail/
+mcp-bridge/
+neon/
+protocol/
+vercel/
+
+# Build artifacts
+target/
+*.log
+logs/
+
+# OS files
+.DS_Store
