@@ -52,7 +52,7 @@ function RootComponent() {
       <div className="grid-pattern" />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-void)]/80 backdrop-blur-md">
+      <nav className="fixed top-0 left-0 right-0 z-50 nav-blur">
         <div className="container">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -65,13 +65,13 @@ function RootComponent() {
             <div className="hidden md:flex items-center gap-8">
               <Link
                 to="/marketplace"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+                className="nav-link"
               >
                 Marketplace
               </Link>
               <Link
                 to="/docs"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+                className="nav-link"
               >
                 Docs
               </Link>
@@ -79,11 +79,14 @@ function RootComponent() {
                 href="https://github.com/fast-gateway-protocol"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+                className="flex items-center gap-2 nav-link"
               >
                 <Github className="w-5 h-5" />
                 GitHub
               </a>
+              <Link to="/docs" className="btn btn-secondary btn-compact">
+                Get started
+              </Link>
             </div>
 
             {/* Mobile menu button */}
@@ -103,14 +106,14 @@ function RootComponent() {
             <div className="container py-4 flex flex-col gap-4">
               <Link
                 to="/marketplace"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors py-2"
+                className="nav-link py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Marketplace
               </Link>
               <Link
                 to="/docs"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors py-2"
+                className="nav-link py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Docs
@@ -119,11 +122,14 @@ function RootComponent() {
                 href="https://github.com/fast-gateway-protocol"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors py-2"
+                className="flex items-center gap-2 nav-link py-2"
               >
                 <Github className="w-5 h-5" />
                 GitHub
               </a>
+              <Link to="/docs" className="btn btn-secondary btn-compact w-full justify-center">
+                Get started
+              </Link>
             </div>
           </div>
         )}
