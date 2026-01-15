@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { packages } from '@/data/registry';
 import { HeroSpeedup, BenchmarkChart, CumulativeOverhead } from '@/components/BenchmarkVisuals';
 
-function InstallCommand({ command }: { command: string }) {
+function InstallCommand({ command, compact = false }: { command: string; compact?: boolean }) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -15,7 +15,7 @@ function InstallCommand({ command }: { command: string }) {
   };
 
   return (
-    <div className="code-block flex items-center justify-between gap-4">
+    <div className={`code-block ${compact ? 'compact' : ''} flex items-center justify-between gap-4`}>
       <code>
         <span className="prompt">$ </span>
         <span className="command">{command}</span>
@@ -33,7 +33,7 @@ function InstallCommand({ command }: { command: string }) {
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
-    <div className="text-center">
+    <div className="stat-card">
       <div className="text-2xl md:text-3xl font-bold gradient-accent-text">{value}</div>
       <div className="text-sm text-[var(--color-text-muted)] mt-1">{label}</div>
     </div>
@@ -89,41 +89,111 @@ function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="section pt-24 md:pt-32 pb-16 overflow-hidden">
+      <section className="section pt-24 md:pt-32 pb-20 overflow-hidden">
         <div className="container">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Big animated 292x */}
-            <HeroSpeedup />
+          <div className="hero-grid">
+            <div className="space-y-8">
+              <motion.div
+                className="flex flex-wrap items-center gap-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="eyebrow">Fast Gateway Protocol</span>
+                <span className="nav-pill">Open source</span>
+              </motion.div>
 
-            <motion.p
-              className="text-xl md:text-2xl text-[var(--color-text-secondary)] mt-8 max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Daemon-based tools for AI agents. Replace slow MCP stdio servers with persistent
-              UNIX socket daemons.{' '}
-              <span className="gradient-accent-text font-semibold">10-50ms latency</span>, not 2.3 seconds.
-            </motion.p>
+              <motion.h1
+                className="text-hero text-balance"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              >
+                Agent tooling that feels instant, not cold-started.
+              </motion.h1>
+
+              <motion.p
+                className="text-lg md:text-xl text-[var(--color-text-secondary)] text-balance max-w-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                FGP turns slow MCP stdio calls into always-on daemons with UNIX sockets. Get{' '}
+                <span className="gradient-accent-text font-semibold">10-50ms latency</span> and keep
+                agents focused on work, not startup overhead.
+              </motion.p>
+
+              <motion.div
+                className="flex flex-wrap items-center gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Link to="/docs" className="btn btn-primary">
+                  Read the docs
+                </Link>
+                <Link to="/marketplace" className="btn btn-secondary">
+                  Browse daemons
+                </Link>
+              </motion.div>
+
+              <motion.div
+                className="hero-stats"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <StatCard value="8ms" label="Browser navigate" />
+                <StatCard value="19x" label="Workflow speedup" />
+                <StatCard value="2.3s" label="MCP cold start" />
+              </motion.div>
+
+              <motion.div
+                className="hero-chips"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="chip">
+                  <Zap className="w-3.5 h-3.5" />
+                  Persistent daemons
+                </span>
+                <span className="chip">
+                  <Rocket className="w-3.5 h-3.5" />
+                  UNIX sockets
+                </span>
+                <span className="chip">
+                  <Database className="w-3.5 h-3.5" />
+                  Typed contracts
+                </span>
+              </motion.div>
+            </div>
 
             <motion.div
-              className="max-w-md mx-auto mt-10"
-              initial={{ opacity: 0, y: 20 }}
+              className="hero-panel space-y-6"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <InstallCommand command="curl -sSL getfgp.com/install | bash" />
-            </motion.div>
+              <div className="flex items-center justify-between">
+                <span className="eyebrow">Benchmarks</span>
+                <span className="text-sm text-[var(--color-text-muted)]">Real workflows</span>
+              </div>
 
-            <motion.div
-              className="flex flex-wrap justify-center gap-8 md:gap-16 mt-12"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <StatCard value="8ms" label="Browser navigate" />
-              <StatCard value="19x" label="Workflow speedup" />
-              <StatCard value="MIT" label="License" />
+              <HeroSpeedup compact />
+
+              <div className="divider-glow" />
+
+              <div className="code-stack">
+                <InstallCommand command="curl -sSL getfgp.com/install | bash" compact />
+                <InstallCommand command="fgp install browser" compact />
+              </div>
+
+              <div className="hero-chips">
+                <span className="chip">10-50ms latency</span>
+                <span className="chip">Daemon lifecycle</span>
+                <span className="chip">MCP compatible</span>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -132,25 +202,50 @@ function HomePage() {
       {/* Performance Section */}
       <section className="section">
         <div className="container">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <h2 className="text-section">
-              The <span className="text-red-400">MCP</span> Problem
-            </h2>
-            <p className="text-[var(--color-text-secondary)] mt-4 max-w-2xl mx-auto">
-              Every MCP tool call spawns a new process. Cold-start overhead compounds across workflows.
-              FGP keeps daemons <span className="gradient-accent-text font-medium">warm and ready</span>.
-            </p>
-          </motion.div>
+          <div className="split-layout">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-6"
+            >
+              <div className="space-y-4">
+                <span className="eyebrow">Performance</span>
+                <h2 className="text-section text-balance">
+                  Cold starts drag your agents. FGP keeps them warm.
+                </h2>
+                <p className="text-[var(--color-text-secondary)] text-balance">
+                  Every MCP tool call spins up a new process. That latency compounds across a workflow.
+                  FGP runs persistent daemons so responses feel immediate.
+                </p>
+              </div>
 
-          {/* New animated benchmark chart */}
-          <div className="max-w-3xl mx-auto">
-            <BenchmarkChart />
+              <div className="section-panel space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-[var(--color-text-muted)]">Typical overhead</span>
+                  <span className="text-sm text-[var(--color-text-muted)]">Per call</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-semibold">MCP stdio</span>
+                  <span className="text-lg font-semibold text-red-400">~2.3s</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-semibold">FGP daemon</span>
+                  <span className="text-lg font-semibold gradient-accent-text">10-50ms</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="section-panel"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <BenchmarkChart />
+            </motion.div>
           </div>
         </div>
       </section>
@@ -175,7 +270,7 @@ function HomePage() {
             <h2 className="text-section">How It Works</h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
                 step: '1',
@@ -195,17 +290,18 @@ function HomePage() {
             ].map((item, i) => (
               <motion.div
                 key={item.step}
-                className="text-center"
+                className="card space-y-4"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="w-10 h-10 rounded-full gradient-accent text-[var(--color-void)] font-bold flex items-center justify-center mx-auto">
-                  {item.step}
+                <div className="flex items-center justify-between">
+                  <span className="eyebrow">Step {item.step}</span>
+                  <span className="chip">1 command</span>
                 </div>
-                <h3 className="font-semibold mt-4">{item.title}</h3>
-                <div className="code-block mt-3 text-left">
+                <h3 className="text-lg font-semibold">{item.title}</h3>
+                <div className="code-block compact text-left">
                   <code>
                     <span className="prompt">$ </span>
                     <span className="command">{item.code}</span>
@@ -227,7 +323,10 @@ function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="text-section">Featured Packages</h2>
+            <div>
+              <span className="eyebrow">Marketplace</span>
+              <h2 className="text-section mt-3">Featured Packages</h2>
+            </div>
             <Link
               to="/marketplace"
               className="flex items-center gap-2 text-[var(--color-accent)] hover:underline"
@@ -262,7 +361,8 @@ function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="text-section mb-12">Works With</h2>
+            <span className="eyebrow">Compatible</span>
+            <h2 className="text-section mt-4 mb-12">Works With</h2>
             <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
               {/* Claude Code */}
               <div className="group flex flex-col items-center gap-3">
@@ -339,20 +439,21 @@ function HomePage() {
       <section className="section">
         <div className="container">
           <motion.div
-            className="max-w-2xl mx-auto text-center"
+            className="section-panel max-w-3xl mx-auto text-center space-y-6"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="text-section">Get Started</h2>
-            <p className="text-[var(--color-text-secondary)] mt-4">
+            <span className="eyebrow">Get started</span>
+            <h2 className="text-section">Install in minutes</h2>
+            <p className="text-[var(--color-text-secondary)]">
               Install the FGP CLI and start using fast daemons in minutes.
             </p>
-            <div className="max-w-md mx-auto mt-8 space-y-4">
-              <InstallCommand command="curl -sSL getfgp.com/install | bash" />
-              <InstallCommand command="fgp install browser" />
-              <InstallCommand command="fgp start browser" />
+            <div className="max-w-md mx-auto code-stack">
+              <InstallCommand command="curl -sSL getfgp.com/install | bash" compact />
+              <InstallCommand command="fgp install browser" compact />
+              <InstallCommand command="fgp start browser" compact />
             </div>
           </motion.div>
         </div>
