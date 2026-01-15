@@ -379,6 +379,436 @@ impl TravelService {
         }))
     }
 
+    /// Search multiple destinations in parallel to find cheapest route.
+    fn search_cheapest_route(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let origin = Self::get_str(&params, "origin")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: origin"))?
+            .to_string();
+
+        let destinations: Vec<String> = params
+            .get("destinations")
+            .and_then(|v| v.as_array())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: destinations (array)"))?;
+
+        if destinations.is_empty() {
+            anyhow::bail!("destinations array cannot be empty");
+        }
+        if destinations.len() > 20 {
+            anyhow::bail!("Maximum 20 destinations allowed (got {})", destinations.len());
+        }
+
+        let date = Self::get_date(&params, "date")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: date"))?;
+
+        let max_price = Self::get_f64(&params, "max_price");
+        let adults = Self::get_u8(&params, "adults", 1);
+
+        tracing::info!(
+            "Searching {} destinations in parallel from {}",
+            destinations.len(),
+            origin
+        );
+
+        let client = self.flights.clone();
+        let origin_clone = origin.clone();
+
+        let results = self.runtime.block_on(async move {
+            use futures::future::join_all;
+
+            let tasks: Vec<_> = destinations
+                .into_iter()
+                .map(|dest| {
+                    let client = client.clone();
+                    let origin = origin_clone.clone();
+
+                    async move {
+                        let search_params = FlightSearchParams {
+                            origin,
+                            destination: dest.clone(),
+                            departure_from: date,
+                            departure_to: date,
+                            return_from: None,
+                            return_to: None,
+                            adults,
+                            children: 0,
+                            infants: 0,
+                            cabin_class: CabinClass::Economy,
+                            max_stops: None,
+                            sort_by: SortBy::Price,
+                            limit: 1,
+                            max_price: None,
+                            min_price: None,
+                        };
+
+                        match client.search_flights(&search_params).await {
+                            Ok(flights) => {
+                                let price = flights.first().map(|f| f.price);
+                                (dest, price, true)
+                            }
+                            Err(e) => {
+                                tracing::warn!("Failed to search {}: {}", dest, e);
+                                (dest, None, false)
+                            }
+                        }
+                    }
+                })
+                .collect();
+
+            join_all(tasks).await
+        });
+
+        // Filter by max_price if specified and sort by price
+        let mut route_prices: Vec<_> = results
+            .iter()
+            .filter_map(|(dest, price, ok)| {
+                if !ok {
+                    return None;
+                }
+                price.and_then(|p| {
+                    if max_price.map_or(true, |max| p <= max) {
+                        Some((dest.clone(), p))
+                    } else {
+                        None
+                    }
+                })
+            })
+            .collect();
+        route_prices.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal));
+
+        let cheapest = route_prices.first().map(|(dest, price)| {
+            json!({
+                "destination": dest,
+                "price": price,
+            })
+        });
+
+        let routes: Vec<_> = route_prices
+            .iter()
+            .map(|(dest, price)| {
+                json!({
+                    "destination": dest,
+                    "price": price,
+                })
+            })
+            .collect();
+
+        Ok(json!({
+            "origin": origin,
+            "date": date.to_string(),
+            "destinations_searched": results.len(),
+            "routes_found": routes.len(),
+            "cheapest": cheapest,
+            "routes": routes,
+        }))
+    }
+
+    /// Search ±N days around a target date for flexibility.
+    fn search_flexible_dates(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let origin = Self::get_str(&params, "origin")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: origin"))?
+            .to_string();
+
+        let destination = Self::get_str(&params, "destination")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: destination"))?
+            .to_string();
+
+        let target_date = Self::get_date(&params, "date")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: date"))?;
+
+        let flexibility = Self::get_u32(&params, "flexibility", 3) as i64;
+        if flexibility > 14 {
+            anyhow::bail!("Maximum flexibility is 14 days (got {})", flexibility);
+        }
+
+        let adults = Self::get_u8(&params, "adults", 1);
+
+        // Generate date range
+        let date_from = target_date - Duration::days(flexibility);
+        let date_to = target_date + Duration::days(flexibility);
+
+        // Reuse search_cheapest_day logic
+        let mut inner_params = HashMap::new();
+        inner_params.insert("origin".to_string(), json!(origin));
+        inner_params.insert("destination".to_string(), json!(destination));
+        inner_params.insert("date_from".to_string(), json!(date_from.to_string()));
+        inner_params.insert("date_to".to_string(), json!(date_to.to_string()));
+        inner_params.insert("adults".to_string(), json!(adults));
+
+        let mut result = self.search_cheapest_day(inner_params)?;
+
+        // Add flexibility metadata
+        if let Some(obj) = result.as_object_mut() {
+            obj.insert("target_date".to_string(), json!(target_date.to_string()));
+            obj.insert("flexibility_days".to_string(), json!(flexibility));
+        }
+
+        Ok(result)
+    }
+
+    /// Ultra-light price check - returns just price, no flight details.
+    fn price_check(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let origin = Self::get_str(&params, "origin")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: origin"))?
+            .to_string();
+
+        let destination = Self::get_str(&params, "destination")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: destination"))?
+            .to_string();
+
+        let date = Self::get_date(&params, "date")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: date"))?;
+
+        let adults = Self::get_u8(&params, "adults", 1);
+
+        // Check cache first
+        let cache_key = format!("price:{}:{}:{}:{}", origin, destination, date, adults);
+        if let Some(cached) = self.cache_get(&cache_key) {
+            return Ok(cached);
+        }
+
+        let search_params = FlightSearchParams {
+            origin: origin.clone(),
+            destination: destination.clone(),
+            departure_from: date,
+            departure_to: date,
+            return_from: None,
+            return_to: None,
+            adults,
+            children: 0,
+            infants: 0,
+            cabin_class: CabinClass::Economy,
+            max_stops: None,
+            sort_by: SortBy::Price,
+            limit: 1,
+            max_price: None,
+            min_price: None,
+        };
+
+        let client = self.flights.clone();
+        let flights = self
+            .runtime
+            .block_on(async move { client.search_flights(&search_params).await })?;
+
+        let result = if let Some(flight) = flights.first() {
+            json!({
+                "origin": origin,
+                "destination": destination,
+                "date": date.to_string(),
+                "price": flight.price,
+                "currency": flight.currency,
+                "stops": flight.stops,
+                "available": true,
+            })
+        } else {
+            json!({
+                "origin": origin,
+                "destination": destination,
+                "date": date.to_string(),
+                "available": false,
+            })
+        };
+
+        self.cache_set(&cache_key, &result);
+        Ok(result)
+    }
+
+    /// Search for direct (non-stop) flights only.
+    fn search_direct_only(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let origin = Self::get_str(&params, "origin")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: origin"))?
+            .to_string();
+
+        let destination = Self::get_str(&params, "destination")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: destination"))?
+            .to_string();
+
+        let date = Self::get_date(&params, "date")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: date"))?;
+
+        let adults = Self::get_u8(&params, "adults", 1);
+        let limit = Self::get_u32(&params, "limit", 10);
+
+        let search_params = FlightSearchParams {
+            origin: origin.clone(),
+            destination: destination.clone(),
+            departure_from: date,
+            departure_to: date,
+            return_from: None,
+            return_to: None,
+            adults,
+            children: 0,
+            infants: 0,
+            cabin_class: CabinClass::Economy,
+            max_stops: Some(0), // Direct flights only
+            sort_by: SortBy::Price,
+            limit,
+            max_price: None,
+            min_price: None,
+        };
+
+        let client = self.flights.clone();
+        let flights = self
+            .runtime
+            .block_on(async move { client.search_flights(&search_params).await })?;
+
+        // Filter to only truly direct flights (single segment)
+        let direct_flights: Vec<_> = flights
+            .into_iter()
+            .filter(|f| f.stops == 0 && f.segments.len() == 1)
+            .collect();
+
+        Ok(json!({
+            "origin": origin,
+            "destination": destination,
+            "date": date.to_string(),
+            "flights": direct_flights,
+            "count": direct_flights.len(),
+            "direct_only": true,
+        }))
+    }
+
+    /// Execute multiple independent searches in one call.
+    fn batch_search(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let searches: Vec<Value> = params
+            .get("searches")
+            .and_then(|v| v.as_array())
+            .cloned()
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: searches (array)"))?;
+
+        if searches.is_empty() {
+            anyhow::bail!("searches array cannot be empty");
+        }
+        if searches.len() > 10 {
+            anyhow::bail!("Maximum 10 searches per batch (got {})", searches.len());
+        }
+
+        let client = self.flights.clone();
+        let cache = self.cache.clone();
+
+        let results = self.runtime.block_on(async move {
+            use futures::future::join_all;
+
+            let tasks: Vec<_> = searches
+                .into_iter()
+                .enumerate()
+                .map(|(idx, search)| {
+                    let client = client.clone();
+                    let cache = cache.clone();
+
+                    async move {
+                        let origin = search.get("origin").and_then(|v| v.as_str()).unwrap_or("");
+                        let destination = search
+                            .get("destination")
+                            .and_then(|v| v.as_str())
+                            .unwrap_or("anywhere");
+                        let date_str = search.get("date").and_then(|v| v.as_str()).unwrap_or("");
+
+                        if origin.is_empty() || date_str.is_empty() {
+                            return json!({
+                                "index": idx,
+                                "ok": false,
+                                "error": "Missing origin or date",
+                            });
+                        }
+
+                        let date = match NaiveDate::parse_from_str(date_str, "%Y-%m-%d") {
+                            Ok(d) => d,
+                            Err(_) => {
+                                return json!({
+                                    "index": idx,
+                                    "ok": false,
+                                    "error": "Invalid date format",
+                                });
+                            }
+                        };
+
+                        // Check cache
+                        let cache_key = format!("price:{}:{}:{}:1", origin, destination, date);
+                        if let Some(cached) = cache.get(&cache_key) {
+                            return json!({
+                                "index": idx,
+                                "ok": true,
+                                "cached": true,
+                                "result": cached,
+                            });
+                        }
+
+                        let search_params = FlightSearchParams {
+                            origin: origin.to_string(),
+                            destination: destination.to_string(),
+                            departure_from: date,
+                            departure_to: date,
+                            return_from: None,
+                            return_to: None,
+                            adults: 1,
+                            children: 0,
+                            infants: 0,
+                            cabin_class: CabinClass::Economy,
+                            max_stops: None,
+                            sort_by: SortBy::Price,
+                            limit: 1,
+                            max_price: None,
+                            min_price: None,
+                        };
+
+                        match client.search_flights(&search_params).await {
+                            Ok(flights) => {
+                                let result = if let Some(f) = flights.first() {
+                                    json!({
+                                        "origin": origin,
+                                        "destination": destination,
+                                        "date": date.to_string(),
+                                        "price": f.price,
+                                        "stops": f.stops,
+                                        "available": true,
+                                    })
+                                } else {
+                                    json!({
+                                        "origin": origin,
+                                        "destination": destination,
+                                        "date": date.to_string(),
+                                        "available": false,
+                                    })
+                                };
+
+                                cache.set(cache_key, result.clone());
+
+                                json!({
+                                    "index": idx,
+                                    "ok": true,
+                                    "cached": false,
+                                    "result": result,
+                                })
+                            }
+                            Err(e) => {
+                                json!({
+                                    "index": idx,
+                                    "ok": false,
+                                    "error": e.to_string(),
+                                })
+                            }
+                        }
+                    }
+                })
+                .collect();
+
+            join_all(tasks).await
+        });
+
+        let successful = results.iter().filter(|r| r.get("ok") == Some(&json!(true))).count();
+
+        Ok(json!({
+            "searches_requested": results.len(),
+            "successful": successful,
+            "results": results,
+        }))
+    }
+
     fn parse_flight_params(&self, params: &HashMap<String, Value>) -> Result<FlightSearchParams> {
         let origin = Self::get_str(params, "origin")
             .ok_or_else(|| anyhow::anyhow!("Missing required parameter: origin"))?
@@ -557,13 +987,24 @@ impl FgpService for TravelService {
 
     fn dispatch(&self, method: &str, params: HashMap<String, Value>) -> Result<Value> {
         match method {
-            // Flights
+            // Flights - basic
             "travel.find_location" | "find_location" => self.find_location(params),
             "travel.search_flights" | "search_flights" => self.search_flights(params),
             "travel.search_roundtrip" | "search_roundtrip" => self.search_roundtrip(params),
+
+            // Flights - efficiency methods
             "travel.search_cheapest_day" | "search_cheapest_day" => {
                 self.search_cheapest_day(params)
             }
+            "travel.search_cheapest_route" | "search_cheapest_route" => {
+                self.search_cheapest_route(params)
+            }
+            "travel.search_flexible_dates" | "search_flexible_dates" => {
+                self.search_flexible_dates(params)
+            }
+            "travel.price_check" | "price_check" => self.price_check(params),
+            "travel.search_direct_only" | "search_direct_only" => self.search_direct_only(params),
+            "travel.batch_search" | "batch_search" => self.batch_search(params),
 
             // Hotels
             "travel.search_hotels" | "search_hotels" => self.search_hotels(params),
@@ -748,6 +1189,156 @@ impl FgpService for TravelService {
                         default: None,
                     },
                 ],
+            },
+            MethodInfo {
+                name: "travel.search_cheapest_route".into(),
+                description: "Search multiple destinations in parallel to find cheapest route"
+                    .into(),
+                params: vec![
+                    ParamInfo {
+                        name: "origin".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "destinations".into(),
+                        param_type: "array".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "date".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "max_price".into(),
+                        param_type: "number".into(),
+                        required: false,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "adults".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(json!(1)),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "travel.search_flexible_dates".into(),
+                description: "Search ±N days around target date for price flexibility".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "origin".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "destination".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "date".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "flexibility".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(json!(3)),
+                    },
+                    ParamInfo {
+                        name: "adults".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(json!(1)),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "travel.price_check".into(),
+                description: "Ultra-light price check - returns just price, no flight details"
+                    .into(),
+                params: vec![
+                    ParamInfo {
+                        name: "origin".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "destination".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "date".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "adults".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(json!(1)),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "travel.search_direct_only".into(),
+                description: "Search for direct (non-stop) flights only".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "origin".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "destination".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "date".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "adults".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(json!(1)),
+                    },
+                    ParamInfo {
+                        name: "limit".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(json!(10)),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "travel.batch_search".into(),
+                description: "Execute multiple independent searches in one call".into(),
+                params: vec![ParamInfo {
+                    name: "searches".into(),
+                    param_type: "array".into(),
+                    required: true,
+                    default: None,
+                }],
             },
             // Hotel methods
             MethodInfo {

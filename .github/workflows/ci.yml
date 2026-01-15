@@ -9,6 +9,8 @@ on:
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
+  CARGO_HOME: /Users/runner/.cargo
+  CARGO_INCREMENTAL: 0
 
 jobs:
   # Lint and format check for travel daemon
@@ -22,6 +24,17 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('travel/Cargo.lock') }}
+
+      - name: Fetch dependencies
+        run: cargo fetch --manifest-path travel/Cargo.toml
 
       - name: Check formatting (travel)
         run: cargo fmt --check --manifest-path travel/Cargo.toml
@@ -47,6 +60,9 @@ jobs:
             ~/.cargo/git
             travel/target
           key: ${{ runner.os }}-cargo-travel-${{ hashFiles('travel/Cargo.lock') }}
+
+      - name: Fetch dependencies
+        run: cargo fetch --manifest-path travel/Cargo.toml
 
       - name: Build travel daemon
         run: cargo build --manifest-path travel/Cargo.toml --release
