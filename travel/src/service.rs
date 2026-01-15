@@ -1,6 +1,7 @@
 //! FGP service implementation for travel search.
 //!
 //! # CHANGELOG (recent first, max 5 entries)
+//! 01/15/2026 - Added response caching for all API methods (Claude)
 //! 01/14/2026 - Initial implementation (Claude)
 
 use anyhow::{Context, Result};
@@ -84,6 +85,16 @@ impl TravelService {
         })
     }
 
+    /// Check cache and return cached value if present.
+    fn cache_get(&self, key: &str) -> Option<Value> {
+        self.cache.get(&key.to_string())
+    }
+
+    /// Store value in cache.
+    fn cache_set(&self, key: &str, value: &Value) {
+        self.cache.set(key.to_string(), value.clone());
+    }
+
     // ========================================================================
     // Flight methods
     // ========================================================================
@@ -94,6 +105,13 @@ impl TravelService {
         let limit = Self::get_u32(&params, "limit", 10);
         let types = Self::get_str_array(&params, "types");
 
+        // Check cache
+        let cache_key = format!("loc:{}:{}:{:?}", term, limit, types);
+        if let Some(cached) = self.cache_get(&cache_key) {
+            tracing::debug!("Cache HIT for location search: {}", term);
+            return Ok(cached);
+        }
+
         let client = self.flights.clone();
         let term = term.to_string();
 
@@ -101,38 +119,83 @@ impl TravelService {
             .runtime
             .block_on(async move { client.find_location(&term, types, limit).await })?;
 
-        Ok(json!({
+        let result = json!({
             "locations": locations,
             "count": locations.len(),
-        }))
+        });
+
+        // Store in cache
+        self.cache_set(&cache_key, &result);
+        tracing::debug!("Cache MISS for location search, stored: {}", cache_key);
+
+        Ok(result)
     }
 
     fn search_flights(&self, params: HashMap<String, Value>) -> Result<Value> {
         let search_params = self.parse_flight_params(&params)?;
+
+        // Check cache
+        let cache_key = format!(
+            "flights:{}:{}:{}:{}:{}",
+            search_params.origin,
+            search_params.destination,
+            search_params.departure_from,
+            search_params.adults,
+            search_params.limit
+        );
+        if let Some(cached) = self.cache_get(&cache_key) {
+            tracing::debug!("Cache HIT for flight search");
+            return Ok(cached);
+        }
 
         let client = self.flights.clone();
         let flights = self
             .runtime
             .block_on(async move { client.search_flights(&search_params).await })?;
 
-        Ok(json!({
+        let result = json!({
             "flights": flights,
             "count": flights.len(),
-        }))
+        });
+
+        self.cache_set(&cache_key, &result);
+        tracing::debug!("Cache MISS for flight search, stored");
+
+        Ok(result)
     }
 
     fn search_roundtrip(&self, params: HashMap<String, Value>) -> Result<Value> {
         let search_params = self.parse_flight_params(&params)?;
+
+        // Check cache
+        let cache_key = format!(
+            "roundtrip:{}:{}:{}:{}:{}:{}",
+            search_params.origin,
+            search_params.destination,
+            search_params.departure_from,
+            search_params.return_from.map(|d| d.to_string()).unwrap_or_default(),
+            search_params.adults,
+            search_params.limit
+        );
+        if let Some(cached) = self.cache_get(&cache_key) {
+            tracing::debug!("Cache HIT for roundtrip search");
+            return Ok(cached);
+        }
 
         let client = self.flights.clone();
         let roundtrips = self
             .runtime
             .block_on(async move { client.search_roundtrip(&search_params).await })?;
 
-        Ok(json!({
+        let result = json!({
             "roundtrips": roundtrips,
             "count": roundtrips.len(),
-        }))
+        });
+
+        self.cache_set(&cache_key, &result);
+        tracing::debug!("Cache MISS for roundtrip search, stored");
+
+        Ok(result)
     }
 
     fn parse_flight_params(&self, params: &HashMap<String, Value>) -> Result<FlightSearchParams> {
@@ -213,10 +276,20 @@ impl TravelService {
             .ok_or_else(|| anyhow::anyhow!("Missing required parameter: location"))?
             .to_string();
 
+        let limit = Self::get_u32(&params, "limit", 30);
+        let offset = Self::get_u32(&params, "offset", 0);
+
+        // Check cache (without filters - filters are applied client-side)
+        let cache_key = format!("hotels:{}:{}:{}", location, limit, offset);
+        if let Some(cached) = self.cache_get(&cache_key) {
+            tracing::debug!("Cache HIT for hotel search");
+            return Ok(cached);
+        }
+
         let search_params = HotelSearchParams {
             location,
-            limit: Self::get_u32(&params, "limit", 30),
-            offset: Self::get_u32(&params, "offset", 0),
+            limit,
+            offset,
             min_price: Self::get_f64(&params, "min_price"),
             max_price: Self::get_f64(&params, "max_price"),
             min_rating: Self::get_f64(&params, "min_rating"),
@@ -228,7 +301,11 @@ impl TravelService {
             .runtime
             .block_on(async move { client.search_hotels(&search_params).await })?;
 
-        Ok(json!(results))
+        let result = json!(results);
+        self.cache_set(&cache_key, &result);
+        tracing::debug!("Cache MISS for hotel search, stored");
+
+        Ok(result)
     }
 
     fn get_hotel_rates(&self, params: HashMap<String, Value>) -> Result<Value> {
@@ -246,6 +323,16 @@ impl TravelService {
         let adults = Self::get_u8(&params, "adults", 2);
         let currency = Self::get_str(&params, "currency").unwrap_or("USD").to_string();
 
+        // Check cache (shorter TTL for rates - prices change frequently)
+        let cache_key = format!(
+            "rates:{}:{}:{}:{}:{}:{}",
+            hotel_key, check_in, check_out, rooms, adults, currency
+        );
+        if let Some(cached) = self.cache_get(&cache_key) {
+            tracing::debug!("Cache HIT for hotel rates");
+            return Ok(cached);
+        }
+
         let client = self.hotels.clone();
         let rates = self.runtime.block_on(async move {
             client
@@ -253,7 +340,11 @@ impl TravelService {
                 .await
         })?;
 
-        Ok(json!(rates))
+        let result = json!(rates);
+        self.cache_set(&cache_key, &result);
+        tracing::debug!("Cache MISS for hotel rates, stored");
+
+        Ok(result)
     }
 
     // ========================================================================
