@@ -53,12 +53,14 @@ Or edit `~/.cursor/mcp.json` directly:
 {
   "mcpServers": {
     "fgp": {
-      "command": "/Users/yourname/.fgp/bin/fgp",
+      "command": "fgp",
       "args": ["mcp-bridge"]
     }
   }
 }
 ```
+
+If `fgp` is not on your PATH, use `$HOME/.fgp/bin/fgp`.
 
 Restart Cursor to load the new MCP server.
 
@@ -186,7 +188,7 @@ Ensure the full path in your config:
 ```json
 {
   "fgp": {
-    "command": "/Users/yourname/.fgp/bin/fgp",
+    "command": "$HOME/.fgp/bin/fgp",
     "args": ["mcp-bridge"]
   }
 }
@@ -241,7 +243,7 @@ Create `~/Library/LaunchAgents/com.fgp.browser.plist`:
     <string>com.fgp.browser</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/yourname/.fgp/bin/fgp</string>
+        <string>$HOME/.fgp/bin/fgp</string>
         <string>start</string>
         <string>browser</string>
     </array>
@@ -265,5 +267,5 @@ See [systemd deployment guide](../deployment/systemd.md).
 ## Next Steps
 
 - [Browser Daemon Reference](../daemons/browser.md) - All browser methods
-- [Gmail Integration](./gmail.md) - Email automation
-- [Building Custom Daemons](../development/building-daemons.md) - Create your own
+- [Building Custom Daemons](../development/building-daemons.md) - Create your own FGP daemon
+- [Protocol Reference](../protocol/overview.md) - Wire format details

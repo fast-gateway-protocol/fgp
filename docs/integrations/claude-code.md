@@ -234,7 +234,6 @@ FGP is **19x faster** for multi-step workflows.
 
 ## Next Steps
 
-- [Gmail Integration](./gmail.md) - Email automation
-- [Calendar Integration](./calendar.md) - Schedule management
-- [GitHub Integration](./github.md) - Repository operations
 - [Protocol Reference](../protocol/overview.md) - Wire format details
+- [Browser Daemon](../daemons/browser.md) - Full browser method reference
+- [Building Custom Daemons](../development/building-daemons.md) - Create your own FGP daemon
