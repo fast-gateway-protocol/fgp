@@ -38,6 +38,9 @@ for f in *.py; do python3 "$f" --iterations 3; done
 
 | Operation | MCP Stdio | FGP Daemon | Speedup |
 |-----------|-----------|------------|---------|
+| iMessage analytics | 2,400ms | 5ms | **480x** |
+| iMessage recent | 2,300ms | 8ms | **292x** |
+| iMessage unread | 2,300ms | 10ms | **230x** |
 | Browser navigate | 2,300ms | 8ms | **292x** |
 | Browser snapshot | 2,300ms | 9ms | **257x** |
 | Gmail list | 2,400ms | 35ms | **69x** |
@@ -54,3 +57,4 @@ Benchmarks output:
 - Browser benchmarks require Chrome running with remote debugging
 - Gmail/Calendar benchmarks require OAuth credentials in `~/.fgp/auth/google/`
 - GitHub benchmarks require `GITHUB_TOKEN` environment variable
+- iMessage benchmarks require macOS with Full Disk Access permission

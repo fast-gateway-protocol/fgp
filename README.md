@@ -64,15 +64,27 @@ All methods tested at **100% success rate** (3 iterations each):
 | notifications | 521ms | 512ms | 535ms | 9.8KB |
 | issues | **390ms** | 343ms | 460ms | 75B |
 
+### iMessage Daemon (macOS)
+
+Fast iMessage operations via direct SQLite queries to `chat.db`:
+
+| Operation | FGP Daemon | MCP Stdio | Speedup |
+|-----------|------------|-----------|---------|
+| Recent messages | **8ms** | 2,300ms | **292x** |
+| Unread messages | **10ms** | 2,300ms | **230x** |
+| Analytics | **5ms** | 2,400ms | **480x** |
+
 ### Summary by Daemon
 
-| Daemon | Avg Latency | Architecture |
-|--------|-------------|--------------|
-| **Calendar** | **233ms** | PyO3 + Google API |
-| **GitHub** | **474ms** | Native Rust + gh CLI |
-| **Gmail** | **683ms** | PyO3 + Google API |
+| Daemon | Avg Latency | Architecture | Speedup |
+|--------|-------------|--------------|---------|
+| **iMessage** | **8ms** | Native Rust + SQLite | **480x** |
+| **Browser** | **16ms** | Native Rust + CDP | **292x** |
+| **Calendar** | **233ms** | PyO3 + Google API | Beta |
+| **GitHub** | **474ms** | Native Rust + gh CLI | **75x** |
+| **Gmail** | **683ms** | PyO3 + Google API | **69x** |
 
-**Key insight:** Latency is dominated by external API calls, not FGP overhead (~5-10ms). For MCP, add ~2.3s cold-start to every call.
+**Key insight:** Latency is dominated by external API calls, not FGP overhead (~5-10ms). Local daemons (iMessage, Browser) are fastest. For MCP, add ~2.3s cold-start to every call.
 
 ## Why FGP?
 
@@ -92,18 +104,18 @@ LLM agents make many sequential tool calls. Cold-start overhead compounds:
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                     AI Agent / Claude                    │
-├─────────────────────────────────────────────────────────┤
-│                   FGP UNIX Sockets                       │
-│   ~/.fgp/services/{browser,gmail,calendar,github}/      │
-├──────────┬──────────┬──────────┬──────────┬────────────┤
-│ Browser  │  Gmail   │ Calendar │  GitHub  │   ...      │
-│ Daemon   │  Daemon  │  Daemon  │  Daemon  │            │
-│ (Rust)   │  (PyO3)  │  (PyO3)  │  (Rust)  │            │
-├──────────┴──────────┴──────────┴──────────┴────────────┤
-│           Chrome    │  Google APIs  │  gh CLI          │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                       AI Agent / Claude                          │
+├─────────────────────────────────────────────────────────────────┤
+│                      FGP UNIX Sockets                            │
+│   ~/.fgp/services/{browser,gmail,calendar,github,imessage}/     │
+├──────────┬──────────┬──────────┬──────────┬──────────┬─────────┤
+│ Browser  │  Gmail   │ Calendar │  GitHub  │ iMessage │   ...   │
+│ Daemon   │  Daemon  │  Daemon  │  Daemon  │  Daemon  │         │
+│ (Rust)   │  (PyO3)  │  (PyO3)  │  (Rust)  │  (Rust)  │         │
+├──────────┴──────────┴──────────┴──────────┴──────────┴─────────┤
+│    Chrome    │    Google APIs    │  gh CLI  │ chat.db + AS     │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 **Key design decisions:**
@@ -201,6 +213,21 @@ fgp call github.issues '{"repo": "owner/repo"}'
 fgp call github.notifications
 ```
 
+### iMessage Daemon (macOS)
+
+```bash
+cd imessage && cargo build --release
+
+# Start daemon (requires Full Disk Access)
+./target/release/fgp-imessage-daemon start
+
+# Use it
+fgp call imessage.recent '{"limit": 10}'
+fgp call imessage.unread
+fgp call imessage.analytics '{"days": 30}'
+fgp call imessage.bundle '{"include": "unread_count,recent,analytics"}'
+```
+
 ## FGP Protocol
 
 All daemons use the same NDJSON-over-UNIX-socket protocol.
@@ -233,6 +260,7 @@ fgp/
 ├── gmail/           # Gmail daemon (Google API)
 ├── calendar/        # Google Calendar daemon
 ├── github/          # GitHub daemon (GraphQL + REST)
+├── imessage/        # iMessage daemon (macOS - SQLite + AppleScript)
 └── ...
 ```
 
@@ -240,7 +268,8 @@ fgp/
 
 | Component | Status | Performance |
 |-----------|--------|-------------|
-| browser | **Production** | 8ms navigate, 9ms snapshot |
+| imessage | **Production** | 5ms analytics, 8ms recent **(480x)** |
+| browser | **Production** | 8ms navigate, 9ms snapshot **(292x)** |
 | gmail | Beta | 116ms thread read, 881ms inbox |
 | calendar | Beta | 177ms search, 233ms avg |
 | github | Beta | 390ms issues, 474ms avg |
@@ -279,4 +308,5 @@ MIT
 ## Related
 
 - [daemon](https://github.com/fast-gateway-protocol/daemon) - Core SDK
-- [browser](https://github.com/fast-gateway-protocol/browser) - Browser daemon
+- [browser](https://github.com/fast-gateway-protocol/browser) - Browser daemon (292x faster)
+- [imessage](https://github.com/fast-gateway-protocol/imessage) - iMessage daemon (480x faster, macOS)

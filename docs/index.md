@@ -1,10 +1,18 @@
 # FGP - Fast Gateway Protocol
 
-**Daemon-based architecture for AI agent tools. 19x faster than MCP stdio.**
+**Daemon-based architecture for AI agent tools. Up to 480x faster than MCP stdio.**
 
 FGP replaces slow MCP stdio servers with persistent UNIX socket daemons. Instead of spawning a new process for each tool call (~2.3s overhead), FGP keeps daemons warm and ready (~10-50ms latency).
 
 ## Performance
+
+### iMessage (macOS) - Fastest Local Daemon
+
+| Operation | FGP iMessage | MCP Stdio | Speedup |
+|-----------|--------------|-----------|---------|
+| Analytics | **5ms**      | 2,400ms   | **480x** |
+| Recent    | **8ms**      | 2,300ms   | **292x** |
+| Unread    | **10ms**     | 2,300ms   | **230x** |
 
 ### Browser Automation (vs Playwright MCP)
 
@@ -82,15 +90,16 @@ The daemon handles connection pooling, state management, and resource caching.
 
 ## Available Daemons
 
-| Daemon | Description | Status |
-|--------|-------------|--------|
-| [browser](daemons/browser.md) | Chrome automation via DevTools Protocol | Stable |
-| [gmail](daemons/gmail.md) | Gmail API operations | Beta |
-| [calendar](daemons/calendar.md) | Google Calendar integration | Beta |
-| [github](daemons/github.md) | GitHub GraphQL + REST | Beta |
-| fly | Fly.io deployments | Alpha |
-| neon | Neon Postgres | Alpha |
-| vercel | Vercel deployments | Alpha |
+| Daemon | Description | Speedup | Status |
+|--------|-------------|---------|--------|
+| [imessage](daemons/imessage.md) | macOS iMessage via SQLite | **480x** | Stable |
+| [browser](daemons/browser.md) | Chrome automation via DevTools Protocol | **292x** | Stable |
+| [github](daemons/github.md) | GitHub GraphQL + REST | **75x** | Beta |
+| [gmail](daemons/gmail.md) | Gmail API operations | **69x** | Beta |
+| [calendar](daemons/calendar.md) | Google Calendar integration | - | Beta |
+| fly | Fly.io deployments | - | Alpha |
+| neon | Neon Postgres | - | Alpha |
+| vercel | Vercel deployments | - | Alpha |
 
 ## IDE & Agent Integrations
 

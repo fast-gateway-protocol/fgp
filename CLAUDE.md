@@ -19,6 +19,7 @@ FGP (Fast Gateway Protocol) is a **daemon-based architecture** that replaces slo
 
 | Tool | MCP Stdio | FGP Daemon | Speedup |
 |------|-----------|------------|---------|
+| iMessage analytics | 2,400ms | 5ms | **480x** |
 | Browser navigate | 2,300ms | 8ms | **292x** |
 | Gmail list | 2,400ms | 35ms | **69x** |
 | GitHub issues | 2,100ms | 28ms | **75x** |
@@ -34,7 +35,8 @@ fgp/
 ├── protocol/        # FGP protocol specification (NDJSON over UNIX sockets)
 ├── cli/             # `fgp` CLI for managing daemons
 │
-├── browser/         # Browser automation daemon (Chrome DevTools Protocol)
+├── imessage/        # iMessage daemon (macOS - SQLite + AppleScript) **480x**
+├── browser/         # Browser automation daemon (Chrome DevTools Protocol) **292x**
 ├── gmail/           # Gmail daemon (Google API)
 ├── calendar/        # Google Calendar daemon
 ├── github/          # GitHub daemon (GraphQL + REST)
@@ -289,6 +291,7 @@ echo '{"id":"1","v":1,"method":"health","params":{}}' | nc -U ~/.fgp/services/br
 | Component | Status | Notes |
 |-----------|--------|-------|
 | `daemon` | Stable | Core SDK, concurrent server |
+| `imessage` | Production | 480x faster, macOS only |
 | `browser` | Production | Full feature parity, 292x faster |
 | `gmail` | Beta | Basic operations |
 | `calendar` | Beta | Basic operations |
