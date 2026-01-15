@@ -1,0 +1,94 @@
+{
+  "$schema": "https://fgp.dev/schemas/marketplace.json",
+  "name": "fgp-official",
+  "description": "Official Fast Gateway Protocol skill marketplace - high-performance daemon integrations for AI agents",
+  "owner": {
+    "name": "Fast Gateway Protocol",
+    "email": "support@fgp.dev"
+  },
+  "homepage": "https://fgp.dev",
+  "repository": "https://github.com/fast-gateway-protocol/fgp",
+  "skills": [
+    {
+      "name": "browser-gateway",
+      "description": "Fast browser automation via Chrome DevTools Protocol - 292x faster than Playwright MCP",
+      "version": "0.1.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./browser",
+      "category": "browser-automation",
+      "tags": ["browser", "automation", "chrome", "cdp"],
+      "homepage": "https://github.com/fast-gateway-protocol/browser"
+    },
+    {
+      "name": "gmail-gateway",
+      "description": "Fast Gmail operations via Google API - 69x faster than MCP stdio",
+      "version": "1.0.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./gmail",
+      "category": "email",
+      "tags": ["gmail", "email", "google", "inbox"],
+      "homepage": "https://github.com/fast-gateway-protocol/gmail"
+    },
+    {
+      "name": "calendar-gateway",
+      "description": "Fast Google Calendar operations - create events, check availability, schedule meetings",
+      "version": "1.0.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./calendar",
+      "category": "calendar",
+      "tags": ["calendar", "google", "scheduling", "events"],
+      "homepage": "https://github.com/fast-gateway-protocol/calendar"
+    },
+    {
+      "name": "github-gateway",
+      "description": "Fast GitHub operations via GraphQL + REST - issues, PRs, repos, notifications",
+      "version": "0.2.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./github",
+      "category": "development",
+      "tags": ["github", "git", "issues", "pull-requests"],
+      "homepage": "https://github.com/fast-gateway-protocol/github"
+    },
+    {
+      "name": "neon-gateway",
+      "description": "Fast Neon Postgres operations - run SQL, manage branches, migrations",
+      "version": "0.1.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./neon",
+      "category": "database",
+      "tags": ["postgres", "neon", "database", "sql"],
+      "homepage": "https://github.com/fast-gateway-protocol/neon"
+    },
+    {
+      "name": "vercel-gateway",
+      "description": "Fast Vercel deployment operations - deploy, logs, domains",
+      "version": "0.1.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./vercel",
+      "category": "deployment",
+      "tags": ["vercel", "deploy", "hosting"],
+      "homepage": "https://github.com/fast-gateway-protocol/vercel"
+    },
+    {
+      "name": "fly-gateway",
+      "description": "Fast Fly.io operations via GraphQL - deploy, scale, manage machines",
+      "version": "0.1.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./fly",
+      "category": "deployment",
+      "tags": ["fly", "deploy", "containers"],
+      "homepage": "https://github.com/fast-gateway-protocol/fly"
+    },
+    {
+      "name": "imessage-gateway",
+      "description": "Fast iMessage operations for macOS - send, read, search messages with semantic search",
+      "version": "1.0.0",
+      "author": { "name": "Fast Gateway Protocol" },
+      "source": "./imessage",
+      "category": "messaging",
+      "tags": ["imessage", "sms", "macos", "messaging", "apple"],
+      "platforms": ["darwin"],
+      "homepage": "https://github.com/fast-gateway-protocol/imessage"
+    }
+  ]
+}
