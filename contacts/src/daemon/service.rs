@@ -234,77 +234,19 @@ impl FgpService for ContactsService {
 
     fn method_list(&self) -> Vec<MethodInfo> {
         vec![
-            MethodInfo {
-                name: "list".into(),
-                description: "List all contacts".into(),
-                params: vec![ParamInfo {
-                    name: "limit".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(100.into())),
-                }],
-            },
-            MethodInfo {
-                name: "search".into(),
-                description: "Search contacts by name".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "query".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(20.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "by_email".into(),
-                description: "Find contact by email address".into(),
-                params: vec![ParamInfo {
-                    name: "email".into(),
-                    param_type: "string".into(),
-                    required: true,
-                    default: None,
-                }],
-            },
-            MethodInfo {
-                name: "by_phone".into(),
-                description: "Find contact by phone number".into(),
-                params: vec![ParamInfo {
-                    name: "phone".into(),
-                    param_type: "string".into(),
-                    required: true,
-                    default: None,
-                }],
-            },
-            MethodInfo {
-                name: "recent".into(),
-                description: "Get recently modified contacts".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "days".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(30.into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(20.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "stats".into(),
-                description: "Get contact statistics".into(),
-                params: vec![],
-            },
+            MethodInfo::new("list", "List all contacts")
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(100.into())) }),
+            MethodInfo::new("search", "Search contacts by name")
+                .param(ParamInfo { name: "query".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(20.into())) }),
+            MethodInfo::new("by_email", "Find contact by email address")
+                .param(ParamInfo { name: "email".into(), param_type: "string".into(), required: true, default: None }),
+            MethodInfo::new("by_phone", "Find contact by phone number")
+                .param(ParamInfo { name: "phone".into(), param_type: "string".into(), required: true, default: None }),
+            MethodInfo::new("recent", "Get recently modified contacts")
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(30.into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(20.into())) }),
+            MethodInfo::new("stats", "Get contact statistics"),
         ]
     }
 

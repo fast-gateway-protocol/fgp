@@ -197,204 +197,39 @@ impl FgpService for SpotlightService {
 
     fn method_list(&self) -> Vec<MethodInfo> {
         vec![
-            MethodInfo {
-                name: "search".into(),
-                description: "Raw Spotlight query (mdfind syntax)".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "query".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "scope".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: Some(Value::String("home".into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "by_name".into(),
-                description: "Search files by name (substring match)".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "name".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "scope".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: Some(Value::String("home".into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "by_extension".into(),
-                description: "Search files by extension".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "extension".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "scope".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: Some(Value::String("home".into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "by_kind".into(),
-                description: "Search by kind: pdf, image, video, audio, document, text, source, folder, app, archive".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "kind".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "name".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "scope".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: Some(Value::String("home".into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "recent".into(),
-                description: "Find recently modified files".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "days".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(7.into())),
-                    },
-                    ParamInfo {
-                        name: "scope".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: Some(Value::String("home".into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "apps".into(),
-                description: "Find applications".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "name".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "directories".into(),
-                description: "Find directories".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "name".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "scope".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: Some(Value::String("home".into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "by_size".into(),
-                description: "Find files by size range".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "min_bytes".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "max_bytes".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "scope".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: Some(Value::String("home".into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
+            MethodInfo::new("search", "Raw Spotlight query (mdfind syntax)")
+                .param(ParamInfo { name: "query".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "scope".into(), param_type: "string".into(), required: false, default: Some(Value::String("home".into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("by_name", "Search files by name (substring match)")
+                .param(ParamInfo { name: "name".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "scope".into(), param_type: "string".into(), required: false, default: Some(Value::String("home".into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("by_extension", "Search files by extension")
+                .param(ParamInfo { name: "extension".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "scope".into(), param_type: "string".into(), required: false, default: Some(Value::String("home".into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("by_kind", "Search by kind: pdf, image, video, audio, document, text, source, folder, app, archive")
+                .param(ParamInfo { name: "kind".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "name".into(), param_type: "string".into(), required: false, default: None })
+                .param(ParamInfo { name: "scope".into(), param_type: "string".into(), required: false, default: Some(Value::String("home".into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("recent", "Find recently modified files")
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(7.into())) })
+                .param(ParamInfo { name: "scope".into(), param_type: "string".into(), required: false, default: Some(Value::String("home".into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("apps", "Find applications")
+                .param(ParamInfo { name: "name".into(), param_type: "string".into(), required: false, default: None })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("directories", "Find directories")
+                .param(ParamInfo { name: "name".into(), param_type: "string".into(), required: false, default: None })
+                .param(ParamInfo { name: "scope".into(), param_type: "string".into(), required: false, default: Some(Value::String("home".into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("by_size", "Find files by size range (requires min_bytes and/or max_bytes)")
+                .param(ParamInfo { name: "min_bytes".into(), param_type: "integer".into(), required: false, default: None })
+                .param(ParamInfo { name: "max_bytes".into(), param_type: "integer".into(), required: false, default: None })
+                .param(ParamInfo { name: "scope".into(), param_type: "string".into(), required: false, default: Some(Value::String("home".into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
         ]
     }
 

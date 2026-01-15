@@ -299,40 +299,24 @@ pub fn search_by_size(
     scope: Option<&str>,
     limit: u32,
 ) -> Result<Vec<SearchResult>> {
-    let scopes = scope
-        .map(|s| vec![parse_scope(s)])
-        .unwrap_or_else(|| vec![MDQueryScope::Home]);
-
-    let mut builder = MDQueryBuilder::default();
-
-    if let Some(min) = min_bytes {
-        builder = builder.size(MDQueryCompareOp::GreaterThan, min);
+    // Handle size range queries - mdquery-rs builder doesn't support multiple conditions
+    // so we use raw query strings for all size filters
+    match (min_bytes, max_bytes) {
+        (Some(min), Some(max)) => {
+            let query = format!("kMDItemFSSize > {} && kMDItemFSSize < {}", min, max);
+            return search_raw(&query, scope, limit);
+        }
+        (Some(min), None) => {
+            let query = format!("kMDItemFSSize > {}", min);
+            return search_raw(&query, scope, limit);
+        }
+        (None, Some(max)) => {
+            let query = format!("kMDItemFSSize < {}", max);
+            return search_raw(&query, scope, limit);
+        }
+        (None, None) => {
+            // No size filter - return error since this endpoint requires at least one bound
+            Err(anyhow!("At least one of min_bytes or max_bytes must be provided"))
+        }
     }
-
-    // Note: mdquery-rs builder may not support multiple conditions well
-    // For complex queries, use raw query string
-    if max_bytes.is_some() && min_bytes.is_some() {
-        // Fall back to raw query for range
-        let query = format!(
-            "kMDItemFSSize > {} && kMDItemFSSize < {}",
-            min_bytes.unwrap(),
-            max_bytes.unwrap()
-        );
-        return search_raw(&query, scope, limit);
-    }
-
-    let md_query = builder
-        .build(scopes, Some(limit as usize))
-        .map_err(|e| anyhow!("Failed to build query: {}", e))?;
-
-    let items = md_query
-        .execute()
-        .map_err(|e| anyhow!("Query execution failed: {}", e))?;
-
-    let results: Vec<SearchResult> = items
-        .iter()
-        .filter_map(|item| SearchResult::from_mditem(item))
-        .collect();
-
-    Ok(results)
 }

@@ -504,6 +504,43 @@ export const packages: Package[] = [
     },
     download_count: 0,
   },
+  {
+    name: 'travel',
+    version: '1.0.0',
+    description: 'Flight and hotel search via Kiwi/Xotelo APIs - token-optimized efficiency methods',
+    repository: 'https://github.com/fast-gateway-protocol/travel',
+    license: 'MIT',
+    platforms: ['darwin', 'linux', 'windows'],
+    categories: ['travel', 'productivity'],
+    featured: true,
+    verified: true,
+    skills: ['claude-code', 'cursor', 'windsurf', 'continue'],
+    auth: {
+      type: 'none',
+      setup: 'No authentication required - uses public APIs',
+    },
+    methods: [
+      { name: 'travel.find_location', description: 'Search airports/cities (instant, local DB)' },
+      { name: 'travel.search_flights', description: 'One-way flight search' },
+      { name: 'travel.search_roundtrip', description: 'Round-trip flight search' },
+      { name: 'travel.search_hotels', description: 'Hotel search by city' },
+      { name: 'travel.hotel_rates', description: 'Real-time hotel rates' },
+      { name: 'travel.price_check', description: 'Ultra-light price check (~55 tokens, 10x more efficient)' },
+      { name: 'travel.search_cheapest_day', description: 'Find cheapest day in date range (30x more efficient)' },
+      { name: 'travel.search_cheapest_route', description: 'Find cheapest destination from multiple options' },
+      { name: 'travel.search_flexible_dates', description: 'Search ±N days around target date' },
+      { name: 'travel.search_direct_only', description: 'Non-stop flights only' },
+      { name: 'travel.batch_search', description: 'Multiple searches in one call' },
+      { name: 'travel.cache_stats', description: 'Cache hit/miss statistics' },
+      { name: 'travel.cache_clear', description: 'Clear response cache' },
+    ],
+    benchmark: {
+      avg_latency_ms: 5,
+      vs_mcp_speedup: 'N/A',
+    },
+    added_at: '2026-01-15',
+    updated_at: '2026-01-15',
+  },
 ];
 
 export const categories = [

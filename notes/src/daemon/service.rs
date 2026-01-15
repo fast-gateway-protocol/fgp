@@ -175,105 +175,24 @@ impl FgpService for NotesService {
 
     fn method_list(&self) -> Vec<MethodInfo> {
         vec![
-            MethodInfo {
-                name: "list".into(),
-                description: "List all notes".into(),
-                params: vec![ParamInfo {
-                    name: "limit".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(50.into())),
-                }],
-            },
-            MethodInfo {
-                name: "recent".into(),
-                description: "Get recently modified notes".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "days".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(7.into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "search".into(),
-                description: "Search notes by title/content".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "query".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "read".into(),
-                description: "Read a specific note by ID".into(),
-                params: vec![ParamInfo {
-                    name: "id".into(),
-                    param_type: "integer".into(),
-                    required: true,
-                    default: None,
-                }],
-            },
-            MethodInfo {
-                name: "by_folder".into(),
-                description: "Get notes in a folder".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "folder".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "pinned".into(),
-                description: "Get pinned notes".into(),
-                params: vec![ParamInfo {
-                    name: "limit".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(50.into())),
-                }],
-            },
-            MethodInfo {
-                name: "folders".into(),
-                description: "List folders".into(),
-                params: vec![ParamInfo {
-                    name: "limit".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(50.into())),
-                }],
-            },
-            MethodInfo {
-                name: "stats".into(),
-                description: "Get library statistics".into(),
-                params: vec![],
-            },
+            MethodInfo::new("list", "List all notes")
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("recent", "Get recently modified notes")
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(7.into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("search", "Search notes by title/content")
+                .param(ParamInfo { name: "query".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("read", "Read a specific note by ID")
+                .param(ParamInfo { name: "id".into(), param_type: "integer".into(), required: true, default: None }),
+            MethodInfo::new("by_folder", "Get notes in a folder")
+                .param(ParamInfo { name: "folder".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("pinned", "Get pinned notes")
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("folders", "List folders")
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("stats", "Get library statistics"),
         ]
     }
 

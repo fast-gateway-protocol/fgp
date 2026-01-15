@@ -30,8 +30,10 @@ pub fn open_notes_db() -> Result<Connection> {
         rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY | rusqlite::OpenFlags::SQLITE_OPEN_NO_MUTEX,
     )?;
 
-    // Enable WAL mode for concurrent reads
-    conn.pragma_update(None, "journal_mode", "WAL")?;
+    // Note: WAL mode enables concurrent reads but requires write access to set.
+    // Apple Notes already uses WAL, so we benefit from it without needing to set it.
+    // Just verify we can query the database.
+    conn.pragma_query(None, "journal_mode", |_row| Ok(()))?;
 
     Ok(conn)
 }

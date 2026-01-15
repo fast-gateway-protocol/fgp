@@ -237,155 +237,32 @@ impl FgpService for PhotosService {
 
     fn method_list(&self) -> Vec<MethodInfo> {
         vec![
-            MethodInfo {
-                name: "recent".into(),
-                description: "Get recent photos/videos".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "days".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(30.into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                    ParamInfo {
-                        name: "kind".into(),
-                        param_type: "string".into(),
-                        required: false,
-                        default: None,
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "favorites".into(),
-                description: "Get favorited photos/videos".into(),
-                params: vec![ParamInfo {
-                    name: "limit".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(50.into())),
-                }],
-            },
-            MethodInfo {
-                name: "by_date".into(),
-                description: "Search photos by date range".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "start".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "end".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(100.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "by_location".into(),
-                description: "Search photos near a location".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "lat".into(),
-                        param_type: "number".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "lon".into(),
-                        param_type: "number".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "radius".into(),
-                        param_type: "number".into(),
-                        required: false,
-                        default: Some(Value::Number(serde_json::Number::from_f64(1.0).unwrap())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "albums".into(),
-                description: "List photo albums".into(),
-                params: vec![ParamInfo {
-                    name: "limit".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(50.into())),
-                }],
-            },
-            MethodInfo {
-                name: "album_photos".into(),
-                description: "Get photos in an album".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "album_id".into(),
-                        param_type: "integer".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(100.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "people".into(),
-                description: "List recognized people".into(),
-                params: vec![ParamInfo {
-                    name: "limit".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(50.into())),
-                }],
-            },
-            MethodInfo {
-                name: "person_photos".into(),
-                description: "Get photos of a person".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "person_id".into(),
-                        param_type: "integer".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "stats".into(),
-                description: "Get library statistics".into(),
-                params: vec![],
-            },
+            MethodInfo::new("recent", "Get recent photos/videos")
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(30.into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) })
+                .param(ParamInfo { name: "kind".into(), param_type: "string".into(), required: false, default: None }),
+            MethodInfo::new("favorites", "Get favorited photos/videos")
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("by_date", "Search photos by date range")
+                .param(ParamInfo { name: "start".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "end".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(100.into())) }),
+            MethodInfo::new("by_location", "Search photos near a location")
+                .param(ParamInfo { name: "lat".into(), param_type: "number".into(), required: true, default: None })
+                .param(ParamInfo { name: "lon".into(), param_type: "number".into(), required: true, default: None })
+                .param(ParamInfo { name: "radius".into(), param_type: "number".into(), required: false, default: Some(Value::Number(serde_json::Number::from_f64(1.0).unwrap())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("albums", "List photo albums")
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("album_photos", "Get photos in an album")
+                .param(ParamInfo { name: "album_id".into(), param_type: "integer".into(), required: true, default: None })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(100.into())) }),
+            MethodInfo::new("people", "List recognized people")
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("person_photos", "Get photos of a person")
+                .param(ParamInfo { name: "person_id".into(), param_type: "integer".into(), required: true, default: None })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("stats", "Get library statistics"),
         ]
     }
 

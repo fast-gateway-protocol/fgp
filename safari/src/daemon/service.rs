@@ -223,91 +223,21 @@ impl FgpService for SafariService {
 
     fn method_list(&self) -> Vec<MethodInfo> {
         vec![
-            MethodInfo {
-                name: "history".into(),
-                description: "Get recent browser history".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "days".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(7.into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "search".into(),
-                description: "Search history by URL or title".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "query".into(),
-                        param_type: "string".into(),
-                        required: true,
-                        default: None,
-                    },
-                    ParamInfo {
-                        name: "days".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(30.into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(50.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "top_sites".into(),
-                description: "Get most visited sites".into(),
-                params: vec![
-                    ParamInfo {
-                        name: "days".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(30.into())),
-                    },
-                    ParamInfo {
-                        name: "limit".into(),
-                        param_type: "integer".into(),
-                        required: false,
-                        default: Some(Value::Number(20.into())),
-                    },
-                ],
-            },
-            MethodInfo {
-                name: "stats".into(),
-                description: "Get browsing statistics".into(),
-                params: vec![ParamInfo {
-                    name: "days".into(),
-                    param_type: "integer".into(),
-                    required: false,
-                    default: Some(Value::Number(30.into())),
-                }],
-            },
-            MethodInfo {
-                name: "cloud_tabs".into(),
-                description: "Get tabs from other devices via iCloud".into(),
-                params: vec![],
-            },
-            MethodInfo {
-                name: "bundle".into(),
-                description: "Bundle multiple queries for dashboard".into(),
-                params: vec![ParamInfo {
-                    name: "include".into(),
-                    param_type: "string".into(),
-                    required: false,
-                    default: Some(Value::String("history,top_sites".into())),
-                }],
-            },
+            MethodInfo::new("history", "Get recent browser history")
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(7.into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("search", "Search history by URL or title")
+                .param(ParamInfo { name: "query".into(), param_type: "string".into(), required: true, default: None })
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(30.into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(50.into())) }),
+            MethodInfo::new("top_sites", "Get most visited sites")
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(30.into())) })
+                .param(ParamInfo { name: "limit".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(20.into())) }),
+            MethodInfo::new("stats", "Get browsing statistics")
+                .param(ParamInfo { name: "days".into(), param_type: "integer".into(), required: false, default: Some(Value::Number(30.into())) }),
+            MethodInfo::new("cloud_tabs", "Get tabs from other devices via iCloud"),
+            MethodInfo::new("bundle", "Bundle multiple queries for dashboard")
+                .param(ParamInfo { name: "include".into(), param_type: "string".into(), required: false, default: Some(Value::String("history,top_sites".into())) }),
         ]
     }
 
