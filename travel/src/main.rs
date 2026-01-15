@@ -23,6 +23,7 @@
 mod api;
 mod cache;
 mod error;
+mod locations;
 mod models;
 mod service;
 

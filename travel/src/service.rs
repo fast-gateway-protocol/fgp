@@ -1,6 +1,7 @@
 //! FGP service implementation for travel search.
 //!
 //! # CHANGELOG (recent first, max 5 entries)
+//! 01/15/2026 - Added local location database for instant lookups (Claude)
 //! 01/15/2026 - Added response caching for all API methods (Claude)
 //! 01/14/2026 - Initial implementation (Claude)
 
@@ -16,6 +17,7 @@ use tokio::runtime::Runtime;
 use crate::api::flights::FlightsClient;
 use crate::api::hotels::HotelsClient;
 use crate::cache::TtlCache;
+use crate::locations::LocationDb;
 use crate::models::flight::{CabinClass, FlightSearchParams, SortBy};
 use crate::models::hotel::HotelSearchParams;
 
@@ -102,33 +104,35 @@ impl TravelService {
     fn find_location(&self, params: HashMap<String, Value>) -> Result<Value> {
         let term = Self::get_str(&params, "term")
             .ok_or_else(|| anyhow::anyhow!("Missing required parameter: term"))?;
-        let limit = Self::get_u32(&params, "limit", 10);
+        let limit = Self::get_u32(&params, "limit", 10) as usize;
         let types = Self::get_str_array(&params, "types");
 
-        // Check cache
-        let cache_key = format!("loc:{}:{}:{:?}", term, limit, types);
-        if let Some(cached) = self.cache_get(&cache_key) {
-            tracing::debug!("Cache HIT for location search: {}", term);
-            return Ok(cached);
-        }
+        // Use local database - instant lookup, no API call needed
+        let db = LocationDb::instance();
+        let locations = db.search(term, limit);
 
-        let client = self.flights.clone();
-        let term = term.to_string();
+        // Filter by type if specified
+        let locations: Vec<_> = if let Some(ref type_filters) = types {
+            locations
+                .into_iter()
+                .filter(|l| {
+                    l.location_type
+                        .as_ref()
+                        .map(|t| type_filters.iter().any(|f| f.eq_ignore_ascii_case(t)))
+                        .unwrap_or(false)
+                })
+                .collect()
+        } else {
+            locations
+        };
 
-        let locations = self
-            .runtime
-            .block_on(async move { client.find_location(&term, types, limit).await })?;
+        tracing::debug!("Local location search '{}': {} results", term, locations.len());
 
-        let result = json!({
+        Ok(json!({
             "locations": locations,
             "count": locations.len(),
-        });
-
-        // Store in cache
-        self.cache_set(&cache_key, &result);
-        tracing::debug!("Cache MISS for location search, stored: {}", cache_key);
-
-        Ok(result)
+            "source": "local",
+        }))
     }
 
     fn search_flights(&self, params: HashMap<String, Value>) -> Result<Value> {
