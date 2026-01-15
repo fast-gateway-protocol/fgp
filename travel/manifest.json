@@ -79,6 +79,12 @@
       "description": "ISO 3166 country codes"
     }
   },
+  "skills": {
+    "claude-code": {
+      "source": "./skills/claude-code/",
+      "target": "~/.claude/skills/travel-fgp/"
+    }
+  },
   "auth": {
     "type": "none",
     "note": "Uses public Kiwi/Skypicker and Xotelo APIs"
