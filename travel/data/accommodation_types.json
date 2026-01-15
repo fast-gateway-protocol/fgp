@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "description": "Hotel accommodation types from Xotelo/TripAdvisor",
+    "updated": "2026-01-15"
+  },
+  "types": [
+    {"id": "hotel", "name": "Hotel", "description": "Traditional hotel with full services"},
+    {"id": "motel", "name": "Motel", "description": "Roadside accommodation with parking"},
+    {"id": "resort", "name": "Resort", "description": "Full-service resort with amenities"},
+    {"id": "hostel", "name": "Hostel", "description": "Budget accommodation, often shared rooms"},
+    {"id": "boutique", "name": "Boutique Hotel", "description": "Small, stylish hotel with unique character"},
+    {"id": "b_and_b", "name": "Bed & Breakfast", "description": "Small lodging with breakfast included"},
+    {"id": "inn", "name": "Inn", "description": "Small hotel, often historic or rural"},
+    {"id": "guesthouse", "name": "Guest House", "description": "Private house offering rooms"},
+    {"id": "apartment", "name": "Apartment", "description": "Self-catering apartment rental"},
+    {"id": "villa", "name": "Villa", "description": "Private villa, often with pool"},
+    {"id": "ryokan", "name": "Ryokan", "description": "Traditional Japanese inn"},
+    {"id": "riad", "name": "Riad", "description": "Traditional Moroccan house"},
+    {"id": "lodge", "name": "Lodge", "description": "Rustic accommodation, often in nature"},
+    {"id": "cabin", "name": "Cabin", "description": "Small cabin or cottage"},
+    {"id": "chalet", "name": "Chalet", "description": "Mountain chalet, often ski-focused"},
+    {"id": "pension", "name": "Pension", "description": "European-style small guesthouse"},
+    {"id": "capsule", "name": "Capsule Hotel", "description": "Japanese-style pod accommodation"},
+    {"id": "glamping", "name": "Glamping", "description": "Luxury camping accommodation"},
+    {"id": "treehouse", "name": "Treehouse", "description": "Accommodation built in trees"},
+    {"id": "houseboat", "name": "Houseboat", "description": "Boat converted for accommodation"}
+  ]
+}

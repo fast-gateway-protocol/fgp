@@ -1,0 +1,5480 @@
+{
+  "metadata": {
+    "description": "IATA airline codes and names",
+    "source": "npow/airline-codes on GitHub",
+    "count": 1094,
+    "updated": "2026-01-15"
+  },
+  "airlines": {
+    "&T": {
+      "name": "Tom\\\\'s & co airliners",
+      "country": "France",
+      "active": true
+    },
+    "++": {
+      "name": "Lombards Air",
+      "country": "South Africa",
+      "active": false
+    },
+    "-+": {
+      "name": "U.S. Air",
+      "country": "United States",
+      "active": true
+    },
+    "--": {
+      "name": "ELK Airways",
+      "country": "Estonia",
+      "active": true
+    },
+    "-.": {
+      "name": "Nazca",
+      "country": "Peru",
+      "active": false
+    },
+    "..": {
+      "name": "Avilu",
+      "country": "Switzerland",
+      "active": true
+    },
+    "00": {
+      "name": "AirOne Atlantic",
+      "country": "Slovakia",
+      "active": false
+    },
+    "01": {
+      "name": "Bobb Air Freight",
+      "country": "Germany",
+      "active": true
+    },
+    "04": {
+      "name": "Antrak Air",
+      "country": "Ghana",
+      "active": false
+    },
+    "07": {
+      "name": "Samurai Airlines",
+      "country": "Pakistan",
+      "active": false
+    },
+    "0A": {
+      "name": "Amber Air",
+      "country": "Lithuania",
+      "active": false
+    },
+    "0B": {
+      "name": "Blue Air",
+      "country": "Romania",
+      "active": true
+    },
+    "0C": {
+      "name": "Aerofumigaciones Sam",
+      "country": "Chile",
+      "active": false
+    },
+    "0D": {
+      "name": "Darwin Airline",
+      "country": "Switzerland",
+      "active": true
+    },
+    "0E": {
+      "name": "Silver Air",
+      "country": "Czech Republic",
+      "active": false
+    },
+    "0F": {
+      "name": "Mediterranean Air Freight",
+      "country": "Greece",
+      "active": false
+    },
+    "0G": {
+      "name": "Sprintair",
+      "country": "Poland",
+      "active": true
+    },
+    "0J": {
+      "name": "Jetclub",
+      "country": "Switzerland",
+      "active": false
+    },
+    "0X": {
+      "name": "Copenhagen Express",
+      "country": "Denmark",
+      "active": true
+    },
+    "10": {
+      "name": "Canadian World",
+      "country": "Canada",
+      "active": false
+    },
+    "11": {
+      "name": "TUIfly (X3)",
+      "country": "Germany",
+      "active": true
+    },
+    "12": {
+      "name": "12 North",
+      "country": "India",
+      "active": true
+    },
+    "13": {
+      "name": "Eastern Atlantic Virtual Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "1A": {
+      "name": "Amadeus Global Travel Distribution",
+      "country": "Spain",
+      "active": false
+    },
+    "1B": {
+      "name": "Abacus International",
+      "country": "Singapore",
+      "active": true
+    },
+    "1C": {
+      "name": "OneChina",
+      "country": "China",
+      "active": true
+    },
+    "1D": {
+      "name": "Radixx Solutions International",
+      "country": "United States",
+      "active": false
+    },
+    "1E": {
+      "name": "Travelsky Technology",
+      "country": "China",
+      "active": false
+    },
+    "1F": {
+      "name": "CB Airways UK ( Interliging Flights )",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "1G": {
+      "name": "Galileo International",
+      "country": "United States",
+      "active": false
+    },
+    "1H": {
+      "name": "Hellenic Airways",
+      "country": "Greece",
+      "active": false
+    },
+    "1I": {
+      "name": "NetJets Europe",
+      "country": "Portugal",
+      "active": true
+    },
+    "1K": {
+      "name": "Sutra",
+      "country": "United States",
+      "active": false
+    },
+    "1L": {
+      "name": "Open Skies Consultative Commission",
+      "country": "United States",
+      "active": false
+    },
+    "1M": {
+      "name": "JSC Transport Automated Information Systems",
+      "country": "Russia",
+      "active": false
+    },
+    "1N": {
+      "name": "Navitaire",
+      "country": "United States",
+      "active": false
+    },
+    "1P": {
+      "name": "Worldspan",
+      "country": "United States",
+      "active": false
+    },
+    "1Q": {
+      "name": "Sirena",
+      "country": "Russia",
+      "active": false
+    },
+    "1R": {
+      "name": "Hainan Phoenix Information Systems",
+      "country": "China",
+      "active": false
+    },
+    "1S": {
+      "name": "Sabre",
+      "country": "United States",
+      "active": false
+    },
+    "1T": {
+      "name": "1Time Airline",
+      "country": "South Africa",
+      "active": true
+    },
+    "1U": {
+      "name": "Polyot Sirena",
+      "country": "Russia",
+      "active": false
+    },
+    "1Z": {
+      "name": "Sabre Pacific",
+      "country": "Australia",
+      "active": false
+    },
+    "20": {
+      "name": "Air Salone",
+      "country": "Sierra Leone",
+      "active": true
+    },
+    "24": {
+      "name": "Euro Jet",
+      "country": "Germany",
+      "active": true
+    },
+    "2A": {
+      "name": "Deutsche Bahn",
+      "country": "Germany",
+      "active": true
+    },
+    "2B": {
+      "name": "Aerocondor",
+      "country": "Portugal",
+      "active": true
+    },
+    "2C": {
+      "name": "SNCF",
+      "country": "France",
+      "active": false
+    },
+    "2D": {
+      "name": "Aero VIP (2D)",
+      "country": "Portugal",
+      "active": true
+    },
+    "2F": {
+      "name": "Frontier Flying Service",
+      "country": "United States",
+      "active": true
+    },
+    "2G": {
+      "name": "San Juan Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "2H": {
+      "name": "Thalys",
+      "country": "Belgium",
+      "active": false
+    },
+    "2I": {
+      "name": "Star Peru (2I)",
+      "country": "Peru",
+      "active": true
+    },
+    "2J": {
+      "name": "Air Burkina",
+      "country": "Burkina Faso",
+      "active": true
+    },
+    "2K": {
+      "name": "Aerolineas Galapagos (Aerogal)",
+      "country": "Ecuador",
+      "active": true
+    },
+    "2L": {
+      "name": "Helvetic Airways",
+      "country": "Switzerland",
+      "active": true
+    },
+    "2M": {
+      "name": "Moldavian Airlines",
+      "country": "Moldova",
+      "active": true
+    },
+    "2N": {
+      "name": "NextJet",
+      "country": "Sweden",
+      "active": true
+    },
+    "2O": {
+      "name": "Air Salone",
+      "country": "Sierra Leone",
+      "active": true
+    },
+    "2P": {
+      "name": "Air Philippines",
+      "country": "Philippines",
+      "active": true
+    },
+    "2Q": {
+      "name": "Air Cargo Carriers",
+      "country": "United States",
+      "active": true
+    },
+    "2R": {
+      "name": "VIA Rail Canada",
+      "country": "Canada",
+      "active": false
+    },
+    "2S": {
+      "name": "Star Equatorial Airlines",
+      "country": "Guinea",
+      "active": false
+    },
+    "2T": {
+      "name": "Haiti Ambassador Airlines",
+      "country": "Haiti",
+      "active": true
+    },
+    "2U": {
+      "name": "Air Guinee Express",
+      "country": "Guinea",
+      "active": true
+    },
+    "2W": {
+      "name": "Welcome Air",
+      "country": "Austria",
+      "active": true
+    },
+    "2X": {
+      "name": "Regionalia Uruguay",
+      "country": "Uruguay",
+      "active": true
+    },
+    "2Y": {
+      "name": "My Indo Airlines",
+      "country": "Indonesia",
+      "active": true
+    },
+    "2Z": {
+      "name": "Changan Airlines",
+      "country": "China",
+      "active": false
+    },
+    "3B": {
+      "name": "JobAir",
+      "country": "Czech Republic",
+      "active": true
+    },
+    "3C": {
+      "name": "RegionsAir",
+      "country": "United States",
+      "active": false
+    },
+    "3E": {
+      "name": "Air Choice One",
+      "country": "United States",
+      "active": true
+    },
+    "3F": {
+      "name": "Fly Colombia ( Interliging Flights )",
+      "country": "Colombia",
+      "active": true
+    },
+    "3G": {
+      "name": "AsiaCargo Express",
+      "country": "Malaysia",
+      "active": true
+    },
+    "3I": {
+      "name": "Air Comet Chile",
+      "country": "Chile",
+      "active": true
+    },
+    "3J": {
+      "name": "Zip",
+      "country": "Canada",
+      "active": false
+    },
+    "3K": {
+      "name": "Jetstar Asia Airways",
+      "country": "Singapore",
+      "active": true
+    },
+    "3L": {
+      "name": "Intersky",
+      "country": "Austria",
+      "active": true
+    },
+    "3N": {
+      "name": "Air Urga",
+      "country": "Ukraine",
+      "active": false
+    },
+    "3O": {
+      "name": "Air Arabia Maroc",
+      "country": "Morocco",
+      "active": true
+    },
+    "3P": {
+      "name": "Tiara Air",
+      "country": "Aruba",
+      "active": true
+    },
+    "3Q": {
+      "name": "Yunnan Airlines",
+      "country": "China",
+      "active": true
+    },
+    "3R": {
+      "name": "Moskovia Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "3S": {
+      "name": "Air Antilles Express",
+      "country": "Guadeloupe",
+      "active": true
+    },
+    "3T": {
+      "name": "Turan Air",
+      "country": "Azerbaijan",
+      "active": true
+    },
+    "3U": {
+      "name": "Sichuan Airlines",
+      "country": "China",
+      "active": true
+    },
+    "3V": {
+      "name": "3 Valleys Airlines",
+      "country": "France",
+      "active": false
+    },
+    "3W": {
+      "name": "Malawian Airlines",
+      "country": "Malawi",
+      "active": true
+    },
+    "47": {
+      "name": "88",
+      "country": "Cyprus",
+      "active": true
+    },
+    "4A": {
+      "name": "Air Kiribati",
+      "country": "Kiribati",
+      "active": true
+    },
+    "4C": {
+      "name": "Aires",
+      "country": "Colombia",
+      "active": true
+    },
+    "4D": {
+      "name": "Air Sinai",
+      "country": "Egypt",
+      "active": true
+    },
+    "4F": {
+      "name": "Air City",
+      "country": "Germany",
+      "active": false
+    },
+    "4G": {
+      "name": "Gazpromavia",
+      "country": "Russia",
+      "active": true
+    },
+    "4H": {
+      "name": "United Airways",
+      "country": "Bangladesh",
+      "active": true
+    },
+    "4K": {
+      "name": "Askari Aviation",
+      "country": "Pakistan",
+      "active": true
+    },
+    "4L": {
+      "name": "Euroline",
+      "country": "Georgia",
+      "active": true
+    },
+    "4M": {
+      "name": "LAN Argentina",
+      "country": "Argentina",
+      "active": true
+    },
+    "4N": {
+      "name": "Air North Charter - Canada",
+      "country": "Canada",
+      "active": true
+    },
+    "4O": {
+      "name": "Interjet (ABC Aerolineas)",
+      "country": "Mexico",
+      "active": true
+    },
+    "4P": {
+      "name": "Business Aviation",
+      "country": "Democratic Republic of the Congo",
+      "active": true
+    },
+    "4Q": {
+      "name": "Safi Airlines",
+      "country": "Afghanistan",
+      "active": true
+    },
+    "4R": {
+      "name": "Hamburg International",
+      "country": "Germany",
+      "active": true
+    },
+    "4S": {
+      "name": "Finalair Congo",
+      "country": "Republic of the Congo",
+      "active": false
+    },
+    "4T": {
+      "name": "Belair Airlines",
+      "country": "Switzerland",
+      "active": true
+    },
+    "4U": {
+      "name": "Germanwings",
+      "country": "Germany",
+      "active": true
+    },
+    "4X": {
+      "name": "Red Jet Mexico",
+      "country": "Mexico",
+      "active": true
+    },
+    "4Y": {
+      "name": "Airbus France",
+      "country": "France",
+      "active": false
+    },
+    "4Z": {
+      "name": "Airlink (SAA)",
+      "country": "South Africa",
+      "active": true
+    },
+    "5A": {
+      "name": "Alpine Air Express",
+      "country": "United States",
+      "active": false
+    },
+    "5C": {
+      "name": "CAL Cargo Air Lines",
+      "country": "Israel",
+      "active": true
+    },
+    "5D": {
+      "name": "DonbassAero",
+      "country": "Ukraine",
+      "active": true
+    },
+    "5E": {
+      "name": "SGA Airlines",
+      "country": "Thailand",
+      "active": true
+    },
+    "5F": {
+      "name": "Arctic Circle Air Service",
+      "country": "United States",
+      "active": false
+    },
+    "5G": {
+      "name": "Skyservice Airlines",
+      "country": "Canada",
+      "active": true
+    },
+    "5H": {
+      "name": "Fly540",
+      "country": "Kenya",
+      "active": true
+    },
+    "5J": {
+      "name": "Cebu Pacific",
+      "country": "Philippines",
+      "active": true
+    },
+    "5K": {
+      "name": "Hi Fly (5K)",
+      "country": "Portugal",
+      "active": true
+    },
+    "5L": {
+      "name": "Aerosur",
+      "country": "Bolivia",
+      "active": true
+    },
+    "5M": {
+      "name": "Sibaviatrans",
+      "country": "Russia",
+      "active": true
+    },
+    "5N": {
+      "name": "Aeroflot-Nord",
+      "country": "Russia",
+      "active": true
+    },
+    "5O": {
+      "name": "ASL Airlines France",
+      "country": "France",
+      "active": false
+    },
+    "5P": {
+      "name": "Pal airlines",
+      "country": "Chile",
+      "active": true
+    },
+    "5Q": {
+      "name": "BQB Lineas Aereas",
+      "country": "Uruguay",
+      "active": true
+    },
+    "5T": {
+      "name": "Canadian North",
+      "country": "Canada",
+      "active": true
+    },
+    "5V": {
+      "name": "Lviv Airlines",
+      "country": "Ukraine",
+      "active": false
+    },
+    "5W": {
+      "name": "Astraeus",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "5X": {
+      "name": "United Parcel Service",
+      "country": "United States",
+      "active": false
+    },
+    "5Y": {
+      "name": "Atlas Air",
+      "country": "United States",
+      "active": true
+    },
+    "5Z": {
+      "name": "VivaColombia",
+      "country": "Colombia",
+      "active": true
+    },
+    "69": {
+      "name": "Royal European Airlines",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "6A": {
+      "name": "Consorcio Aviaxsa",
+      "country": "Mexico",
+      "active": true
+    },
+    "6B": {
+      "name": "TUIfly Nordic",
+      "country": "Sweden",
+      "active": true
+    },
+    "6C": {
+      "name": "Vuela Cuba",
+      "country": "Cuba",
+      "active": true
+    },
+    "6D": {
+      "name": "Pelita",
+      "country": "Indonesia",
+      "active": true
+    },
+    "6E": {
+      "name": "IndiGo Airlines",
+      "country": "India",
+      "active": true
+    },
+    "6F": {
+      "name": "MAT Airways",
+      "country": "North Macedonia",
+      "active": true
+    },
+    "6G": {
+      "name": "Air Wales",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "6H": {
+      "name": "Israir",
+      "country": "Israel",
+      "active": true
+    },
+    "6I": {
+      "name": "Fly 6ix",
+      "country": "Sierra Leone",
+      "active": false
+    },
+    "6J": {
+      "name": "Skynet Asia Airways",
+      "country": "Japan",
+      "active": true
+    },
+    "6K": {
+      "name": "Asian Spirit",
+      "country": "Philippines",
+      "active": true
+    },
+    "6N": {
+      "name": "Nordic Regional",
+      "country": "Sweden",
+      "active": false
+    },
+    "6P": {
+      "name": "Gryphon Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "6Q": {
+      "name": "Slovak Airlines",
+      "country": "Slovakia",
+      "active": false
+    },
+    "6R": {
+      "name": "Alrosa Mirny Air Enterprise",
+      "country": "Russia",
+      "active": true
+    },
+    "6T": {
+      "name": "Air Mandalay",
+      "country": "Myanmar (Burma)",
+      "active": true
+    },
+    "6U": {
+      "name": "Air Cargo Germany",
+      "country": "Germany",
+      "active": true
+    },
+    "6V": {
+      "name": "Mars RK",
+      "country": "Ukraine",
+      "active": false
+    },
+    "6W": {
+      "name": "Saratov Aviation Division",
+      "country": "Russia",
+      "active": true
+    },
+    "6Y": {
+      "name": "SmartLynx Airlines",
+      "country": "Latvia",
+      "active": true
+    },
+    "6Z": {
+      "name": "Ukrainian Cargo Airways",
+      "country": "Ukraine",
+      "active": false
+    },
+    "76": {
+      "name": "Southjet",
+      "country": "United States",
+      "active": true
+    },
+    "77": {
+      "name": "Southjet connect",
+      "country": "United States",
+      "active": true
+    },
+    "78": {
+      "name": "Southjet cargo",
+      "country": "United States",
+      "active": true
+    },
+    "7A": {
+      "name": "Aztec Worldwide Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "7B": {
+      "name": "Krasnojarsky Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "7C": {
+      "name": "Jeju Air",
+      "country": "South Korea",
+      "active": true
+    },
+    "7E": {
+      "name": "Aeroline GmbH",
+      "country": "Germany",
+      "active": true
+    },
+    "7F": {
+      "name": "First Air",
+      "country": "Canada",
+      "active": true
+    },
+    "7G": {
+      "name": "Star Flyer",
+      "country": "Japan",
+      "active": true
+    },
+    "7H": {
+      "name": "Era Alaska",
+      "country": "United States",
+      "active": true
+    },
+    "7I": {
+      "name": "Insel Air (7I/INC) (Priv)",
+      "country": "Netherlands Antilles",
+      "active": true
+    },
+    "7J": {
+      "name": "Tajik Air",
+      "country": "Tajikistan",
+      "active": true
+    },
+    "7K": {
+      "name": "Kogalymavia Air Company",
+      "country": "Russia",
+      "active": true
+    },
+    "7L": {
+      "name": "Sun D'Or",
+      "country": "Israel",
+      "active": true
+    },
+    "7M": {
+      "name": "Mongolian International Air Lines",
+      "country": "Mongolia",
+      "active": true
+    },
+    "7N": {
+      "name": "Centavia",
+      "country": "Serbia",
+      "active": false
+    },
+    "7O": {
+      "name": "All Colombia",
+      "country": "Colombia",
+      "active": true
+    },
+    "7P": {
+      "name": "Metro Batavia",
+      "country": "Indonesia",
+      "active": true
+    },
+    "7Q": {
+      "name": "Pan Am World Airways Dominicana",
+      "country": "Dominican Republic",
+      "active": true
+    },
+    "7R": {
+      "name": "BRA-Transportes Aereos",
+      "country": "Brazil",
+      "active": false
+    },
+    "7T": {
+      "name": "Tobruk Air",
+      "country": "Libya",
+      "active": false
+    },
+    "7W": {
+      "name": "Wayraper",
+      "country": "Peru",
+      "active": true
+    },
+    "7Y": {
+      "name": "Med Airways",
+      "country": "Lebanon",
+      "active": true
+    },
+    "7Z": {
+      "name": "Halcyonair",
+      "country": "Cape Verde",
+      "active": true
+    },
+    "88": {
+      "name": "All Australia",
+      "country": "Australia",
+      "active": true
+    },
+    "8A": {
+      "name": "Atlas Blue",
+      "country": "Morocco",
+      "active": true
+    },
+    "8B": {
+      "name": "BusinessAir",
+      "country": "Thailand",
+      "active": true
+    },
+    "8C": {
+      "name": "Shanxi Airlines",
+      "country": "China",
+      "active": false
+    },
+    "8D": {
+      "name": "Servant Air",
+      "country": "United States",
+      "active": false
+    },
+    "8E": {
+      "name": "Bering Air",
+      "country": "United States",
+      "active": true
+    },
+    "8F": {
+      "name": "STP Airways",
+      "country": "Sao Tome and Principe",
+      "active": true
+    },
+    "8H": {
+      "name": "Heli France",
+      "country": "France",
+      "active": true
+    },
+    "8I": {
+      "name": "Myway Airlines",
+      "country": "Italy",
+      "active": true
+    },
+    "8J": {
+      "name": "Komiinteravia",
+      "country": "Russia",
+      "active": false
+    },
+    "8K": {
+      "name": "Voestar",
+      "country": "Brazil",
+      "active": true
+    },
+    "8L": {
+      "name": "Redhill Aviation",
+      "country": "United Kingdom",
+      "active": false
+    },
+    "8M": {
+      "name": "Myanmar Airways International",
+      "country": "Myanmar (Burma)",
+      "active": true
+    },
+    "8N": {
+      "name": "Barents AirLink",
+      "country": "Sweden",
+      "active": true
+    },
+    "8O": {
+      "name": "West Coast Air",
+      "country": "Canada",
+      "active": true
+    },
+    "8P": {
+      "name": "Pacific Coastal Airline",
+      "country": "Canada",
+      "active": true
+    },
+    "8Q": {
+      "name": "Maldivian Air Taxi",
+      "country": "Maldives",
+      "active": true
+    },
+    "8R": {
+      "name": "TRIP Linhas A",
+      "country": "Brazil",
+      "active": true
+    },
+    "8S": {
+      "name": "Scorpio Aviation",
+      "country": "",
+      "active": false
+    },
+    "8T": {
+      "name": "Air Tindi",
+      "country": "Canada",
+      "active": true
+    },
+    "8U": {
+      "name": "Afriqiyah Airways",
+      "country": "Libya",
+      "active": true
+    },
+    "8V": {
+      "name": "Wright Air Service",
+      "country": "United States",
+      "active": false
+    },
+    "8W": {
+      "name": "Private Wings Flugcharter",
+      "country": "Germany",
+      "active": false
+    },
+    "8Y": {
+      "name": "China Postal Airlines",
+      "country": "China",
+      "active": false
+    },
+    "8Z": {
+      "name": "Wizz Air Hungary",
+      "country": "Bulgaria",
+      "active": true
+    },
+    "99": {
+      "name": "Ciao Air",
+      "country": "Italy",
+      "active": true
+    },
+    "9A": {
+      "name": "All Africa",
+      "country": "South Africa",
+      "active": true
+    },
+    "9C": {
+      "name": "China SSS",
+      "country": "China",
+      "active": true
+    },
+    "9E": {
+      "name": "Pinnacle Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "9F": {
+      "name": "Tramm Airlines",
+      "country": "Netherlands Antilles",
+      "active": false
+    },
+    "9H": {
+      "name": "MDLR Airlines",
+      "country": "India",
+      "active": true
+    },
+    "9I": {
+      "name": "Thai Sky Airlines",
+      "country": "Thailand",
+      "active": false
+    },
+    "9J": {
+      "name": "Regionalia Chile",
+      "country": "Chile",
+      "active": true
+    },
+    "9K": {
+      "name": "Cape Air",
+      "country": "United States",
+      "active": true
+    },
+    "9L": {
+      "name": "Colgan Air",
+      "country": "United States",
+      "active": true
+    },
+    "9N": {
+      "name": "Regional Air Iceland",
+      "country": "Iceland",
+      "active": true
+    },
+    "9O": {
+      "name": "National Airways Cameroon",
+      "country": "Cameroon",
+      "active": false
+    },
+    "9P": {
+      "name": "Pelangi",
+      "country": "Malaysia",
+      "active": false
+    },
+    "9Q": {
+      "name": "PB Air",
+      "country": "Thailand",
+      "active": true
+    },
+    "9R": {
+      "name": "SATENA",
+      "country": "Colombia",
+      "active": true
+    },
+    "9S": {
+      "name": "Spring Airlines",
+      "country": "China",
+      "active": true
+    },
+    "9T": {
+      "name": "Transwest Air",
+      "country": "Canada",
+      "active": true
+    },
+    "9U": {
+      "name": "Air Moldova",
+      "country": "Moldova",
+      "active": true
+    },
+    "9W": {
+      "name": "Jet Airways",
+      "country": "India",
+      "active": true
+    },
+    "9X": {
+      "name": "Regionalia Venezuela",
+      "country": "Venezuela",
+      "active": true
+    },
+    "9Y": {
+      "name": "Air Kazakhstan",
+      "country": "Kazakhstan",
+      "active": true
+    },
+    "::": {
+      "name": "Llloyd Helicopters",
+      "country": "Australia",
+      "active": false
+    },
+    ";;": {
+      "name": "Wilderness Air",
+      "country": "Australia",
+      "active": true
+    },
+    "??": {
+      "name": "British Air Ferries",
+      "country": "United Kingdom",
+      "active": false
+    },
+    "A1": {
+      "name": "Atifly",
+      "country": "United States",
+      "active": true
+    },
+    "A2": {
+      "name": "All America",
+      "country": "United States",
+      "active": true
+    },
+    "A3": {
+      "name": "Aegean Airlines",
+      "country": "Greece",
+      "active": true
+    },
+    "A4": {
+      "name": "Southern Winds Airlines",
+      "country": "Argentina",
+      "active": true
+    },
+    "A5": {
+      "name": "Airlinair",
+      "country": "France",
+      "active": true
+    },
+    "A6": {
+      "name": "Air Alps Aviation (A6)",
+      "country": "Austria",
+      "active": true
+    },
+    "A7": {
+      "name": "Air Plus Comet",
+      "country": "Spain",
+      "active": true
+    },
+    "A8": {
+      "name": "Benin Golf Air",
+      "country": "Benin",
+      "active": false
+    },
+    "A9": {
+      "name": "Georgian Airways",
+      "country": "Georgia",
+      "active": true
+    },
+    "AA": {
+      "name": "American Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "AB": {
+      "name": "Air Berlin",
+      "country": "Germany",
+      "active": true
+    },
+    "AC": {
+      "name": "Air Canada",
+      "country": "Canada",
+      "active": true
+    },
+    "AD": {
+      "name": "Azul",
+      "country": "Brazil",
+      "active": true
+    },
+    "AE": {
+      "name": "Mandarin Airlines",
+      "country": "Taiwan",
+      "active": true
+    },
+    "AF": {
+      "name": "Air France",
+      "country": "France",
+      "active": true
+    },
+    "AG": {
+      "name": "ASL Airlines Ireland",
+      "country": "Ireland",
+      "active": false
+    },
+    "AH": {
+      "name": "Air Algerie",
+      "country": "Algeria",
+      "active": true
+    },
+    "AI": {
+      "name": "Air India Limited",
+      "country": "India",
+      "active": true
+    },
+    "AJ": {
+      "name": "Aero Contractors",
+      "country": "Nigeria",
+      "active": true
+    },
+    "AK": {
+      "name": "AirAsia",
+      "country": "Malaysia",
+      "active": true
+    },
+    "AL": {
+      "name": "Transaviaexport",
+      "country": "Belarus",
+      "active": false
+    },
+    "AM": {
+      "name": "AeroM\u00e9xico",
+      "country": "Mexico",
+      "active": true
+    },
+    "AN": {
+      "name": "Ansett Australia",
+      "country": "Australia",
+      "active": true
+    },
+    "AO": {
+      "name": "Avianova (Russia)",
+      "country": "Russia",
+      "active": true
+    },
+    "AP": {
+      "name": "Air One",
+      "country": "Italy",
+      "active": true
+    },
+    "AQ": {
+      "name": "Aloha Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "AR": {
+      "name": "Aerolineas Argentinas",
+      "country": "Argentina",
+      "active": true
+    },
+    "AS": {
+      "name": "Alaska Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "AT": {
+      "name": "Royal Air Maroc",
+      "country": "Morocco",
+      "active": true
+    },
+    "AU": {
+      "name": "Austral Lineas Aereas",
+      "country": "Argentina",
+      "active": true
+    },
+    "AV": {
+      "name": "Avianca - Aerovias Nacionales de Colombia",
+      "country": "Colombia",
+      "active": true
+    },
+    "AW": {
+      "name": "Asian Wings Airways",
+      "country": "Myanmar (Burma)",
+      "active": true
+    },
+    "AX": {
+      "name": "Trans States Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "AY": {
+      "name": "Finnair",
+      "country": "Finland",
+      "active": true
+    },
+    "AZ": {
+      "name": "Alitalia",
+      "country": "Italy",
+      "active": true
+    },
+    "B0": {
+      "name": "Aws express",
+      "country": "United States",
+      "active": true
+    },
+    "B1": {
+      "name": "Baltic Air lines",
+      "country": "Latvia",
+      "active": true
+    },
+    "B2": {
+      "name": "Belavia Belarusian Airlines",
+      "country": "Belarus",
+      "active": true
+    },
+    "B3": {
+      "name": "Bhutan Airlines",
+      "country": "Bhutan",
+      "active": true
+    },
+    "B4": {
+      "name": "Flyglobespan",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "B5": {
+      "name": "Flightline",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "B6": {
+      "name": "JetBlue Airways",
+      "country": "United States",
+      "active": true
+    },
+    "B7": {
+      "name": "Uni Air",
+      "country": "Taiwan",
+      "active": true
+    },
+    "B8": {
+      "name": "Eritrean Airlines",
+      "country": "Eritrea",
+      "active": true
+    },
+    "B9": {
+      "name": "Iran Airtour",
+      "country": "Bhutan",
+      "active": true
+    },
+    "BA": {
+      "name": "British Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "BB": {
+      "name": "Seaborne Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "BC": {
+      "name": "Skymark Airlines",
+      "country": "Japan",
+      "active": true
+    },
+    "BD": {
+      "name": "bmi",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "BE": {
+      "name": "Flybe",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "BF": {
+      "name": "Bluebird Cargo",
+      "country": "Iceland",
+      "active": false
+    },
+    "BG": {
+      "name": "Biman Bangladesh Airlines",
+      "country": "Bangladesh",
+      "active": true
+    },
+    "BH": {
+      "name": "Hawkair",
+      "country": "Canada",
+      "active": true
+    },
+    "BI": {
+      "name": "Royal Brunei Airlines",
+      "country": "Brunei",
+      "active": true
+    },
+    "BJ": {
+      "name": "Nouvel Air Tunisie",
+      "country": "Tunisia",
+      "active": true
+    },
+    "BK": {
+      "name": "Potomac Air",
+      "country": "United States",
+      "active": true
+    },
+    "BL": {
+      "name": "Jetstar Pacific",
+      "country": "Vietnam",
+      "active": true
+    },
+    "BM": {
+      "name": "Bayu Indonesia Air",
+      "country": "Indonesia",
+      "active": false
+    },
+    "BN": {
+      "name": "Horizon Airlines",
+      "country": "Australia",
+      "active": true
+    },
+    "BO": {
+      "name": "Bouraq Indonesia Airlines",
+      "country": "Indonesia",
+      "active": false
+    },
+    "BP": {
+      "name": "Air Botswana",
+      "country": "Botswana",
+      "active": true
+    },
+    "BQ": {
+      "name": "Buquebus L\u00edneas A\u00e9reas",
+      "country": "Uruguay",
+      "active": true
+    },
+    "BR": {
+      "name": "EVA Air",
+      "country": "Taiwan",
+      "active": true
+    },
+    "BS": {
+      "name": "US-Bangla Airlines",
+      "country": "Bangladesh",
+      "active": true
+    },
+    "BT": {
+      "name": "Air Baltic",
+      "country": "Latvia",
+      "active": true
+    },
+    "BU": {
+      "name": "Baikotovitchestrian Airlines",
+      "country": "American Samoa",
+      "active": true
+    },
+    "BV": {
+      "name": "Blue Panorama Airlines",
+      "country": "Italy",
+      "active": true
+    },
+    "BW": {
+      "name": "Caribbean Airlines",
+      "country": "Trinidad and Tobago",
+      "active": true
+    },
+    "BX": {
+      "name": "Air Busan",
+      "country": "South Korea",
+      "active": true
+    },
+    "BY": {
+      "name": "Thomsonfly",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "BZ": {
+      "name": "Black Stallion Airways",
+      "country": "United States",
+      "active": true
+    },
+    "C0": {
+      "name": "Centralwings",
+      "country": "Poland",
+      "active": true
+    },
+    "C1": {
+      "name": "CanXpress",
+      "country": "Canada",
+      "active": true
+    },
+    "C2": {
+      "name": "CanXplorer",
+      "country": "Canada",
+      "active": true
+    },
+    "C3": {
+      "name": "QatXpress",
+      "country": "Qatar",
+      "active": true
+    },
+    "C4": {
+      "name": "LionXpress",
+      "country": "Cameroon",
+      "active": true
+    },
+    "C5": {
+      "name": "CommutAir",
+      "country": "United States",
+      "active": true
+    },
+    "C6": {
+      "name": "CanJet",
+      "country": "Canada",
+      "active": false
+    },
+    "C7": {
+      "name": "Sky Wing Pacific",
+      "country": "South Korea",
+      "active": true
+    },
+    "C8": {
+      "name": "Chicago Express (C8)",
+      "country": "United States",
+      "active": false
+    },
+    "C9": {
+      "name": "Cirrus Airlines",
+      "country": "Germany",
+      "active": true
+    },
+    "CA": {
+      "name": "Air China",
+      "country": "China",
+      "active": true
+    },
+    "CB": {
+      "name": "CCML Airlines",
+      "country": "Colombia",
+      "active": true
+    },
+    "CC": {
+      "name": "Macair Airlines",
+      "country": "Australia",
+      "active": true
+    },
+    "CD": {
+      "name": "Air India Regional",
+      "country": "India",
+      "active": true
+    },
+    "CE": {
+      "name": "Nationwide Airlines",
+      "country": "South Africa",
+      "active": true
+    },
+    "CF": {
+      "name": "City Airline",
+      "country": "Sweden",
+      "active": true
+    },
+    "CG": {
+      "name": "Airlines PNG",
+      "country": "Papua New Guinea",
+      "active": true
+    },
+    "CH": {
+      "name": "Bemidji Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "CI": {
+      "name": "China Airlines",
+      "country": "Taiwan",
+      "active": true
+    },
+    "CJ": {
+      "name": "BA CityFlyer",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "CK": {
+      "name": "China Cargo Airlines",
+      "country": "China",
+      "active": false
+    },
+    "CL": {
+      "name": "Lufthansa CityLine",
+      "country": "Germany",
+      "active": true
+    },
+    "CM": {
+      "name": "Copa Airlines",
+      "country": "Panama",
+      "active": true
+    },
+    "CN": {
+      "name": "Canadian National Airways",
+      "country": "Canada",
+      "active": true
+    },
+    "CO": {
+      "name": "Continental Express",
+      "country": "United States",
+      "active": true
+    },
+    "CP": {
+      "name": "Compass Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "CQ": {
+      "name": "SOCHI AIR",
+      "country": "Russia",
+      "active": true
+    },
+    "CR": {
+      "name": "Air Ops",
+      "country": "Sweden",
+      "active": false
+    },
+    "CS": {
+      "name": "Continental Micronesia",
+      "country": "United States",
+      "active": true
+    },
+    "CT": {
+      "name": "Alitalia Cityliner",
+      "country": "Italy",
+      "active": true
+    },
+    "CU": {
+      "name": "Cubana de Aviaci\u00f3n",
+      "country": "Cuba",
+      "active": true
+    },
+    "CV": {
+      "name": "Cargolux",
+      "country": "Luxembourg",
+      "active": false
+    },
+    "CW": {
+      "name": "Air Marshall Islands",
+      "country": "Marshall Islands",
+      "active": true
+    },
+    "CX": {
+      "name": "Cathay Pacific",
+      "country": "Hong Kong",
+      "active": true
+    },
+    "CY": {
+      "name": "Cyprus Airways",
+      "country": "Cyprus",
+      "active": true
+    },
+    "CZ": {
+      "name": "China Southern Airlines",
+      "country": "China",
+      "active": true
+    },
+    "D1": {
+      "name": "Domenican Airlines",
+      "country": "Dominican Republic",
+      "active": true
+    },
+    "D3": {
+      "name": "Daallo Airlines",
+      "country": "Djibouti",
+      "active": true
+    },
+    "D4": {
+      "name": "Alidaunia",
+      "country": "Italy",
+      "active": false
+    },
+    "D5": {
+      "name": "NEPC Airlines",
+      "country": "India",
+      "active": false
+    },
+    "D6": {
+      "name": "Interair South Africa",
+      "country": "South Africa",
+      "active": true
+    },
+    "D7": {
+      "name": "AirAsia X",
+      "country": "Malaysia",
+      "active": true
+    },
+    "D8": {
+      "name": "Djibouti Airlines",
+      "country": "Djibouti",
+      "active": true
+    },
+    "D9": {
+      "name": "Aeroflot-Don",
+      "country": "Russia",
+      "active": true
+    },
+    "DA": {
+      "name": "Dana Air",
+      "country": "Nigeria",
+      "active": true
+    },
+    "DB": {
+      "name": "Brit Air",
+      "country": "France",
+      "active": true
+    },
+    "DC": {
+      "name": "Golden Air",
+      "country": "Sweden",
+      "active": true
+    },
+    "DD": {
+      "name": "Nok Air",
+      "country": "Thailand",
+      "active": true
+    },
+    "DE": {
+      "name": "Condor Flugdienst",
+      "country": "Germany",
+      "active": true
+    },
+    "DF": {
+      "name": "Michael Airlines",
+      "country": "Puerto Rico",
+      "active": true
+    },
+    "DG": {
+      "name": "South East Asian Airlines",
+      "country": "Philippines",
+      "active": true
+    },
+    "DH": {
+      "name": "Dennis Sky",
+      "country": "Israel",
+      "active": true
+    },
+    "DI": {
+      "name": "dba",
+      "country": "Germany",
+      "active": true
+    },
+    "DJ": {
+      "name": "Virgin Blue",
+      "country": "Australia",
+      "active": false
+    },
+    "DK": {
+      "name": "Eastland Air",
+      "country": "Australia",
+      "active": true
+    },
+    "DL": {
+      "name": "Delta Air Lines",
+      "country": "United States",
+      "active": true
+    },
+    "DM": {
+      "name": "Maersk",
+      "country": "Denmark",
+      "active": true
+    },
+    "DN": {
+      "name": "Senegal Airlines",
+      "country": "Senegal",
+      "active": true
+    },
+    "DO": {
+      "name": "Dominicana de Aviaci",
+      "country": "Dominican Republic",
+      "active": true
+    },
+    "DP": {
+      "name": "First Choice Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "DQ": {
+      "name": "Coastal Air",
+      "country": "United States",
+      "active": true
+    },
+    "DR": {
+      "name": "Air Mediterranee",
+      "country": "France",
+      "active": true
+    },
+    "DS": {
+      "name": "EasyJet (DS)",
+      "country": "Switzerland",
+      "active": true
+    },
+    "DT": {
+      "name": "TAAG Angola Airlines",
+      "country": "Angola",
+      "active": true
+    },
+    "DU": {
+      "name": "Hemus Air",
+      "country": "Bulgaria",
+      "active": false
+    },
+    "DV": {
+      "name": "Scat Air",
+      "country": "Kazakhstan",
+      "active": true
+    },
+    "DW": {
+      "name": "Deutsche Luftverkehrsgesellschaft",
+      "country": "Germany",
+      "active": false
+    },
+    "DX": {
+      "name": "DAT Danish Air Transport",
+      "country": "Denmark",
+      "active": true
+    },
+    "DY": {
+      "name": "Norwegian Air Shuttle",
+      "country": "Norway",
+      "active": true
+    },
+    "DZ": {
+      "name": "Starline.kz",
+      "country": "Kazakhstan",
+      "active": true
+    },
+    "E0": {
+      "name": "Eos Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "E1": {
+      "name": "Usa Sky Cargo",
+      "country": "United States",
+      "active": true
+    },
+    "E2": {
+      "name": "Rio Grande Air",
+      "country": "United States",
+      "active": false
+    },
+    "E3": {
+      "name": "Domodedovo Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "E4": {
+      "name": "Elysian Airlines",
+      "country": "Cameroon",
+      "active": true
+    },
+    "E5": {
+      "name": "Air Arabia Egypt",
+      "country": "Egypt",
+      "active": true
+    },
+    "E6": {
+      "name": "Aviaexpresscruise",
+      "country": "Russia",
+      "active": false
+    },
+    "E7": {
+      "name": "European Aviation Air Charter",
+      "country": "United Kingdom",
+      "active": false
+    },
+    "E8": {
+      "name": "US Africa Airways",
+      "country": "United States",
+      "active": false
+    },
+    "E9": {
+      "name": "Compagnie Africaine d\\\\'Aviation",
+      "country": "Democratic Republic of the Congo",
+      "active": true
+    },
+    "EA": {
+      "name": "European Air Express",
+      "country": "Germany",
+      "active": true
+    },
+    "EC": {
+      "name": "Avialeasing Aviation Company",
+      "country": "Uzbekistan",
+      "active": true
+    },
+    "ED": {
+      "name": "Airblue",
+      "country": "Pakistan",
+      "active": true
+    },
+    "EE": {
+      "name": "Aero Airlines",
+      "country": "Estonia",
+      "active": false
+    },
+    "EF": {
+      "name": "Far Eastern Air Transport",
+      "country": "Taiwan",
+      "active": true
+    },
+    "EG": {
+      "name": "Japan Asia Airways",
+      "country": "Japan",
+      "active": true
+    },
+    "EH": {
+      "name": "Euro Harmony",
+      "country": "Portugal",
+      "active": false
+    },
+    "EI": {
+      "name": "Aer Lingus",
+      "country": "Ireland",
+      "active": true
+    },
+    "EJ": {
+      "name": "New England Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "EK": {
+      "name": "Emirates",
+      "country": "United Arab Emirates",
+      "active": true
+    },
+    "EL": {
+      "name": "Air Nippon",
+      "country": "Japan",
+      "active": true
+    },
+    "EM": {
+      "name": "Empire Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "EN": {
+      "name": "Air Dolomiti",
+      "country": "Italy",
+      "active": true
+    },
+    "EO": {
+      "name": "Hewa Bora Airways",
+      "country": "Democratic Republic of the Congo",
+      "active": false
+    },
+    "EP": {
+      "name": "Iran Aseman Airlines",
+      "country": "Iran",
+      "active": true
+    },
+    "EQ": {
+      "name": "TAME",
+      "country": "Ecuador",
+      "active": true
+    },
+    "ER": {
+      "name": "Fly Europa",
+      "country": "Spain",
+      "active": true
+    },
+    "ES": {
+      "name": "EuropeSky",
+      "country": "Germany",
+      "active": true
+    },
+    "ET": {
+      "name": "Ethiopian Airlines",
+      "country": "Ethiopia",
+      "active": true
+    },
+    "EU": {
+      "name": "Empresa Ecuatoriana De Aviacion",
+      "country": "Ecuador",
+      "active": true
+    },
+    "EV": {
+      "name": "Atlantic Southeast Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "EW": {
+      "name": "Eurowings",
+      "country": "Germany",
+      "active": true
+    },
+    "EX": {
+      "name": "Air Santo Domingo",
+      "country": "Dominican Republic",
+      "active": false
+    },
+    "EY": {
+      "name": "Etihad Airways",
+      "country": "United Arab Emirates",
+      "active": true
+    },
+    "EZ": {
+      "name": "Sun Air of Scandinavia",
+      "country": "Denmark",
+      "active": false
+    },
+    "F1": {
+      "name": "Fly Brasil",
+      "country": "Brazil",
+      "active": true
+    },
+    "F2": {
+      "name": "Fly Air",
+      "country": "Turkey",
+      "active": false
+    },
+    "F3": {
+      "name": "Faso Airways",
+      "country": "Burkina Faso",
+      "active": false
+    },
+    "F4": {
+      "name": "Albarka Air",
+      "country": "Nigeria",
+      "active": false
+    },
+    "F5": {
+      "name": "Global Freightways",
+      "country": "United States",
+      "active": false
+    },
+    "F6": {
+      "name": "Faroejet",
+      "country": "Faroe Islands",
+      "active": false
+    },
+    "F7": {
+      "name": "Flybaboo",
+      "country": "Switzerland",
+      "active": true
+    },
+    "F8": {
+      "name": "Air2there",
+      "country": "New Zealand",
+      "active": true
+    },
+    "F9": {
+      "name": "Frontier Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "FA": {
+      "name": "Epic Holiday",
+      "country": "United States",
+      "active": true
+    },
+    "FB": {
+      "name": "Bulgaria Air",
+      "country": "Bulgaria",
+      "active": true
+    },
+    "FC": {
+      "name": "Finncomm Airlines",
+      "country": "Finland",
+      "active": true
+    },
+    "FD": {
+      "name": "Thai AirAsia",
+      "country": "Thailand",
+      "active": true
+    },
+    "FE": {
+      "name": "Primaris Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "FF": {
+      "name": "Tower Air",
+      "country": "United States",
+      "active": false
+    },
+    "FG": {
+      "name": "Ariana Afghan Airlines",
+      "country": "Afghanistan",
+      "active": true
+    },
+    "FH": {
+      "name": "FlyHigh Airlines Ireland (FH)",
+      "country": "Ireland",
+      "active": true
+    },
+    "FI": {
+      "name": "Icelandair",
+      "country": "Iceland",
+      "active": true
+    },
+    "FJ": {
+      "name": "Air Pacific",
+      "country": "Fiji",
+      "active": true
+    },
+    "FK": {
+      "name": "Africa West",
+      "country": "Togo",
+      "active": true
+    },
+    "FL": {
+      "name": "AirTran Airways",
+      "country": "United States",
+      "active": true
+    },
+    "FM": {
+      "name": "Shanghai Airlines",
+      "country": "China",
+      "active": true
+    },
+    "FN": {
+      "name": "Regional Airlines",
+      "country": "Morocco",
+      "active": true
+    },
+    "FO": {
+      "name": "Airlines Of Tasmania",
+      "country": "Australia",
+      "active": true
+    },
+    "FP": {
+      "name": "Freedom Air",
+      "country": "United States",
+      "active": true
+    },
+    "FQ": {
+      "name": "Thomas Cook Airlines",
+      "country": "Belgium",
+      "active": true
+    },
+    "FR": {
+      "name": "Ryanair",
+      "country": "Ireland",
+      "active": true
+    },
+    "FS": {
+      "name": "Servicios de Transportes A",
+      "country": "Argentina",
+      "active": true
+    },
+    "FT": {
+      "name": "Siem Reap Airways",
+      "country": "Cambodia",
+      "active": true
+    },
+    "FU": {
+      "name": "Felix Airways",
+      "country": "Yemen",
+      "active": true
+    },
+    "FV": {
+      "name": "Rossiya-Russian Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "FW": {
+      "name": "Ibex Airlines",
+      "country": "Japan",
+      "active": true
+    },
+    "FX": {
+      "name": "Federal Express",
+      "country": "United States",
+      "active": false
+    },
+    "FY": {
+      "name": "Northwest Regional Airlines",
+      "country": "Australia",
+      "active": false
+    },
+    "FZ": {
+      "name": "Fly Dubai",
+      "country": "United Arab Emirates",
+      "active": true
+    },
+    "G0": {
+      "name": "Ghana International Airlines",
+      "country": "Ghana",
+      "active": true
+    },
+    "G1": {
+      "name": "Indya Airline Group",
+      "country": "India",
+      "active": true
+    },
+    "G2": {
+      "name": "Avirex",
+      "country": "Gabon",
+      "active": false
+    },
+    "G3": {
+      "name": "Sky Express",
+      "country": "Greece",
+      "active": true
+    },
+    "G4": {
+      "name": "Allegiant Air",
+      "country": "United States",
+      "active": true
+    },
+    "G5": {
+      "name": "Huaxia",
+      "country": "China",
+      "active": true
+    },
+    "G6": {
+      "name": "Air Volga",
+      "country": "Russia",
+      "active": true
+    },
+    "G7": {
+      "name": "GoJet Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "G8": {
+      "name": "Gujarat Airways",
+      "country": "India",
+      "active": false
+    },
+    "G9": {
+      "name": "Air Arabia",
+      "country": "United Arab Emirates",
+      "active": true
+    },
+    "GA": {
+      "name": "Garuda Indonesia",
+      "country": "Indonesia",
+      "active": true
+    },
+    "GB": {
+      "name": "BRAZIL AIR",
+      "country": "Brazil",
+      "active": true
+    },
+    "GC": {
+      "name": "Lina Congo",
+      "country": "Republic of the Congo",
+      "active": false
+    },
+    "GD": {
+      "name": "GoDutch",
+      "country": "Netherlands",
+      "active": false
+    },
+    "GE": {
+      "name": "TransAsia Airways",
+      "country": "Taiwan",
+      "active": true
+    },
+    "GF": {
+      "name": "Gulf Air Bahrain",
+      "country": "Bahrain",
+      "active": true
+    },
+    "GG": {
+      "name": "Cargo 360",
+      "country": "United States",
+      "active": false
+    },
+    "GH": {
+      "name": "Globus",
+      "country": "Russia",
+      "active": true
+    },
+    "GI": {
+      "name": "Itek Air",
+      "country": "Kyrgyzstan",
+      "active": true
+    },
+    "GJ": {
+      "name": "Eurofly Service",
+      "country": "Italy",
+      "active": true
+    },
+    "GK": {
+      "name": "Genesis",
+      "country": "Pakistan",
+      "active": true
+    },
+    "GL": {
+      "name": "Miami Air International",
+      "country": "United States",
+      "active": false
+    },
+    "GM": {
+      "name": "German International Air Lines",
+      "country": "Germany",
+      "active": true
+    },
+    "GN": {
+      "name": "GNB Linhas Aereas",
+      "country": "Brazil",
+      "active": true
+    },
+    "GO": {
+      "name": "Kuzu Airlines Cargo",
+      "country": "Turkey",
+      "active": true
+    },
+    "GP": {
+      "name": "Gadair European Airlines",
+      "country": "Spain",
+      "active": true
+    },
+    "GQ": {
+      "name": "Big Sky Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "GR": {
+      "name": "Gemini Air Cargo",
+      "country": "United States",
+      "active": false
+    },
+    "GS": {
+      "name": "Grant Aviation",
+      "country": "United States",
+      "active": false
+    },
+    "GT": {
+      "name": "GB Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "GU": {
+      "name": "Gulisano airways",
+      "country": "Italy",
+      "active": false
+    },
+    "GV": {
+      "name": "Aero Flight",
+      "country": "Germany",
+      "active": true
+    },
+    "GW": {
+      "name": "Kuban Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "GX": {
+      "name": "Pacificair",
+      "country": "Philippines",
+      "active": false
+    },
+    "GY": {
+      "name": "Gabon Airlines",
+      "country": "Gabon",
+      "active": true
+    },
+    "GZ": {
+      "name": "Air Rarotonga",
+      "country": "Cook Islands",
+      "active": true
+    },
+    "H1": {
+      "name": "Hankook Air US",
+      "country": "United States",
+      "active": true
+    },
+    "H2": {
+      "name": "Sky Airline",
+      "country": "Chile",
+      "active": true
+    },
+    "H3": {
+      "name": "Harbour Air (Priv)",
+      "country": "Canada",
+      "active": true
+    },
+    "H4": {
+      "name": "Inter Islands Airlines",
+      "country": "Cape Verde",
+      "active": false
+    },
+    "H5": {
+      "name": "I-Fly",
+      "country": "Russia",
+      "active": true
+    },
+    "H6": {
+      "name": "Hageland Aviation Services",
+      "country": "United States",
+      "active": true
+    },
+    "H7": {
+      "name": "Eagle Air",
+      "country": "Uganda",
+      "active": true
+    },
+    "H8": {
+      "name": "Dalavia",
+      "country": "Russia",
+      "active": true
+    },
+    "H9": {
+      "name": "PEGASUS AIRLINES-",
+      "country": "Turkey",
+      "active": true
+    },
+    "HA": {
+      "name": "Hawaiian Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "HB": {
+      "name": "Harbor Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "HC": {
+      "name": "Himalayan Airlines",
+      "country": "Nepal",
+      "active": true
+    },
+    "HD": {
+      "name": "Hokkaido International Airlines",
+      "country": "Japan",
+      "active": true
+    },
+    "HE": {
+      "name": "Luftfahrtgesellschaft Walter",
+      "country": "Germany",
+      "active": true
+    },
+    "HF": {
+      "name": "Hapagfly",
+      "country": "Germany",
+      "active": true
+    },
+    "HG": {
+      "name": "Niki",
+      "country": "Austria",
+      "active": true
+    },
+    "HH": {
+      "name": "Air Hamburg (AHO)",
+      "country": "Germany",
+      "active": true
+    },
+    "HI": {
+      "name": "Papillon Grand Canyon Helicopters",
+      "country": "United States",
+      "active": true
+    },
+    "HJ": {
+      "name": "Asian Express Airlines",
+      "country": "Australia",
+      "active": false
+    },
+    "HK": {
+      "name": "Yangon Airways",
+      "country": "Myanmar (Burma)",
+      "active": true
+    },
+    "HM": {
+      "name": "Air Seychelles",
+      "country": "Seychelles",
+      "active": true
+    },
+    "HN": {
+      "name": "Hankook Airline",
+      "country": "South Korea",
+      "active": true
+    },
+    "HO": {
+      "name": "Juneyao Airlines",
+      "country": "China",
+      "active": true
+    },
+    "HP": {
+      "name": "Phoenix Airways",
+      "country": "Switzerland",
+      "active": false
+    },
+    "HQ": {
+      "name": "HQ- Business Express",
+      "country": "United States",
+      "active": false
+    },
+    "HR": {
+      "name": "Hahn Air",
+      "country": "Germany",
+      "active": false
+    },
+    "HT": {
+      "name": "Hellenic Imperial Airways",
+      "country": "Greece",
+      "active": true
+    },
+    "HU": {
+      "name": "Hainan Airlines",
+      "country": "China",
+      "active": true
+    },
+    "HV": {
+      "name": "Transavia Holland",
+      "country": "Netherlands",
+      "active": true
+    },
+    "HW": {
+      "name": "North-Wright Airways",
+      "country": "Canada",
+      "active": false
+    },
+    "HX": {
+      "name": "Hong Kong Airlines",
+      "country": "Hong Kong",
+      "active": true
+    },
+    "HY": {
+      "name": "Uzbekistan Airways",
+      "country": "Uzbekistan",
+      "active": true
+    },
+    "HZ": {
+      "name": "Sat Airlines",
+      "country": "Kazakhstan",
+      "active": true
+    },
+    "I2": {
+      "name": "Iberia Express",
+      "country": "Spain",
+      "active": true
+    },
+    "I4": {
+      "name": "Interstate Airline",
+      "country": "Netherlands",
+      "active": false
+    },
+    "I5": {
+      "name": "Indonesia Sky",
+      "country": "Indonesia",
+      "active": true
+    },
+    "I6": {
+      "name": "MexicanaLink",
+      "country": "Mexico",
+      "active": true
+    },
+    "I7": {
+      "name": "Paramount Airways",
+      "country": "India",
+      "active": true
+    },
+    "I8": {
+      "name": "IzAvia",
+      "country": "Russia",
+      "active": true
+    },
+    "I9": {
+      "name": "Indigo",
+      "country": "United States",
+      "active": true
+    },
+    "IA": {
+      "name": "Iraqi Airways",
+      "country": "Iraq",
+      "active": true
+    },
+    "IB": {
+      "name": "Iberia Airlines",
+      "country": "Spain",
+      "active": true
+    },
+    "IC": {
+      "name": "Indian Airlines",
+      "country": "India",
+      "active": true
+    },
+    "ID": {
+      "name": "Interlink Airlines",
+      "country": "South Africa",
+      "active": true
+    },
+    "IE": {
+      "name": "Solomon Airlines",
+      "country": "Solomon Islands",
+      "active": true
+    },
+    "IF": {
+      "name": "Islas Airways",
+      "country": "Spain",
+      "active": true
+    },
+    "IG": {
+      "name": "Meridiana",
+      "country": "Italy",
+      "active": true
+    },
+    "IH": {
+      "name": "Falcon Air (IH)",
+      "country": "Sweden",
+      "active": false
+    },
+    "II": {
+      "name": "LSM International",
+      "country": "Russia",
+      "active": true
+    },
+    "IJ": {
+      "name": "T.A.T",
+      "country": "France",
+      "active": false
+    },
+    "IK": {
+      "name": "Lankair",
+      "country": "Sri Lanka",
+      "active": false
+    },
+    "IL": {
+      "name": "Fly Illi",
+      "country": "United States",
+      "active": false
+    },
+    "IM": {
+      "name": "Menajet",
+      "country": "Lebanon",
+      "active": false
+    },
+    "IN": {
+      "name": "MAT Macedonian Airlines",
+      "country": "North Macedonia",
+      "active": true
+    },
+    "IO": {
+      "name": "Indonesian Airlines",
+      "country": "Indonesia",
+      "active": true
+    },
+    "IP": {
+      "name": "Island Spirit",
+      "country": "Iceland",
+      "active": true
+    },
+    "IQ": {
+      "name": "Augsburg Airways",
+      "country": "Germany",
+      "active": true
+    },
+    "IR": {
+      "name": "Iran Air",
+      "country": "Iran",
+      "active": true
+    },
+    "IS": {
+      "name": "Island Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "IT": {
+      "name": "Kingfisher Airlines",
+      "country": "India",
+      "active": true
+    },
+    "IV": {
+      "name": "Wind Jet",
+      "country": "Italy",
+      "active": true
+    },
+    "IW": {
+      "name": "Wings Air",
+      "country": "Indonesia",
+      "active": true
+    },
+    "IX": {
+      "name": "Air India Express",
+      "country": "India",
+      "active": true
+    },
+    "IY": {
+      "name": "Yemenia",
+      "country": "Yemen",
+      "active": true
+    },
+    "IZ": {
+      "name": "Arkia Israel Airlines",
+      "country": "Israel",
+      "active": true
+    },
+    "J2": {
+      "name": "Azerbaijan Airlines",
+      "country": "Azerbaijan",
+      "active": true
+    },
+    "J3": {
+      "name": "Northwestern Air",
+      "country": "Canada",
+      "active": true
+    },
+    "J4": {
+      "name": "ALAK",
+      "country": "Russia",
+      "active": true
+    },
+    "J5": {
+      "name": "Alaska Seaplane Service",
+      "country": "United States",
+      "active": true
+    },
+    "J6": {
+      "name": "AVCOM",
+      "country": "Russia",
+      "active": false
+    },
+    "J7": {
+      "name": "Denim Air",
+      "country": "Norway",
+      "active": true
+    },
+    "J8": {
+      "name": "Berjaya Air",
+      "country": "Malaysia",
+      "active": true
+    },
+    "J9": {
+      "name": "Jazeera Airways",
+      "country": "Kuwait",
+      "active": true
+    },
+    "JA": {
+      "name": "B&H Airlines",
+      "country": "Bosnia and Herzegovina",
+      "active": false
+    },
+    "JB": {
+      "name": "Helijet",
+      "country": "Canada",
+      "active": true
+    },
+    "JC": {
+      "name": "JAL Express",
+      "country": "Japan",
+      "active": true
+    },
+    "JD": {
+      "name": "Japan Air System",
+      "country": "Japan",
+      "active": true
+    },
+    "JE": {
+      "name": "Mango",
+      "country": "South Africa",
+      "active": true
+    },
+    "JF": {
+      "name": "L.A.B. Flying Service",
+      "country": "United States",
+      "active": false
+    },
+    "JH": {
+      "name": "Fuji Dream Airlines",
+      "country": "Japan",
+      "active": true
+    },
+    "JI": {
+      "name": "Midway Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "JJ": {
+      "name": "TAM Brazilian Airlines",
+      "country": "Brazil",
+      "active": true
+    },
+    "JK": {
+      "name": "Spanair",
+      "country": "Spain",
+      "active": true
+    },
+    "JL": {
+      "name": "Japan Airlines Domestic",
+      "country": "Japan",
+      "active": false
+    },
+    "JM": {
+      "name": "Air Jamaica",
+      "country": "Jamaica",
+      "active": true
+    },
+    "JN": {
+      "name": "Excel Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "JO": {
+      "name": "JALways",
+      "country": "Japan",
+      "active": true
+    },
+    "JP": {
+      "name": "Adria Airways",
+      "country": "Slovenia",
+      "active": true
+    },
+    "JQ": {
+      "name": "Jetstar Airways",
+      "country": "Australia",
+      "active": true
+    },
+    "JR": {
+      "name": "Joy Air",
+      "country": "China",
+      "active": true
+    },
+    "JS": {
+      "name": "Air Koryo",
+      "country": "South Korea",
+      "active": true
+    },
+    "JT": {
+      "name": "Lion Mentari Airlines",
+      "country": "Indonesia",
+      "active": true
+    },
+    "JU": {
+      "name": "Jat Airways",
+      "country": "Serbia",
+      "active": true
+    },
+    "JV": {
+      "name": "Bearskin Lake Air Service",
+      "country": "Canada",
+      "active": true
+    },
+    "JW": {
+      "name": "Arrow Air",
+      "country": "United States",
+      "active": true
+    },
+    "JX": {
+      "name": "Jusur airways",
+      "country": "Egypt",
+      "active": true
+    },
+    "JY": {
+      "name": "Aereonautica militare",
+      "country": "Italy",
+      "active": true
+    },
+    "JZ": {
+      "name": "Skyways Express",
+      "country": "Sweden",
+      "active": true
+    },
+    "K1": {
+      "name": "Kostromskie avialinii",
+      "country": "Russia",
+      "active": true
+    },
+    "K2": {
+      "name": "Eurolot",
+      "country": "Poland",
+      "active": true
+    },
+    "K4": {
+      "name": "Kalitta Air",
+      "country": "United States",
+      "active": false
+    },
+    "K5": {
+      "name": "SeaPort Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "K6": {
+      "name": "Cambodia Angkor Air (K6)",
+      "country": "Cambodia",
+      "active": true
+    },
+    "K7": {
+      "name": "KoralBlue Airlines",
+      "country": "Egypt",
+      "active": true
+    },
+    "K8": {
+      "name": "Zambia Skyways",
+      "country": "Zambia",
+      "active": true
+    },
+    "K9": {
+      "name": "Krylo Airlines",
+      "country": "Russia",
+      "active": false
+    },
+    "KA": {
+      "name": "Dragonair",
+      "country": "Hong Kong",
+      "active": true
+    },
+    "KB": {
+      "name": "Druk Air",
+      "country": "Bhutan",
+      "active": true
+    },
+    "KC": {
+      "name": "Air Astana",
+      "country": "Kazakhstan",
+      "active": true
+    },
+    "KD": {
+      "name": "KD Avia",
+      "country": "Russia",
+      "active": true
+    },
+    "KE": {
+      "name": "Korean Air",
+      "country": "South Korea",
+      "active": true
+    },
+    "KF": {
+      "name": "Blue1",
+      "country": "Finland",
+      "active": true
+    },
+    "KG": {
+      "name": "Royal Airways",
+      "country": "United States",
+      "active": true
+    },
+    "KH": {
+      "name": "Kharkiv Airlines",
+      "country": "Ukraine",
+      "active": true
+    },
+    "KI": {
+      "name": "Adam Air",
+      "country": "Indonesia",
+      "active": true
+    },
+    "KJ": {
+      "name": "British Mediterranean Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "KK": {
+      "name": "Atlasjet",
+      "country": "Turkey",
+      "active": true
+    },
+    "KL": {
+      "name": "KLM Royal Dutch Airlines",
+      "country": "Netherlands",
+      "active": true
+    },
+    "KM": {
+      "name": "Air Malta",
+      "country": "Malta",
+      "active": true
+    },
+    "KN": {
+      "name": "China United",
+      "country": "China",
+      "active": true
+    },
+    "KO": {
+      "name": "Alaska Central Express",
+      "country": "United States",
+      "active": true
+    },
+    "KP": {
+      "name": "Air Cape",
+      "country": "South Africa",
+      "active": false
+    },
+    "KQ": {
+      "name": "Kenya Airways",
+      "country": "Kenya",
+      "active": true
+    },
+    "KR": {
+      "name": "Comores Airlines",
+      "country": "Comoros",
+      "active": true
+    },
+    "KS": {
+      "name": "Peninsula Airways",
+      "country": "United States",
+      "active": true
+    },
+    "KT": {
+      "name": "VickJet",
+      "country": "France",
+      "active": true
+    },
+    "KU": {
+      "name": "Kuwait Airways",
+      "country": "Kuwait",
+      "active": true
+    },
+    "KV": {
+      "name": "Kavminvodyavia",
+      "country": "Russia",
+      "active": true
+    },
+    "KW": {
+      "name": "Carnival Air Lines",
+      "country": "United States",
+      "active": true
+    },
+    "KX": {
+      "name": "Cayman Airways",
+      "country": "Cayman Islands",
+      "active": true
+    },
+    "KY": {
+      "name": "KSY",
+      "country": "Greece",
+      "active": true
+    },
+    "KZ": {
+      "name": "Nippon Cargo Airlines",
+      "country": "Japan",
+      "active": false
+    },
+    "L1": {
+      "name": "All Argentina",
+      "country": "Argentina",
+      "active": true
+    },
+    "L2": {
+      "name": "Lynden Air Cargo",
+      "country": "United States",
+      "active": false
+    },
+    "L3": {
+      "name": "LTU Austria",
+      "country": "Austria",
+      "active": true
+    },
+    "L4": {
+      "name": "Luchsh Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "L5": {
+      "name": "Lufttransport",
+      "country": "Norway",
+      "active": true
+    },
+    "L6": {
+      "name": "Mauritania Airlines International",
+      "country": "Mauritania",
+      "active": true
+    },
+    "L7": {
+      "name": "Lugansk Airlines",
+      "country": "Ukraine",
+      "active": true
+    },
+    "L8": {
+      "name": "Line Blue",
+      "country": "Germany",
+      "active": true
+    },
+    "L9": {
+      "name": "All Asia",
+      "country": "China",
+      "active": true
+    },
+    "LA": {
+      "name": "LAN Airlines",
+      "country": "Chile",
+      "active": true
+    },
+    "LB": {
+      "name": "Air Costa",
+      "country": "India",
+      "active": true
+    },
+    "LC": {
+      "name": "Varig Log",
+      "country": "Brazil",
+      "active": true
+    },
+    "LD": {
+      "name": "Linea Turistica Aerotuy",
+      "country": "Venezuela",
+      "active": false
+    },
+    "LF": {
+      "name": "FlyNordic",
+      "country": "Sweden",
+      "active": true
+    },
+    "LG": {
+      "name": "Luxair",
+      "country": "Luxembourg",
+      "active": true
+    },
+    "LH": {
+      "name": "Lufthansa Cargo",
+      "country": "Germany",
+      "active": true
+    },
+    "LI": {
+      "name": "Leeward Islands Air Transport",
+      "country": "Antigua and Barbuda",
+      "active": true
+    },
+    "LJ": {
+      "name": "Jin Air",
+      "country": "South Korea",
+      "active": true
+    },
+    "LK": {
+      "name": "Air Luxor",
+      "country": "Portugal",
+      "active": true
+    },
+    "LL": {
+      "name": "Allegro",
+      "country": "Mexico",
+      "active": false
+    },
+    "LM": {
+      "name": "Livingston",
+      "country": "Italy",
+      "active": false
+    },
+    "LN": {
+      "name": "Libyan Arab Airlines",
+      "country": "Libya",
+      "active": true
+    },
+    "LO": {
+      "name": "LOT Polish Airlines",
+      "country": "Poland",
+      "active": true
+    },
+    "LP": {
+      "name": "LAN Peru",
+      "country": "Peru",
+      "active": true
+    },
+    "LQ": {
+      "name": "LCM AIRLINES",
+      "country": "Russia",
+      "active": true
+    },
+    "LR": {
+      "name": "LACSA",
+      "country": "Costa Rica",
+      "active": true
+    },
+    "LS": {
+      "name": "Jet2.com",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "LT": {
+      "name": "LTU International",
+      "country": "Germany",
+      "active": true
+    },
+    "LU": {
+      "name": "LAN Express",
+      "country": "Chile",
+      "active": true
+    },
+    "LV": {
+      "name": "Albanian Airlines",
+      "country": "Albania",
+      "active": true
+    },
+    "LW": {
+      "name": "Pacific Wings",
+      "country": "United States",
+      "active": true
+    },
+    "LX": {
+      "name": "Swiss International Air Lines",
+      "country": "Switzerland",
+      "active": true
+    },
+    "LY": {
+      "name": "El Al Israel Airlines",
+      "country": "Israel",
+      "active": true
+    },
+    "LZ": {
+      "name": "Balkan Bulgarian Airlines",
+      "country": "",
+      "active": true
+    },
+    "M0": {
+      "name": "Aero Mongolia",
+      "country": "Mongolia",
+      "active": false
+    },
+    "M1": {
+      "name": "Maryland Air",
+      "country": "United States",
+      "active": true
+    },
+    "M2": {
+      "name": "MHS Aviation GmbH",
+      "country": "Germany",
+      "active": true
+    },
+    "M3": {
+      "name": "North Flying",
+      "country": "Denmark",
+      "active": false
+    },
+    "M4": {
+      "name": "Marysya Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "M5": {
+      "name": "Kenmore Air",
+      "country": "United States",
+      "active": true
+    },
+    "M6": {
+      "name": "Amerijet International",
+      "country": "United States",
+      "active": false
+    },
+    "M7": {
+      "name": "Tropical Airways",
+      "country": "Haiti",
+      "active": false
+    },
+    "M8": {
+      "name": "Trans Maldivian Airways",
+      "country": "Maldives",
+      "active": false
+    },
+    "M9": {
+      "name": "Motor Sich",
+      "country": "Ukraine",
+      "active": true
+    },
+    "MA": {
+      "name": "Mal\u00e9v",
+      "country": "Hungary",
+      "active": true
+    },
+    "MB": {
+      "name": "MNG Airlines",
+      "country": "Turkey",
+      "active": true
+    },
+    "MC": {
+      "name": "Air Mobility Command",
+      "country": "United States",
+      "active": false
+    },
+    "MD": {
+      "name": "Air Madagascar",
+      "country": "Madagascar",
+      "active": true
+    },
+    "ME": {
+      "name": "Middle East Airlines",
+      "country": "Lebanon",
+      "active": true
+    },
+    "MF": {
+      "name": "Xiamen Airlines",
+      "country": "China",
+      "active": true
+    },
+    "MG": {
+      "name": "Champion Air",
+      "country": "United States",
+      "active": false
+    },
+    "MH": {
+      "name": "Malaysia Airlines",
+      "country": "Malaysia",
+      "active": true
+    },
+    "MI": {
+      "name": "SilkAir",
+      "country": "Singapore",
+      "active": true
+    },
+    "MJ": {
+      "name": "L",
+      "country": "Argentina",
+      "active": true
+    },
+    "MK": {
+      "name": "Air Mauritius",
+      "country": "Mauritius",
+      "active": true
+    },
+    "ML": {
+      "name": "Maldivo Airlines",
+      "country": "Maldives",
+      "active": true
+    },
+    "MM": {
+      "name": "Peach Aviation",
+      "country": "Japan",
+      "active": true
+    },
+    "MN": {
+      "name": "Comair",
+      "country": "South Africa",
+      "active": true
+    },
+    "MO": {
+      "name": "Calm Air",
+      "country": "Canada",
+      "active": false
+    },
+    "MP": {
+      "name": "Martinair",
+      "country": "Netherlands",
+      "active": true
+    },
+    "MQ": {
+      "name": "American Eagle Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "MR": {
+      "name": "Homer Air",
+      "country": "Germany",
+      "active": true
+    },
+    "MS": {
+      "name": "Egyptair",
+      "country": "Egypt",
+      "active": true
+    },
+    "MT": {
+      "name": "Thomas Cook Airlines",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "MU": {
+      "name": "China Eastern Airlines",
+      "country": "China",
+      "active": true
+    },
+    "MV": {
+      "name": "Armenian International Airways",
+      "country": "Armenia",
+      "active": false
+    },
+    "MW": {
+      "name": "Maya Island Air",
+      "country": "Belize",
+      "active": true
+    },
+    "MX": {
+      "name": "Mexicana de Aviaci",
+      "country": "Mexico",
+      "active": true
+    },
+    "MY": {
+      "name": "Midwest Airlines (Egypt)",
+      "country": "Egypt",
+      "active": true
+    },
+    "MZ": {
+      "name": "Merpati Nusantara Airlines",
+      "country": "Indonesia",
+      "active": true
+    },
+    "N0": {
+      "name": "Norte Lineas Aereas",
+      "country": "Argentina",
+      "active": true
+    },
+    "N1": {
+      "name": "N1",
+      "country": "Peru",
+      "active": true
+    },
+    "N2": {
+      "name": "Kabo Air",
+      "country": "Nigeria",
+      "active": false
+    },
+    "N3": {
+      "name": "Omskavia Airline",
+      "country": "Russia",
+      "active": false
+    },
+    "N4": {
+      "name": "Regionalia M\u00e9xico",
+      "country": "Mexico",
+      "active": true
+    },
+    "N5": {
+      "name": "Skagway Air Service",
+      "country": "United States",
+      "active": true
+    },
+    "N6": {
+      "name": "Aerocontinente (Priv)",
+      "country": "Peru",
+      "active": false
+    },
+    "N7": {
+      "name": "All Spain",
+      "country": "Spain",
+      "active": true
+    },
+    "N8": {
+      "name": "National Air Cargo",
+      "country": "United States",
+      "active": true
+    },
+    "N9": {
+      "name": "All Europe",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "NA": {
+      "name": "Al-Naser Airlines",
+      "country": "Iraq",
+      "active": true
+    },
+    "NB": {
+      "name": "Sterling Airlines",
+      "country": "Denmark",
+      "active": true
+    },
+    "NC": {
+      "name": "Northern Air Cargo",
+      "country": "United States",
+      "active": false
+    },
+    "NE": {
+      "name": "SkyEurope",
+      "country": "Slovakia",
+      "active": true
+    },
+    "NF": {
+      "name": "Air Vanuatu",
+      "country": "Vanuatu",
+      "active": true
+    },
+    "NG": {
+      "name": "Lauda Air",
+      "country": "Austria",
+      "active": true
+    },
+    "NH": {
+      "name": "All Nippon Airways",
+      "country": "Japan",
+      "active": true
+    },
+    "NI": {
+      "name": "Portugalia",
+      "country": "Portugal",
+      "active": true
+    },
+    "NJ": {
+      "name": "Nordic Global Airlines",
+      "country": "Finland",
+      "active": true
+    },
+    "NK": {
+      "name": "Spirit Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "NL": {
+      "name": "Shaheen Air International",
+      "country": "Pakistan",
+      "active": true
+    },
+    "NM": {
+      "name": "Mount Cook Airlines",
+      "country": "New Zealand",
+      "active": false
+    },
+    "NN": {
+      "name": "VIM Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "NO": {
+      "name": "North Pacific Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "NP": {
+      "name": "Nile Air",
+      "country": "Egypt",
+      "active": true
+    },
+    "NQ": {
+      "name": "Air Japan",
+      "country": "Japan",
+      "active": true
+    },
+    "NR": {
+      "name": "Jettor Airlines",
+      "country": "Hong Kong",
+      "active": true
+    },
+    "NS": {
+      "name": "Caucasus Airlines",
+      "country": "Georgia",
+      "active": true
+    },
+    "NT": {
+      "name": "Binter Canarias",
+      "country": "Spain",
+      "active": true
+    },
+    "NU": {
+      "name": "Japan Transocean Air",
+      "country": "Japan",
+      "active": true
+    },
+    "NV": {
+      "name": "Air Central",
+      "country": "Japan",
+      "active": false
+    },
+    "NW": {
+      "name": "Northwest Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "NX": {
+      "name": "Air Macau",
+      "country": "Macau",
+      "active": true
+    },
+    "NY": {
+      "name": "Air Iceland",
+      "country": "Iceland",
+      "active": true
+    },
+    "NZ": {
+      "name": "Air New Zealand",
+      "country": "New Zealand",
+      "active": true
+    },
+    "O1": {
+      "name": "Orbit Airlines Azerbaijan",
+      "country": "Azerbaijan",
+      "active": true
+    },
+    "O2": {
+      "name": "Oceanic Airlines",
+      "country": "Guinea",
+      "active": true
+    },
+    "O3": {
+      "name": "SF Airlines",
+      "country": "China",
+      "active": true
+    },
+    "O6": {
+      "name": "Oceanair",
+      "country": "Brazil",
+      "active": true
+    },
+    "O7": {
+      "name": "Ozjet Airlines",
+      "country": "Australia",
+      "active": true
+    },
+    "O8": {
+      "name": "Oasis Hong Kong Airlines",
+      "country": "Hong Kong",
+      "active": true
+    },
+    "OA": {
+      "name": "Olympic Airlines",
+      "country": "Greece",
+      "active": true
+    },
+    "OB": {
+      "name": "Astrakhan Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "OC": {
+      "name": "Catovair",
+      "country": "Mauritius",
+      "active": true
+    },
+    "OD": {
+      "name": "Malindo Air",
+      "country": "Malaysia",
+      "active": true
+    },
+    "OE": {
+      "name": "WestAir Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "OF": {
+      "name": "Transports et Travaux A",
+      "country": "",
+      "active": false
+    },
+    "OG": {
+      "name": "AirOnix",
+      "country": "Ukraine",
+      "active": true
+    },
+    "OH": {
+      "name": "Comair",
+      "country": "United States",
+      "active": true
+    },
+    "OI": {
+      "name": "Orchid Airlines",
+      "country": "Australia",
+      "active": true
+    },
+    "OJ": {
+      "name": "Overland Airways",
+      "country": "Nigeria",
+      "active": true
+    },
+    "OK": {
+      "name": "Czech Airlines",
+      "country": "Czech Republic",
+      "active": true
+    },
+    "OL": {
+      "name": "Ostfriesische Lufttransport",
+      "country": "Germany",
+      "active": true
+    },
+    "OM": {
+      "name": "MIAT Mongolian Airlines",
+      "country": "Mongolia",
+      "active": true
+    },
+    "ON": {
+      "name": "Our Airline",
+      "country": "Nauru",
+      "active": false
+    },
+    "OO": {
+      "name": "SkyWest",
+      "country": "United States",
+      "active": true
+    },
+    "OP": {
+      "name": "Chalk's Ocean Airways",
+      "country": "United States",
+      "active": false
+    },
+    "OQ": {
+      "name": "Chongqing Airlines",
+      "country": "China",
+      "active": true
+    },
+    "OR": {
+      "name": "Arkefly",
+      "country": "Netherlands",
+      "active": true
+    },
+    "OS": {
+      "name": "Austrian Airlines",
+      "country": "Austria",
+      "active": true
+    },
+    "OT": {
+      "name": "Aeropelican Air Services",
+      "country": "Australia",
+      "active": true
+    },
+    "OU": {
+      "name": "Croatia Airlines",
+      "country": "Croatia",
+      "active": true
+    },
+    "OV": {
+      "name": "Estonian Air",
+      "country": "Estonia",
+      "active": true
+    },
+    "OW": {
+      "name": "Executive Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "OX": {
+      "name": "Orient Thai Airlines",
+      "country": "Thailand",
+      "active": true
+    },
+    "OY": {
+      "name": "Omni Air International",
+      "country": "United States",
+      "active": true
+    },
+    "OZ": {
+      "name": "Ozark Air Lines",
+      "country": "United States",
+      "active": false
+    },
+    "P0": {
+      "name": "Proflight Commuter Services",
+      "country": "Zambia",
+      "active": true
+    },
+    "P4": {
+      "name": "Patriot Airways",
+      "country": "United States",
+      "active": true
+    },
+    "P5": {
+      "name": "AeroRep",
+      "country": "Colombia",
+      "active": true
+    },
+    "P7": {
+      "name": "Regional Paraguaya",
+      "country": "Paraguay",
+      "active": true
+    },
+    "P8": {
+      "name": "Air Mekong",
+      "country": "Vietnam",
+      "active": true
+    },
+    "P9": {
+      "name": "Peruvian Airlines",
+      "country": "Peru",
+      "active": true
+    },
+    "PA": {
+      "name": "Parmiss Airlines (IPV)",
+      "country": "Iran",
+      "active": true
+    },
+    "PC": {
+      "name": "Pegasus Airlines",
+      "country": "Turkey",
+      "active": true
+    },
+    "PD": {
+      "name": "Porter Airlines",
+      "country": "Canada",
+      "active": true
+    },
+    "PE": {
+      "name": "Air Europe",
+      "country": "Italy",
+      "active": true
+    },
+    "PF": {
+      "name": "Primera Air",
+      "country": "Iceland",
+      "active": true
+    },
+    "PG": {
+      "name": "Bangkok Airways",
+      "country": "Thailand",
+      "active": true
+    },
+    "PH": {
+      "name": "Polynesian Airlines",
+      "country": "Samoa",
+      "active": true
+    },
+    "PI": {
+      "name": "Sun Air (Fiji)",
+      "country": "Fiji",
+      "active": false
+    },
+    "PJ": {
+      "name": "Air Saint Pierre",
+      "country": "France",
+      "active": true
+    },
+    "PK": {
+      "name": "Pakistan International Airlines",
+      "country": "Pakistan",
+      "active": true
+    },
+    "PL": {
+      "name": "Airstars",
+      "country": "Russia",
+      "active": false
+    },
+    "PM": {
+      "name": "Tropic Air",
+      "country": "Belize",
+      "active": true
+    },
+    "PN": {
+      "name": "West Air China",
+      "country": "China",
+      "active": true
+    },
+    "PO": {
+      "name": "FlyPortugal",
+      "country": "Portugal",
+      "active": true
+    },
+    "PP": {
+      "name": "Air Indus",
+      "country": "Pakistan",
+      "active": true
+    },
+    "PQ": {
+      "name": "LSM Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "PR": {
+      "name": "Philippine Airlines",
+      "country": "Philippines",
+      "active": true
+    },
+    "PS": {
+      "name": "Ukraine International Airlines",
+      "country": "Ukraine",
+      "active": true
+    },
+    "PT": {
+      "name": "Red Jet Andes",
+      "country": "Peru",
+      "active": true
+    },
+    "PU": {
+      "name": "PLUNA",
+      "country": "Uruguay",
+      "active": true
+    },
+    "PV": {
+      "name": "PAN Air",
+      "country": "Spain",
+      "active": true
+    },
+    "PW": {
+      "name": "Precision Air",
+      "country": "Tanzania",
+      "active": true
+    },
+    "PX": {
+      "name": "Air Niugini",
+      "country": "Papua New Guinea",
+      "active": true
+    },
+    "PY": {
+      "name": "Surinam Airways",
+      "country": "Suriname",
+      "active": true
+    },
+    "PZ": {
+      "name": "TAM Mercosur",
+      "country": "Paraguay",
+      "active": true
+    },
+    "Q2": {
+      "name": "Maldivian",
+      "country": "Maldives",
+      "active": true
+    },
+    "Q3": {
+      "name": "SOCHI AIR CHATER",
+      "country": "Russia",
+      "active": true
+    },
+    "Q4": {
+      "name": "Mastertop Linhas Aereas",
+      "country": "Brazil",
+      "active": false
+    },
+    "Q5": {
+      "name": "40-Mile Air",
+      "country": "United States",
+      "active": true
+    },
+    "Q6": {
+      "name": "Aero Condor Peru",
+      "country": "Peru",
+      "active": true
+    },
+    "Q8": {
+      "name": "Pacific East Asia Cargo Airlines",
+      "country": "Philippines",
+      "active": true
+    },
+    "Q9": {
+      "name": "Arik Niger",
+      "country": "Niger",
+      "active": true
+    },
+    "QA": {
+      "name": "Click (Mexicana)",
+      "country": "Mexico",
+      "active": true
+    },
+    "QB": {
+      "name": "Georgian National Airlines",
+      "country": "Georgia",
+      "active": true
+    },
+    "QC": {
+      "name": "Camair-co",
+      "country": "Cameroon",
+      "active": true
+    },
+    "QD": {
+      "name": "Dobrolet",
+      "country": "Russia",
+      "active": true
+    },
+    "QE": {
+      "name": "Qatar Executive",
+      "country": "Qatar",
+      "active": true
+    },
+    "QF": {
+      "name": "Qantas",
+      "country": "Australia",
+      "active": true
+    },
+    "QG": {
+      "name": "Citilink Indonesia",
+      "country": "Indonesia",
+      "active": true
+    },
+    "QH": {
+      "name": "Kyrgyzstan",
+      "country": "Kyrgyzstan",
+      "active": false
+    },
+    "QI": {
+      "name": "Cimber Air",
+      "country": "Denmark",
+      "active": true
+    },
+    "QJ": {
+      "name": "Jet Airways",
+      "country": "United States",
+      "active": true
+    },
+    "QK": {
+      "name": "Air Canada Jazz",
+      "country": "Canada",
+      "active": true
+    },
+    "QL": {
+      "name": "Aero Lanka",
+      "country": "Sri Lanka",
+      "active": true
+    },
+    "QM": {
+      "name": "Air Malawi",
+      "country": "Malawi",
+      "active": true
+    },
+    "QN": {
+      "name": "Air Armenia",
+      "country": "Armenia",
+      "active": false
+    },
+    "QO": {
+      "name": "Origin Pacific Airways",
+      "country": "New Zealand",
+      "active": true
+    },
+    "QQ": {
+      "name": "Reno Air",
+      "country": "United States",
+      "active": false
+    },
+    "QR": {
+      "name": "Qatar Airways",
+      "country": "Qatar",
+      "active": true
+    },
+    "QS": {
+      "name": "Travel Service",
+      "country": "Czech Republic",
+      "active": true
+    },
+    "QT": {
+      "name": "TAMPA",
+      "country": "Colombia",
+      "active": true
+    },
+    "QU": {
+      "name": "East African",
+      "country": "Uganda",
+      "active": true
+    },
+    "QV": {
+      "name": "Lao Airlines",
+      "country": "Lao Peoples Democratic Republic",
+      "active": true
+    },
+    "QW": {
+      "name": "Blue Wings",
+      "country": "Germany",
+      "active": true
+    },
+    "QX": {
+      "name": "Horizon Air",
+      "country": "United States",
+      "active": true
+    },
+    "QY": {
+      "name": "Red Jet Canada",
+      "country": "Canada",
+      "active": true
+    },
+    "QZ": {
+      "name": "Indonesia AirAsia",
+      "country": "Indonesia",
+      "active": true
+    },
+    "R0": {
+      "name": "Royal Airlines",
+      "country": "Pakistan",
+      "active": false
+    },
+    "R1": {
+      "name": "Royal Southern Airlines.",
+      "country": "Colombia",
+      "active": false
+    },
+    "R2": {
+      "name": "Orenburg Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "R3": {
+      "name": "Aircompany Yakutia",
+      "country": "Russia",
+      "active": true
+    },
+    "R4": {
+      "name": "Rossiya",
+      "country": "Russia",
+      "active": true
+    },
+    "R5": {
+      "name": "Malta Air Charter",
+      "country": "Malta",
+      "active": true
+    },
+    "R6": {
+      "name": "RACSA",
+      "country": "Guatemala",
+      "active": true
+    },
+    "R7": {
+      "name": "Aserca Airlines",
+      "country": "Venezuela",
+      "active": true
+    },
+    "R8": {
+      "name": "AirRussia",
+      "country": "Russia",
+      "active": true
+    },
+    "R9": {
+      "name": "Camai Air",
+      "country": "United States",
+      "active": false
+    },
+    "RA": {
+      "name": "Royal Nepal Airlines",
+      "country": "Nepal",
+      "active": false
+    },
+    "RB": {
+      "name": "Syrian Arab Airlines",
+      "country": "Syria",
+      "active": true
+    },
+    "RC": {
+      "name": "Atlantic Airways",
+      "country": "Faroe Islands",
+      "active": true
+    },
+    "RD": {
+      "name": "Ryan International Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "RE": {
+      "name": "Aer Arann",
+      "country": "Ireland",
+      "active": true
+    },
+    "RF": {
+      "name": "Florida West International Airways",
+      "country": "United States",
+      "active": true
+    },
+    "RG": {
+      "name": "VRG Linhas Aereas",
+      "country": "Brazil",
+      "active": true
+    },
+    "RH": {
+      "name": "Hong Kong Air Cargo",
+      "country": "Hong Kong",
+      "active": true
+    },
+    "RI": {
+      "name": "Mandala Airlines",
+      "country": "Indonesia",
+      "active": true
+    },
+    "RJ": {
+      "name": "Royal Jordanian",
+      "country": "Jordan",
+      "active": true
+    },
+    "RK": {
+      "name": "Royal Khmer Airlines",
+      "country": "Cambodia",
+      "active": false
+    },
+    "RL": {
+      "name": "Royal Falcon",
+      "country": "Jordan",
+      "active": true
+    },
+    "RM": {
+      "name": "Rainbow Air US",
+      "country": "United States",
+      "active": true
+    },
+    "RN": {
+      "name": "Rainbow Air (RAI)",
+      "country": "United States",
+      "active": true
+    },
+    "RO": {
+      "name": "Tarom",
+      "country": "Romania",
+      "active": true
+    },
+    "RP": {
+      "name": "Chautauqua Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "RQ": {
+      "name": "Kam Air",
+      "country": "Afghanistan",
+      "active": true
+    },
+    "RR": {
+      "name": "Red Jet America",
+      "country": "United States",
+      "active": false
+    },
+    "RS": {
+      "name": "Sky Regional",
+      "country": "Canada",
+      "active": true
+    },
+    "RU": {
+      "name": "Rainbow Air Euro",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "RV": {
+      "name": "Caspian Airlines",
+      "country": "Iran",
+      "active": true
+    },
+    "RW": {
+      "name": "Republic Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "RX": {
+      "name": "Regent Airways",
+      "country": "Bangladesh",
+      "active": true
+    },
+    "RY": {
+      "name": "Rainbow Air Canada",
+      "country": "Canada",
+      "active": true
+    },
+    "RZ": {
+      "name": "Euro Exec Express",
+      "country": "Sweden",
+      "active": true
+    },
+    "S0": {
+      "name": "Spike Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "S1": {
+      "name": "Serbian Airlines",
+      "country": "Serbia",
+      "active": true
+    },
+    "S2": {
+      "name": "Air Sahara",
+      "country": "India",
+      "active": true
+    },
+    "S3": {
+      "name": "Santa Barbara Airlines",
+      "country": "Venezuela",
+      "active": true
+    },
+    "S4": {
+      "name": "SATA International",
+      "country": "Portugal",
+      "active": true
+    },
+    "S5": {
+      "name": "Trast Aero",
+      "country": "Kyrgyzstan",
+      "active": false
+    },
+    "S6": {
+      "name": "Salmon Air",
+      "country": "United States",
+      "active": true
+    },
+    "S7": {
+      "name": "S7 Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "S8": {
+      "name": "Snowbird Airlines",
+      "country": "Finland",
+      "active": true
+    },
+    "S9": {
+      "name": "Starbow Airlines",
+      "country": "Ghana",
+      "active": true
+    },
+    "SA": {
+      "name": "South African Airways",
+      "country": "South Africa",
+      "active": true
+    },
+    "SB": {
+      "name": "Air Caledonie International",
+      "country": "France",
+      "active": true
+    },
+    "SC": {
+      "name": "Shandong Airlines",
+      "country": "China",
+      "active": true
+    },
+    "SD": {
+      "name": "Sudan Airways",
+      "country": "Sudan",
+      "active": true
+    },
+    "SE": {
+      "name": "XL Airways France",
+      "country": "France",
+      "active": true
+    },
+    "SF": {
+      "name": "Air Charter International",
+      "country": "France",
+      "active": false
+    },
+    "SG": {
+      "name": "Spicejet",
+      "country": "India",
+      "active": true
+    },
+    "SH": {
+      "name": "Sharp Airlines",
+      "country": "Australia",
+      "active": true
+    },
+    "SI": {
+      "name": "Skynet Airlines",
+      "country": "Ireland",
+      "active": true
+    },
+    "SJ": {
+      "name": "Sriwijaya Air",
+      "country": "Indonesia",
+      "active": true
+    },
+    "SK": {
+      "name": "Scandinavian Airlines System",
+      "country": "Sweden",
+      "active": true
+    },
+    "SL": {
+      "name": "Thai Lion Air",
+      "country": "Thailand",
+      "active": true
+    },
+    "SM": {
+      "name": "Spirit of Manila Airlines",
+      "country": "Philippines",
+      "active": true
+    },
+    "SN": {
+      "name": "Brussels Airlines",
+      "country": "Belgium",
+      "active": true
+    },
+    "SO": {
+      "name": "Salsa d\\\\'Haiti",
+      "country": "Haiti",
+      "active": true
+    },
+    "SP": {
+      "name": "SATA Air Acores",
+      "country": "Portugal",
+      "active": true
+    },
+    "SQ": {
+      "name": "Singapore Airlines Cargo",
+      "country": "Singapore",
+      "active": true
+    },
+    "SR": {
+      "name": "Swissair",
+      "country": "Switzerland",
+      "active": false
+    },
+    "SS": {
+      "name": "Corsairfly",
+      "country": "France",
+      "active": true
+    },
+    "ST": {
+      "name": "Germania",
+      "country": "Germany",
+      "active": true
+    },
+    "SU": {
+      "name": "Aeroflot Russian Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "SV": {
+      "name": "Saudi Arabian Airlines",
+      "country": "Saudi Arabia",
+      "active": true
+    },
+    "SW": {
+      "name": "Air Namibia",
+      "country": "Namibia",
+      "active": true
+    },
+    "SX": {
+      "name": "SkyWork Airlines",
+      "country": "Switzerland",
+      "active": true
+    },
+    "SY": {
+      "name": "Sun Country Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "SZ": {
+      "name": "Salzburg arrows",
+      "country": "Austria",
+      "active": true
+    },
+    "T0": {
+      "name": "TACA Peru",
+      "country": "Peru",
+      "active": true
+    },
+    "T1": {
+      "name": "TROPICAL LINHAS AEREAS",
+      "country": "Brazil",
+      "active": false
+    },
+    "T2": {
+      "name": "Thai Air Cargo",
+      "country": "Thailand",
+      "active": true
+    },
+    "T3": {
+      "name": "Eastern Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "T4": {
+      "name": "Hellas Jet",
+      "country": "Greece",
+      "active": true
+    },
+    "T5": {
+      "name": "Turkmenistan Airlines",
+      "country": "Turkmenistan",
+      "active": true
+    },
+    "T6": {
+      "name": "Trans Pas Air",
+      "country": "United States",
+      "active": true
+    },
+    "T7": {
+      "name": "Twin Jet",
+      "country": "France",
+      "active": true
+    },
+    "T8": {
+      "name": "TAN",
+      "country": "Argentina",
+      "active": false
+    },
+    "T9": {
+      "name": "Thai Star Airlines",
+      "country": "Thailand",
+      "active": false
+    },
+    "TA": {
+      "name": "Grupo TACA",
+      "country": "Costa Rica",
+      "active": true
+    },
+    "TB": {
+      "name": "TrasBrasil",
+      "country": "Brazil",
+      "active": true
+    },
+    "TC": {
+      "name": "Air Tanzania",
+      "country": "Tanzania",
+      "active": true
+    },
+    "TD": {
+      "name": "Tulip Air",
+      "country": "Netherland",
+      "active": false
+    },
+    "TE": {
+      "name": "FlyLal",
+      "country": "Lithuania",
+      "active": true
+    },
+    "TF": {
+      "name": "Malm\u00f6 Aviation",
+      "country": "Sweden",
+      "active": false
+    },
+    "TG": {
+      "name": "Thai Airways International",
+      "country": "Thailand",
+      "active": true
+    },
+    "TH": {
+      "name": "TransBrasil Airlines",
+      "country": "Brazil",
+      "active": true
+    },
+    "TI": {
+      "name": "TransHolding",
+      "country": "Brazil",
+      "active": true
+    },
+    "TJ": {
+      "name": "T.J. Air",
+      "country": "United States",
+      "active": true
+    },
+    "TK": {
+      "name": "Turkish Airlines",
+      "country": "Turkey",
+      "active": true
+    },
+    "TL": {
+      "name": "Trans Mediterranean Airlines",
+      "country": "Lebanon",
+      "active": true
+    },
+    "TM": {
+      "name": "Air Mozambique",
+      "country": "Mozambique",
+      "active": true
+    },
+    "TN": {
+      "name": "Air Tahiti Nui",
+      "country": "France",
+      "active": true
+    },
+    "TO": {
+      "name": "Transavia France",
+      "country": "France",
+      "active": true
+    },
+    "TP": {
+      "name": "TAP Portugal",
+      "country": "Portugal",
+      "active": true
+    },
+    "TQ": {
+      "name": "Texas Wings",
+      "country": "United States",
+      "active": true
+    },
+    "TR": {
+      "name": "Scoot",
+      "country": "Singapore",
+      "active": true
+    },
+    "TS": {
+      "name": "Air Transat",
+      "country": "Canada",
+      "active": true
+    },
+    "TT": {
+      "name": "Tigerair Australia",
+      "country": "Australia",
+      "active": true
+    },
+    "TU": {
+      "name": "Tunisair",
+      "country": "Tunisia",
+      "active": true
+    },
+    "TV": {
+      "name": "Virgin Express",
+      "country": "Belgium",
+      "active": true
+    },
+    "TW": {
+      "name": "Tway Airlines",
+      "country": "South Korea",
+      "active": true
+    },
+    "TX": {
+      "name": "Air Cara\u00efbes",
+      "country": "France",
+      "active": true
+    },
+    "TY": {
+      "name": "Iberworld",
+      "country": "Spain",
+      "active": true
+    },
+    "U1": {
+      "name": "Aviabus",
+      "country": "Russia",
+      "active": true
+    },
+    "U2": {
+      "name": "United Feeder Service",
+      "country": "United States",
+      "active": false
+    },
+    "U3": {
+      "name": "Avies",
+      "country": "Estonia",
+      "active": true
+    },
+    "U4": {
+      "name": "PMTair",
+      "country": "Cambodia",
+      "active": true
+    },
+    "U5": {
+      "name": "USA3000 Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "U6": {
+      "name": "Ural Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "U7": {
+      "name": "USA Jet Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "U8": {
+      "name": "Armavia",
+      "country": "Armenia",
+      "active": true
+    },
+    "U9": {
+      "name": "Tatarstan Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "UA": {
+      "name": "United Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "UB": {
+      "name": "Myanma Airways",
+      "country": "Myanmar (Burma)",
+      "active": true
+    },
+    "UD": {
+      "name": "Hex'Air",
+      "country": "France",
+      "active": true
+    },
+    "UE": {
+      "name": "Transeuropean Airlines",
+      "country": "Russia",
+      "active": false
+    },
+    "UF": {
+      "name": "UM Airlines",
+      "country": "Ukraine",
+      "active": true
+    },
+    "UG": {
+      "name": "Tuninter",
+      "country": "Tunisia",
+      "active": true
+    },
+    "UH": {
+      "name": "US Helicopter Corporation",
+      "country": "United States",
+      "active": true
+    },
+    "UI": {
+      "name": "Eurocypria Airlines",
+      "country": "Cyprus",
+      "active": true
+    },
+    "UJ": {
+      "name": "AlMasria Universal Airlines",
+      "country": "Egypt",
+      "active": true
+    },
+    "UK": {
+      "name": "Vistara",
+      "country": "India",
+      "active": true
+    },
+    "UL": {
+      "name": "SriLankan Airlines",
+      "country": "Sri Lanka",
+      "active": true
+    },
+    "UM": {
+      "name": "Air Zimbabwe",
+      "country": "Zimbabwe",
+      "active": true
+    },
+    "UN": {
+      "name": "Transaero Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "UO": {
+      "name": "Hong Kong Express Airways",
+      "country": "Hong Kong",
+      "active": true
+    },
+    "UP": {
+      "name": "Bahamasair",
+      "country": "Bahamas",
+      "active": true
+    },
+    "UQ": {
+      "name": "Guangxi Beibu Gulf Airlines",
+      "country": "China",
+      "active": true
+    },
+    "UR": {
+      "name": "UTair-Express",
+      "country": "Russia",
+      "active": true
+    },
+    "US": {
+      "name": "US Airways",
+      "country": "United States",
+      "active": true
+    },
+    "UT": {
+      "name": "UTair Aviation",
+      "country": "Russia",
+      "active": true
+    },
+    "UU": {
+      "name": "Air Austral",
+      "country": "France",
+      "active": true
+    },
+    "UX": {
+      "name": "Air Europa",
+      "country": "Spain",
+      "active": true
+    },
+    "UY": {
+      "name": "Cameroon Airlines",
+      "country": "Cameroon",
+      "active": false
+    },
+    "UZ": {
+      "name": "El-Buraq Air Transport",
+      "country": "Libya",
+      "active": true
+    },
+    "V0": {
+      "name": "Conviasa",
+      "country": "Venezuela",
+      "active": true
+    },
+    "V2": {
+      "name": "Vision Airlines (V2)",
+      "country": "United States",
+      "active": true
+    },
+    "V3": {
+      "name": "Carpatair",
+      "country": "Romania",
+      "active": true
+    },
+    "V4": {
+      "name": "Reem Air",
+      "country": "Kyrgyzstan",
+      "active": false
+    },
+    "V5": {
+      "name": "Danube Wings (V5)",
+      "country": "Slovakia",
+      "active": true
+    },
+    "V6": {
+      "name": "VIP Ecuador",
+      "country": "Ecuador",
+      "active": true
+    },
+    "V7": {
+      "name": "Air Senegal International",
+      "country": "Senegal",
+      "active": false
+    },
+    "V8": {
+      "name": "ATRAN Cargo Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "V9": {
+      "name": "Star1 Airlines",
+      "country": "Lithuania",
+      "active": true
+    },
+    "VA": {
+      "name": "Virgin Australia",
+      "country": "Australia",
+      "active": true
+    },
+    "VB": {
+      "name": "Pacific Express",
+      "country": "United States",
+      "active": false
+    },
+    "VC": {
+      "name": "Strategic Airlines",
+      "country": "Australia",
+      "active": true
+    },
+    "VD": {
+      "name": "SwedJet Airways",
+      "country": "Sweden",
+      "active": false
+    },
+    "VE": {
+      "name": "Volare Airlines",
+      "country": "Italy",
+      "active": true
+    },
+    "VF": {
+      "name": "Valuair",
+      "country": "Singapore",
+      "active": true
+    },
+    "VG": {
+      "name": "VLM Airlines",
+      "country": "Belgium",
+      "active": true
+    },
+    "VH": {
+      "name": "Virgin Pacific",
+      "country": "Fiji",
+      "active": true
+    },
+    "VI": {
+      "name": "Volga-Dnepr Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "VJ": {
+      "name": "Royal Air Cambodge",
+      "country": "Cambodia",
+      "active": true
+    },
+    "VK": {
+      "name": "Virgin Nigeria Airways",
+      "country": "Nigeria",
+      "active": true
+    },
+    "VL": {
+      "name": "Air VIA",
+      "country": "Bulgaria",
+      "active": true
+    },
+    "VM": {
+      "name": "Viaggio Air",
+      "country": "Bulgaria",
+      "active": false
+    },
+    "VN": {
+      "name": "Vietnam Airlines",
+      "country": "Vietnam",
+      "active": true
+    },
+    "VO": {
+      "name": "Tyrolean Airways",
+      "country": "Austria",
+      "active": true
+    },
+    "VP": {
+      "name": "VASP",
+      "country": "Brazil",
+      "active": true
+    },
+    "VQ": {
+      "name": "Viking Hellas",
+      "country": "Greece",
+      "active": true
+    },
+    "VR": {
+      "name": "TACV",
+      "country": "Portugal",
+      "active": true
+    },
+    "VS": {
+      "name": "Virgin Atlantic Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "VT": {
+      "name": "Air Tahiti",
+      "country": "French Polynesia",
+      "active": true
+    },
+    "VU": {
+      "name": "Air Ivoire",
+      "country": "Ivory Coast",
+      "active": true
+    },
+    "VV": {
+      "name": "Aerosvit Airlines",
+      "country": "Ukraine",
+      "active": true
+    },
+    "VW": {
+      "name": "Aeromar",
+      "country": "Mexico",
+      "active": true
+    },
+    "VX": {
+      "name": "Virgin America",
+      "country": "United States",
+      "active": true
+    },
+    "VY": {
+      "name": "Vueling Airlines",
+      "country": "Spain",
+      "active": true
+    },
+    "VZ": {
+      "name": "MyTravel Airways",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "W1": {
+      "name": "World Experience Airline",
+      "country": "Canada",
+      "active": true
+    },
+    "W2": {
+      "name": "Maastricht Airlines",
+      "country": "Netherlands",
+      "active": true
+    },
+    "W3": {
+      "name": "Arik Air",
+      "country": "Nigeria",
+      "active": false
+    },
+    "W4": {
+      "name": "AeroWorld",
+      "country": "Russia",
+      "active": true
+    },
+    "W5": {
+      "name": "Mahan Air",
+      "country": "Iran",
+      "active": true
+    },
+    "W6": {
+      "name": "Wizz Air",
+      "country": "Hungary",
+      "active": true
+    },
+    "W7": {
+      "name": "Austral Brasil",
+      "country": "Brazil",
+      "active": true
+    },
+    "W8": {
+      "name": "Cargojet Airways",
+      "country": "Canada",
+      "active": false
+    },
+    "W9": {
+      "name": "Eastwind Airlines",
+      "country": "United States",
+      "active": false
+    },
+    "WA": {
+      "name": "Western Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "WB": {
+      "name": "Rwandair Express",
+      "country": "Rwanda",
+      "active": true
+    },
+    "WC": {
+      "name": "Islena De Inversiones",
+      "country": "Honduras",
+      "active": true
+    },
+    "WD": {
+      "name": "Amsterdam Airlines",
+      "country": "Netherlands",
+      "active": true
+    },
+    "WE": {
+      "name": "Centurion Air Cargo",
+      "country": "United States",
+      "active": false
+    },
+    "WF": {
+      "name": "Wider\u00f8e",
+      "country": "Norway",
+      "active": true
+    },
+    "WG": {
+      "name": "Sunwing",
+      "country": "Canada",
+      "active": true
+    },
+    "WH": {
+      "name": "China Northwest Airlines (WH)",
+      "country": "China",
+      "active": true
+    },
+    "WJ": {
+      "name": "WebJet Linhas A",
+      "country": "Brazil",
+      "active": true
+    },
+    "WK": {
+      "name": "Edelweiss Air",
+      "country": "Switzerland",
+      "active": true
+    },
+    "WL": {
+      "name": "CheapFlyingInternational",
+      "country": "France",
+      "active": false
+    },
+    "WM": {
+      "name": "Windward Islands Airways",
+      "country": "Netherlands Antilles",
+      "active": true
+    },
+    "WN": {
+      "name": "Southwest Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "WO": {
+      "name": "World Airways",
+      "country": "United States",
+      "active": true
+    },
+    "WP": {
+      "name": "Island Air (WP)",
+      "country": "United States",
+      "active": true
+    },
+    "WQ": {
+      "name": "PanAm World Airways",
+      "country": "United States",
+      "active": true
+    },
+    "WR": {
+      "name": "Royal Tongan Airlines",
+      "country": "Tonga",
+      "active": false
+    },
+    "WS": {
+      "name": "WestJet",
+      "country": "Canada",
+      "active": true
+    },
+    "WU": {
+      "name": "Wizz Air Ukraine",
+      "country": "Ukraine",
+      "active": true
+    },
+    "WV": {
+      "name": "Swe Fly",
+      "country": "Sweden",
+      "active": true
+    },
+    "WW": {
+      "name": "bmibaby",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "WX": {
+      "name": "CityJet",
+      "country": "Ireland",
+      "active": true
+    },
+    "WY": {
+      "name": "Oman Air",
+      "country": "Oman",
+      "active": true
+    },
+    "WZ": {
+      "name": "Red Wings",
+      "country": "Russia",
+      "active": true
+    },
+    "X1": {
+      "name": "Nik Airways",
+      "country": "Saudi Arabia",
+      "active": false
+    },
+    "X3": {
+      "name": "TUIfly",
+      "country": "Germany",
+      "active": true
+    },
+    "X7": {
+      "name": "Chitaavia",
+      "country": "Russia",
+      "active": false
+    },
+    "XA": {
+      "name": "XAIR USA",
+      "country": "United States",
+      "active": true
+    },
+    "XB": {
+      "name": "NEXT Brasil",
+      "country": "Brazil",
+      "active": true
+    },
+    "XE": {
+      "name": "ExpressJet",
+      "country": "United States",
+      "active": true
+    },
+    "XF": {
+      "name": "Vladivostok Air",
+      "country": "Russia",
+      "active": true
+    },
+    "XG": {
+      "name": "Calima Aviacion",
+      "country": "Spain",
+      "active": true
+    },
+    "XJ": {
+      "name": "Mesaba Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "XK": {
+      "name": "Corse-Mediterranee",
+      "country": "France",
+      "active": true
+    },
+    "XL": {
+      "name": "Aerolane",
+      "country": "Ecuador",
+      "active": true
+    },
+    "XM": {
+      "name": "Alitalia Express",
+      "country": "Italy",
+      "active": true
+    },
+    "XN": {
+      "name": "Xpressair",
+      "country": "Indonesia",
+      "active": true
+    },
+    "XO": {
+      "name": "LTE International Airways",
+      "country": "Spain",
+      "active": true
+    },
+    "XP": {
+      "name": "XPTO",
+      "country": "Portugal",
+      "active": true
+    },
+    "XQ": {
+      "name": "SunExpress",
+      "country": "Turkey",
+      "active": true
+    },
+    "XR": {
+      "name": "Skywest Australia",
+      "country": "Australia",
+      "active": true
+    },
+    "XS": {
+      "name": "Texas Spirit",
+      "country": "United States",
+      "active": false
+    },
+    "XT": {
+      "name": "Indonesia AirAsia X",
+      "country": "Indonesia",
+      "active": true
+    },
+    "XV": {
+      "name": "BVI Airways",
+      "country": "British Virgin Islands",
+      "active": true
+    },
+    "XW": {
+      "name": "Sky Express",
+      "country": "Russia",
+      "active": true
+    },
+    "XX": {
+      "name": "Greenfly",
+      "country": "Spain",
+      "active": true
+    },
+    "XY": {
+      "name": "Nas Air",
+      "country": "Saudi Arabia",
+      "active": true
+    },
+    "XZ": {
+      "name": "Congo Express",
+      "country": "Democratic Republic of the Congo",
+      "active": true
+    },
+    "Y0": {
+      "name": "Yellow Air Taxi",
+      "country": "United States",
+      "active": false
+    },
+    "Y1": {
+      "name": "Yellowstone Club Private Shuttle",
+      "country": "United States",
+      "active": true
+    },
+    "Y4": {
+      "name": "Volaris",
+      "country": "Mexico",
+      "active": true
+    },
+    "Y5": {
+      "name": "Asia Wings",
+      "country": "Kazakhstan",
+      "active": true
+    },
+    "Y7": {
+      "name": "NordStar Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "Y8": {
+      "name": "Marusya Airways",
+      "country": "Russia",
+      "active": true
+    },
+    "Y9": {
+      "name": "Kish Air",
+      "country": "Iran",
+      "active": true
+    },
+    "YC": {
+      "name": "Ciel Canadien",
+      "country": "Canada",
+      "active": true
+    },
+    "YD": {
+      "name": "Gomelavia",
+      "country": "Belarus",
+      "active": true
+    },
+    "YE": {
+      "name": "Yellowtail",
+      "country": "United States",
+      "active": true
+    },
+    "YH": {
+      "name": "Yangon Airways Ltd.",
+      "country": "Myanmar (Burma)",
+      "active": true
+    },
+    "YI": {
+      "name": "TUR Avrupa Hava Yollar\u00c4\u00b1",
+      "country": "Turkey",
+      "active": false
+    },
+    "YK": {
+      "name": "Cyprus Turkish Airlines",
+      "country": "Turkey",
+      "active": true
+    },
+    "YL": {
+      "name": "Yamal Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "YM": {
+      "name": "Montenegro Airlines",
+      "country": "Montenegro",
+      "active": true
+    },
+    "YO": {
+      "name": "TransHolding System",
+      "country": "Brazil",
+      "active": true
+    },
+    "YP": {
+      "name": "Aero Lloyd (YP)",
+      "country": "Germany",
+      "active": false
+    },
+    "YQ": {
+      "name": "Polet Airlines (Priv)",
+      "country": "Russia",
+      "active": true
+    },
+    "YR": {
+      "name": "SENIC AIRLINES",
+      "country": "United States",
+      "active": true
+    },
+    "YS": {
+      "name": "R\u00e9gional",
+      "country": "France",
+      "active": true
+    },
+    "YT": {
+      "name": "Yeti Airways",
+      "country": "Nepal",
+      "active": true
+    },
+    "YV": {
+      "name": "Mesa Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "YW": {
+      "name": "Air Nostrum",
+      "country": "Spain",
+      "active": true
+    },
+    "YX": {
+      "name": "Midwest Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "YY": {
+      "name": "Virginwings",
+      "country": "Germany",
+      "active": true
+    },
+    "YZ": {
+      "name": "LSM AIRLINES",
+      "country": "Russia",
+      "active": true
+    },
+    "Z2": {
+      "name": "Zest Air",
+      "country": "Philippines",
+      "active": true
+    },
+    "Z3": {
+      "name": "Avient Aviation",
+      "country": "Zimbabwe",
+      "active": true
+    },
+    "Z4": {
+      "name": "Zoom Airlines",
+      "country": "Canada",
+      "active": true
+    },
+    "Z6": {
+      "name": "ZABAIKAL AIRLINES",
+      "country": "Russia",
+      "active": true
+    },
+    "Z7": {
+      "name": "REDjet",
+      "country": "Barbados",
+      "active": true
+    },
+    "Z8": {
+      "name": "Amaszonas",
+      "country": "Bolivia",
+      "active": true
+    },
+    "Z9": {
+      "name": "Flightlink Tanzania",
+      "country": "Tanzania",
+      "active": true
+    },
+    "ZA": {
+      "name": "Interavia Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "ZB": {
+      "name": "Monarch Airlines",
+      "country": "United Kingdom",
+      "active": true
+    },
+    "ZC": {
+      "name": "Korongo Airlines",
+      "country": "Democratic Republic of the Congo",
+      "active": true
+    },
+    "ZE": {
+      "name": "Eastar Jet",
+      "country": "South Korea",
+      "active": true
+    },
+    "ZF": {
+      "name": "Athens Airways",
+      "country": "Greece",
+      "active": true
+    },
+    "ZG": {
+      "name": "Viva Macau",
+      "country": "Macau",
+      "active": true
+    },
+    "ZH": {
+      "name": "Shenzhen Airlines",
+      "country": "China",
+      "active": true
+    },
+    "ZI": {
+      "name": "Aigle Azur",
+      "country": "France",
+      "active": true
+    },
+    "ZJ": {
+      "name": "Zambezi Airlines (ZMA)",
+      "country": "Zambia",
+      "active": true
+    },
+    "ZK": {
+      "name": "Great Lakes Airlines",
+      "country": "United States",
+      "active": true
+    },
+    "ZL": {
+      "name": "Regional Express",
+      "country": "Australia",
+      "active": true
+    },
+    "ZM": {
+      "name": "Apache Air",
+      "country": "United States",
+      "active": true
+    },
+    "ZN": {
+      "name": "Zenith International Airline",
+      "country": "Thailand",
+      "active": true
+    },
+    "ZP": {
+      "name": "Zabaykalskii Airlines",
+      "country": "Russia",
+      "active": true
+    },
+    "ZQ": {
+      "name": "Locair",
+      "country": "United States",
+      "active": true
+    },
+    "ZS": {
+      "name": "Sama Airlines",
+      "country": "Saudi Arabia",
+      "active": true
+    },
+    "ZT": {
+      "name": "Titan Airways",
+      "country": "United Kingdom",
+      "active": false
+    },
+    "ZU": {
+      "name": "Helios Airways",
+      "country": "Cyprus",
+      "active": false
+    },
+    "ZV": {
+      "name": "Air Midwest",
+      "country": "United States",
+      "active": false
+    },
+    "ZW": {
+      "name": "Air Wisconsin",
+      "country": "United States",
+      "active": true
+    },
+    "ZX": {
+      "name": "Japan Regio",
+      "country": "Japan",
+      "active": true
+    },
+    "ZY": {
+      "name": "Ada Air",
+      "country": "Albania",
+      "active": true
+    },
+    "ZZ": {
+      "name": "Zz",
+      "country": "Belgium",
+      "active": true
+    },
+    "\\N": {
+      "name": "Tyrolean Airways",
+      "country": "\\N",
+      "active": true
+    },
+    "^^": {
+      "name": "Whitaker Air",
+      "country": "Australia",
+      "active": true
+    },
+    "\u041c\u0418": {
+      "name": "KMV",
+      "country": "Russia",
+      "active": true
+    },
+    "\u042f\u041f": {
+      "name": "Polar Airlines",
+      "country": "Russia",
+      "active": true
+    }
+  }
+}
