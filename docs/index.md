@@ -92,9 +92,19 @@ The daemon handles connection pooling, state management, and resource caching.
 | neon | Neon Postgres | Alpha |
 | vercel | Vercel deployments | Alpha |
 
+## IDE & Agent Integrations
+
+| Platform | Guide | Status |
+|----------|-------|--------|
+| Claude Code | [Integration Guide](integrations/claude-code.md) | Full support |
+| Cursor | [Integration Guide](integrations/cursor.md) | Full support |
+| Windsurf | Coming soon | Planned |
+
 ## Next Steps
 
 - [Installation Guide](getting-started/installation.md) - Set up FGP
 - [Quick Start](getting-started/quickstart.md) - Build your first workflow
+- [Claude Code Integration](integrations/claude-code.md) - Use with Claude Code
+- [Cursor Integration](integrations/cursor.md) - Use with Cursor
 - [Protocol Reference](protocol/overview.md) - Understand the wire format
 - [Building Daemons](development/building-daemons.md) - Create custom integrations

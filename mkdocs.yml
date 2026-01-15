@@ -55,6 +55,10 @@ nav:
     - Installation: getting-started/installation.md
     - Quick Start: getting-started/quickstart.md
     - Concepts: getting-started/concepts.md
+  - Integrations:
+    - Overview: integrations/index.md
+    - Claude Code: integrations/claude-code.md
+    - Cursor: integrations/cursor.md
   - Daemons:
     - Browser: daemons/browser.md
     - Gmail: daemons/gmail.md
