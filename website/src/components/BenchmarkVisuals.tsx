@@ -41,12 +41,18 @@ function AnimatedCounter({
 // Hero Speedup Display - The Big 292×
 // ============================================================================
 
-export function HeroSpeedup() {
+export function HeroSpeedup({ compact = false }: { compact?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
+  const sizeClass = compact
+    ? 'text-[clamp(4.5rem,12vw,9rem)]'
+    : 'text-[clamp(8rem,25vw,16rem)]';
+  const subtitleClass = compact
+    ? 'text-base md:text-lg text-left'
+    : 'text-xl md:text-2xl text-center';
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className={`relative ${compact ? 'text-left' : ''}`}>
       {/* Glow effect behind the number */}
       <motion.div
         className="absolute inset-0 blur-[120px] opacity-30"
@@ -60,7 +66,7 @@ export function HeroSpeedup() {
 
       {/* The big number */}
       <motion.div
-        className="relative text-[clamp(8rem,25vw,16rem)] font-black leading-none tracking-tighter"
+        className={`relative ${sizeClass} font-black leading-none tracking-tighter`}
         initial={{ opacity: 0, scale: 0.8, y: 40 }}
         animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -72,7 +78,7 @@ export function HeroSpeedup() {
 
       {/* Subtitle */}
       <motion.p
-        className="text-xl md:text-2xl text-[var(--color-text-secondary)] mt-4 text-center"
+        className={`${subtitleClass} text-[var(--color-text-secondary)] mt-4`}
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
