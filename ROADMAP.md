@@ -65,7 +65,7 @@ Make FGP the standard protocol for AI agent tool integrations - replacing slow s
 ### Distribution
 - [x] Pre-built binary releases (GitHub Releases)
 - [x] One-line installer (`curl | sh`)
-- [ ] Docker images for each daemon
+- [x] Docker images for each daemon
 - [x] Homebrew formula (tap repo)
 
 ### Ecosystem

@@ -1,0 +1,71 @@
+# FGP Docker Compose Configuration
+#
+# Run multiple FGP daemons together. All daemons share a common
+# socket directory for inter-process communication.
+#
+# Usage:
+#   docker-compose up -d              # Start all daemons
+#   docker-compose up -d browser      # Start just browser daemon
+#   docker-compose logs -f            # Watch logs
+#   docker-compose down               # Stop all daemons
+#
+# For GPU-accelerated browser (if available):
+#   docker-compose --profile gpu up -d browser-gpu
+
+services:
+  # Browser automation daemon (Chrome DevTools Protocol)
+  browser:
+    build: ./browser
+    container_name: fgp-browser
+    restart: unless-stopped
+    volumes:
+      - fgp-sockets:/home/fgp/.fgp/services
+      - /dev/shm:/dev/shm  # Chrome needs shared memory
+    environment:
+      - DISPLAY=${DISPLAY:-:0}
+      - CHROME_PATH=/usr/bin/chromium
+    # Uncomment for X11 forwarding (headful mode)
+    # network_mode: host
+    # volumes:
+    #   - /tmp/.X11-unix:/tmp/.X11-unix
+
+  # GitHub operations daemon
+  github:
+    build: ./github
+    container_name: fgp-github
+    restart: unless-stopped
+    volumes:
+      - fgp-sockets:/home/fgp/.fgp/services
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+
+  # Gmail operations daemon
+  gmail:
+    build: ./gmail
+    container_name: fgp-gmail
+    restart: unless-stopped
+    volumes:
+      - fgp-sockets:/home/fgp/.fgp/services
+      - ${HOME}/.config/google:/home/fgp/.config/google:ro
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/fgp/.config/google/credentials.json
+
+  # Calendar operations daemon
+  calendar:
+    build: ./calendar
+    container_name: fgp-calendar
+    restart: unless-stopped
+    volumes:
+      - fgp-sockets:/home/fgp/.fgp/services
+      - ${HOME}/.config/google:/home/fgp/.config/google:ro
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/fgp/.config/google/credentials.json
+
+# Shared volume for UNIX sockets
+volumes:
+  fgp-sockets:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${FGP_SOCKET_DIR:-${HOME}/.fgp/services}
