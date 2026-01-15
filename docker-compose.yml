@@ -46,9 +46,7 @@ services:
     restart: unless-stopped
     volumes:
       - fgp-sockets:/home/fgp/.fgp/services
-      - ${HOME}/.config/google:/home/fgp/.config/google:ro
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/home/fgp/.config/google/credentials.json
+      - ${HOME}/.fgp/auth/google:/home/fgp/.fgp/auth/google:ro
 
   # Calendar operations daemon
   calendar:
@@ -57,9 +55,7 @@ services:
     restart: unless-stopped
     volumes:
       - fgp-sockets:/home/fgp/.fgp/services
-      - ${HOME}/.config/google:/home/fgp/.config/google:ro
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/home/fgp/.config/google/credentials.json
+      - ${HOME}/.fgp/auth/google:/home/fgp/.fgp/auth/google:ro
 
 # Shared volume for UNIX sockets
 # Note: For host access to sockets, set FGP_SOCKET_DIR to a dedicated directory
