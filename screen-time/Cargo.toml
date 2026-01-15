@@ -2,9 +2,13 @@
 name = "fgp-screen-time"
 version = "1.0.0"
 edition = "2021"
-description = "FGP Screen Time daemon - fast access to macOS app usage data"
-authors = ["Wolfgang Schoenberger"]
+description = "FGP daemon for macOS Screen Time - fast access to app usage analytics via knowledgeC.db"
 license = "MIT"
+authors = ["Wolfgang Schoenberger"]
+repository = "https://github.com/fast-gateway-protocol/screen-time"
+homepage = "https://github.com/fast-gateway-protocol"
+keywords = ["screentime", "usage", "macos", "daemon", "fgp"]
+categories = ["os::macos-apis", "development-tools"]
 
 [lib]
 name = "fgp_screen_time"

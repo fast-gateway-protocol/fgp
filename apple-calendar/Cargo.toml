@@ -2,10 +2,13 @@
 name = "fgp-apple-calendar"
 version = "1.0.0"
 edition = "2021"
-description = "FGP daemon for Apple Calendar via EventKit"
+description = "FGP daemon for Apple Calendar via EventKit - fast native access to macOS calendar data"
 license = "MIT"
 authors = ["Wolfgang Schoenberger"]
 repository = "https://github.com/fast-gateway-protocol/apple-calendar"
+homepage = "https://github.com/fast-gateway-protocol"
+keywords = ["calendar", "eventkit", "macos", "daemon", "fgp"]
+categories = ["os::macos-apis", "development-tools"]
 
 [dependencies]
 # FGP daemon framework

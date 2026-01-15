@@ -2,9 +2,13 @@
 name = "fgp-apple-reminders"
 version = "1.0.0"
 edition = "2021"
-description = "FGP Apple Reminders daemon - fast access via EventKit"
+description = "FGP daemon for Apple Reminders via EventKit - fast native access to macOS reminders"
 license = "MIT"
-repository = "https://github.com/fast-gateway-protocol/fgp"
+authors = ["Wolfgang Schoenberger"]
+repository = "https://github.com/fast-gateway-protocol/apple-reminders"
+homepage = "https://github.com/fast-gateway-protocol"
+keywords = ["reminders", "eventkit", "macos", "daemon", "fgp"]
+categories = ["os::macos-apis", "development-tools"]
 
 [[bin]]
 name = "fgp-apple-reminders"
