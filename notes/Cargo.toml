@@ -1,0 +1,51 @@
+[package]
+name = "fgp-notes"
+version = "1.0.0"
+edition = "2021"
+description = "Fast Notes gateway for macOS - direct SQLite queries with protobuf parsing"
+license = "MIT"
+repository = "https://github.com/fast-gateway-protocol/notes"
+
+[dependencies]
+# FGP daemon SDK
+fgp-daemon = { path = "../daemon" }
+
+# SQLite
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+# Protobuf parsing
+prost = "0.13"
+
+# Gzip decompression
+flate2 = "1.0"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Async
+tokio = { version = "1", features = ["full"] }
+
+# Error handling
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+[build-dependencies]
+prost-build = "0.13"
+
+[[bin]]
+name = "fgp-notes"
+path = "src/main.rs"
+
+[[bin]]
+name = "fgp-notes-daemon"
+path = "src/bin/fgp-notes-daemon.rs"

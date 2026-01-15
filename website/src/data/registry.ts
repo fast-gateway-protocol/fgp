@@ -33,6 +33,19 @@ export interface Package {
   };
   added_at: string;
   updated_at: string;
+  // Marketplace fields
+  price_cents?: number;
+  currency?: string;
+  tier?: 'free' | 'community' | 'verified' | 'pro';
+  seller?: {
+    name: string;
+    avatar?: string;
+  };
+  download_count?: number;
+  rating?: {
+    average: number;
+    count: number;
+  };
 }
 
 export const packages: Package[] = [
@@ -383,6 +396,150 @@ export const packages: Package[] = [
     ],
     added_at: '2026-01-08',
     updated_at: '2026-01-14',
+    tier: 'free',
+    download_count: 892,
+  },
+  {
+    name: 'travel',
+    version: '1.0.0',
+    description: 'Flight and hotel search via Kiwi/Xotelo APIs - token-optimized efficiency methods',
+    repository: 'https://github.com/fast-gateway-protocol/travel',
+    license: 'MIT',
+    platforms: ['darwin', 'linux', 'windows'],
+    categories: ['travel', 'productivity'],
+    featured: true,
+    verified: true,
+    skills: ['claude-code', 'cursor', 'windsurf', 'continue'],
+    auth: {
+      type: 'none',
+      setup: 'No authentication required - uses public APIs',
+    },
+    methods: [
+      { name: 'travel.find_location', description: 'Search airports/cities (instant, local DB)' },
+      { name: 'travel.search_flights', description: 'One-way flight search' },
+      { name: 'travel.search_roundtrip', description: 'Round-trip flight search' },
+      { name: 'travel.search_hotels', description: 'Hotel search by city' },
+      { name: 'travel.hotel_rates', description: 'Real-time hotel rates' },
+      { name: 'travel.price_check', description: 'Ultra-light price check (~55 tokens, 10x more efficient)' },
+      { name: 'travel.search_cheapest_day', description: 'Find cheapest day in date range (30x more efficient)' },
+      { name: 'travel.search_cheapest_route', description: 'Find cheapest destination from multiple options' },
+      { name: 'travel.search_flexible_dates', description: 'Search ±N days around target date' },
+      { name: 'travel.search_direct_only', description: 'Non-stop flights only' },
+      { name: 'travel.batch_search', description: 'Multiple searches in one call' },
+      { name: 'travel.cache_stats', description: 'Cache hit/miss statistics' },
+      { name: 'travel.cache_clear', description: 'Clear response cache' },
+    ],
+    benchmark: {
+      avg_latency_ms: 5,
+      vs_mcp_speedup: 'N/A (no MCP equivalent)',
+    },
+    added_at: '2026-01-15',
+    updated_at: '2026-01-15',
+    tier: 'free',
+    download_count: 0,
+  },
+  // Example Paid Skills (for demonstration purposes - all official FGP skills are free)
+  {
+    name: 'example-twitter-research',
+    version: '1.0.0',
+    description: '[EXAMPLE LISTING] Twitter/X research automation - demonstrates how paid skills appear in the marketplace',
+    repository: 'https://github.com/fast-gateway-protocol/examples',
+    license: 'Example',
+    platforms: ['darwin', 'linux'],
+    categories: ['productivity', 'research'],
+    featured: false,
+    verified: false,
+    skills: ['claude-code', 'cursor'],
+    auth: {
+      type: 'oauth2',
+      provider: 'twitter',
+      scopes: ['tweet.read', 'users.read'],
+    },
+    methods: [
+      { name: 'twitter.search', description: 'Search tweets with filters' },
+      { name: 'twitter.sentiment', description: 'Analyze sentiment' },
+      { name: 'twitter.trends', description: 'Get trending topics' },
+    ],
+    added_at: '2026-01-10',
+    updated_at: '2026-01-14',
+    price_cents: 999,
+    currency: 'USD',
+    tier: 'community',
+    seller: {
+      name: 'Example Seller',
+    },
+    download_count: 0,
+    rating: {
+      average: 4.5,
+      count: 3,
+    },
+  },
+  {
+    name: 'example-slack-tools',
+    version: '1.0.0',
+    description: '[EXAMPLE LISTING] Slack workspace tools - demonstrates Community tier pricing',
+    repository: 'https://github.com/fast-gateway-protocol/examples',
+    license: 'Example',
+    platforms: ['darwin', 'linux'],
+    categories: ['productivity', 'automation'],
+    featured: false,
+    verified: false,
+    skills: ['claude-code'],
+    auth: {
+      type: 'oauth2',
+      provider: 'slack',
+      scopes: ['channels:read', 'chat:write'],
+    },
+    methods: [
+      { name: 'slack.channels', description: 'List channels' },
+      { name: 'slack.messages', description: 'Read messages' },
+    ],
+    added_at: '2026-01-12',
+    updated_at: '2026-01-14',
+    price_cents: 499,
+    currency: 'USD',
+    tier: 'community',
+    seller: {
+      name: 'Example Seller',
+    },
+    download_count: 0,
+  },
+  {
+    name: 'travel',
+    version: '1.0.0',
+    description: 'Flight and hotel search via Kiwi/Xotelo APIs - token-optimized efficiency methods',
+    repository: 'https://github.com/fast-gateway-protocol/travel',
+    license: 'MIT',
+    platforms: ['darwin', 'linux', 'windows'],
+    categories: ['travel', 'productivity'],
+    featured: true,
+    verified: true,
+    skills: ['claude-code', 'cursor', 'windsurf', 'continue'],
+    auth: {
+      type: 'none',
+      setup: 'No authentication required - uses public APIs',
+    },
+    methods: [
+      { name: 'travel.find_location', description: 'Search airports/cities (instant, local DB)' },
+      { name: 'travel.search_flights', description: 'One-way flight search' },
+      { name: 'travel.search_roundtrip', description: 'Round-trip flight search' },
+      { name: 'travel.search_hotels', description: 'Hotel search by city' },
+      { name: 'travel.hotel_rates', description: 'Real-time hotel rates' },
+      { name: 'travel.price_check', description: 'Ultra-light price check (~55 tokens, 10x more efficient)' },
+      { name: 'travel.search_cheapest_day', description: 'Find cheapest day in date range (30x more efficient)' },
+      { name: 'travel.search_cheapest_route', description: 'Find cheapest destination from multiple options' },
+      { name: 'travel.search_flexible_dates', description: 'Search ±N days around target date' },
+      { name: 'travel.search_direct_only', description: 'Non-stop flights only' },
+      { name: 'travel.batch_search', description: 'Multiple searches in one call' },
+      { name: 'travel.cache_stats', description: 'Cache hit/miss statistics' },
+      { name: 'travel.cache_clear', description: 'Clear response cache' },
+    ],
+    benchmark: {
+      avg_latency_ms: 5,
+      vs_mcp_speedup: 'N/A',
+    },
+    added_at: '2026-01-15',
+    updated_at: '2026-01-15',
   },
   {
     name: 'travel',
@@ -432,7 +589,49 @@ export const categories = [
   { id: 'cloud', name: 'Cloud Services', icon: 'cloud' },
   { id: 'database', name: 'Database', icon: 'database' },
   { id: 'travel', name: 'Travel', icon: 'plane' },
+  { id: 'research', name: 'Research', icon: 'search' },
+  { id: 'automation', name: 'Automation', icon: 'workflow' },
 ];
+
+// Helper functions for marketplace
+export function formatPrice(priceCents: number | undefined, currency: string = 'USD'): string {
+  if (!priceCents || priceCents === 0) return 'Free';
+  const dollars = priceCents / 100;
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+  }).format(dollars);
+}
+
+export function getTierColor(tier: string | undefined): string {
+  switch (tier) {
+    case 'free':
+      return 'var(--color-success)';
+    case 'community':
+      return 'var(--color-accent-secondary)';
+    case 'verified':
+      return 'var(--color-accent)';
+    case 'pro':
+      return '#a855f7';
+    default:
+      return 'var(--color-success)';
+  }
+}
+
+export function getTierLabel(tier: string | undefined): string {
+  switch (tier) {
+    case 'free':
+      return 'Free';
+    case 'community':
+      return 'Community';
+    case 'verified':
+      return 'Verified';
+    case 'pro':
+      return 'Pro';
+    default:
+      return 'Free';
+  }
+}
 
 export function getPackage(name: string): Package | undefined {
   return packages.find((p) => p.name === name);
