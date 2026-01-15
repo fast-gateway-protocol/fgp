@@ -11,6 +11,10 @@ FGP replaces slow MCP stdio servers with persistent UNIX socket daemons. Instead
 
 ## Performance
 
+<p align="center">
+  <img src="docs/assets/benchmark-browser.svg" alt="FGP vs MCP Browser Benchmark" width="700">
+</p>
+
 ### Browser Automation (vs Playwright MCP)
 
 | Operation | FGP Browser | Playwright MCP | Speedup |
@@ -73,6 +77,10 @@ All methods tested at **100% success rate** (3 iterations each):
 ## Why FGP?
 
 LLM agents make many sequential tool calls. Cold-start overhead compounds:
+
+<p align="center">
+  <img src="docs/assets/benchmark-overhead.svg" alt="Cumulative Cold-Start Overhead" width="700">
+</p>
 
 | Agent Workflow | Tool Calls | MCP Overhead | FGP Overhead | Time Saved |
 |----------------|------------|--------------|--------------|------------|
