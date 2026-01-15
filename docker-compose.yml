@@ -62,10 +62,14 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=/home/fgp/.config/google/credentials.json
 
 # Shared volume for UNIX sockets
+# Note: For host access to sockets, set FGP_SOCKET_DIR to a dedicated directory
+# (not ~/.fgp/services which may have Chrome profile locks)
 volumes:
   fgp-sockets:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${FGP_SOCKET_DIR:-${HOME}/.fgp/services}
+    # Use simple named volume for isolated container testing
+    # For host access, uncomment and set FGP_SOCKET_DIR:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: ${FGP_SOCKET_DIR}
