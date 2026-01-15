@@ -2,13 +2,46 @@
 
 ## Requirements
 
-- **Rust 1.70+** (for building from source)
 - **macOS or Linux** (UNIX sockets required)
 - **Chrome** (for browser daemon)
+- **Rust 1.70+** (only if building from source)
+
+## Quick Install (Recommended)
+
+Install FGP with a single command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash
+```
+
+This installs the FGP CLI and browser daemon to `~/.fgp/bin/`.
+
+### Install Specific Daemons
+
+```bash
+# Install Gmail and Calendar daemons
+curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash -s -- gmail calendar
+
+# Install all available daemons
+curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash -s -- all
+```
+
+### Available Daemons
+
+| Daemon | Description |
+|--------|-------------|
+| `cli` | FGP command-line interface |
+| `browser` | Browser automation (Chrome DevTools) |
+| `gmail` | Gmail API operations |
+| `calendar` | Google Calendar |
+| `github` | GitHub API |
+| `fly` | Fly.io deployments |
+| `neon` | Neon Postgres |
+| `vercel` | Vercel deployments |
 
 ## Install via Cargo
 
-The recommended way to install FGP:
+If you prefer Cargo or need to build from source:
 
 ```bash
 # Install the CLI
