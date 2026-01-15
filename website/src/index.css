@@ -1,0 +1,407 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+ * FGP Design System — Cyan + Gold on Void
+ * Philosophy: Pure black void, cyan for speed/tech, gold for performance wins
+ * ============================================================================ */
+
+@theme {
+  /* Backgrounds */
+  --color-void: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-elevated: #111111;
+  --color-surface-hover: #161616;
+
+  /* Text */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a3a3a3;
+  --color-text-muted: #666666;
+
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(255, 255, 255, 0.12);
+  --color-border-focus: rgba(255, 255, 255, 0.20);
+
+  /* Primary Accent — Cyan (speed, technology, interactive) */
+  --color-accent: #22D3EE;
+  --color-accent-hover: #67E8F9;
+  --color-accent-muted: rgba(34, 211, 238, 0.15);
+
+  /* Secondary Accent — Gold (performance, premium) */
+  --color-accent-secondary: #FBBF24;
+  --color-accent-secondary-hover: #FCD34D;
+  --color-accent-secondary-muted: rgba(251, 191, 36, 0.15);
+
+  /* Semantic */
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+
+  /* Typography */
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* Spacing scale */
+  --spacing-section: clamp(4rem, 10vw, 8rem);
+  --spacing-content: clamp(1.5rem, 4vw, 3rem);
+
+  /* Container */
+  --container-max: 1200px;
+  --container-narrow: 800px;
+
+  /* Animation */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+
+/* ============================================================================
+ * Base Styles
+ * ============================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  background-color: var(--color-void);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::selection {
+  background-color: var(--color-accent-muted);
+  color: var(--color-text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+ * Typography
+ * ============================================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.text-hero {
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.text-section {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 600;
+}
+
+.text-mono {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================================
+ * Layout Utilities
+ * ============================================================================ */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--spacing-content);
+}
+
+.container-narrow {
+  max-width: var(--container-narrow);
+}
+
+.section {
+  padding: var(--spacing-section) 0;
+}
+
+.page-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================================
+ * Component Base Styles
+ * ============================================================================ */
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+  color: var(--color-void);
+  box-shadow: 0 6px 16px rgba(34, 211, 238, 0.18);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(34, 211, 238, 0.22);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-hover);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Cards */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.card:hover {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-elevated);
+}
+
+/* Input */
+.input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:hover {
+  border-color: var(--color-border-hover);
+}
+
+.input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-muted);
+}
+
+/* ============================================================================
+ * Grid Background Pattern
+ * ============================================================================ */
+
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 70%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ============================================================================
+ * Ambient Background
+ * ============================================================================ */
+
+.ambient-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background-image:
+    radial-gradient(1px 1px at 120px 200px, rgba(255, 255, 255, 0.12) 60%, transparent 70%),
+    radial-gradient(1px 1px at 640px 80px, rgba(255, 255, 255, 0.08) 60%, transparent 70%),
+    radial-gradient(1px 1px at 520px 380px, rgba(255, 255, 255, 0.12) 60%, transparent 70%),
+    radial-gradient(1px 1px at 880px 260px, rgba(255, 255, 255, 0.1) 60%, transparent 70%),
+    radial-gradient(1px 1px at 300px 600px, rgba(255, 255, 255, 0.12) 60%, transparent 70%),
+    radial-gradient(1px 1px at 960px 520px, rgba(255, 255, 255, 0.09) 60%, transparent 70%);
+  background-size: 1200px 1200px;
+  opacity: 0.45;
+}
+
+@media (max-width: 640px) {
+  .grid-pattern {
+    opacity: 0.35;
+    background-size: 80px 80px;
+  }
+
+  .ambient-backdrop {
+    opacity: 0.25;
+  }
+}
+
+/* ============================================================================
+ * Animations
+ * ============================================================================ */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--color-accent-muted);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px var(--color-accent-muted);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in var(--duration-slow) var(--ease-out-expo) forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up var(--duration-slow) var(--ease-out-expo) forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* ============================================================================
+ * Gradient Utilities — Cyan/Gold Accent System
+ * ============================================================================ */
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+}
+
+.gradient-accent-text {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================================================
+ * Code Blocks
+ * ============================================================================ */
+
+.code-block {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  overflow-x: auto;
+}
+
+.code-block .prompt {
+  color: var(--color-accent);
+  user-select: none;
+}
+
+.code-block .command {
+  color: var(--color-text-primary);
+}
+
+/* ============================================================================
+ * Performance Bar
+ * ============================================================================ */
+
+.perf-bar {
+  height: 8px;
+  border-radius: 4px;
+  background-color: var(--color-surface-elevated);
+  overflow: hidden;
+}
+
+.perf-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+  transition: width 1s var(--ease-out-expo);
+}
+
+.perf-bar-mcp {
+  background: var(--color-text-muted);
+}

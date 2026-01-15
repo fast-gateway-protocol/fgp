@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="fgp-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#000"/>
+
+  <!-- Mantle (top cone shape) -->
+  <path d="M50 8 Q70 8 75 30 Q78 45 70 52 L50 48 L30 52 Q22 45 25 30 Q30 8 50 8" fill="url(#fgp-grad)"/>
+  <!-- Mantle highlight -->
+  <path d="M38 15 Q50 12 58 18" stroke="#fff" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M42 22 Q48 20 52 23" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.4"/>
+
+  <!-- Head -->
+  <ellipse cx="50" cy="55" rx="22" ry="16" fill="url(#fgp-grad)"/>
+
+  <!-- Goggles frame -->
+  <path d="M26 50 Q26 42 34 42 L66 42 Q74 42 74 50 L74 58 Q74 66 66 66 L34 66 Q26 66 26 58 Z" fill="#000" stroke="url(#fgp-grad)" stroke-width="2"/>
+
+  <!-- Left goggle lens -->
+  <ellipse cx="38" cy="54" rx="8" ry="7" fill="#111"/>
+  <circle cx="36" cy="52" r="2.5" fill="#fff" opacity="0.8"/>
+
+  <!-- Right goggle lens -->
+  <ellipse cx="62" cy="54" rx="8" ry="7" fill="#111"/>
+  <circle cx="60" cy="52" r="2.5" fill="#fff" opacity="0.8"/>
+
+  <!-- Side piece (ear) -->
+  <circle cx="78" cy="54" r="5" fill="url(#fgp-grad)"/>
+  <circle cx="78" cy="54" r="2.5" fill="#000"/>
+
+  <!-- Tentacles -->
+  <path d="M32 68 Q28 78 22 92" stroke="url(#fgp-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M40 70 Q38 82 36 94" stroke="url(#fgp-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M50 71 Q50 84 50 96" stroke="url(#fgp-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M60 70 Q62 82 64 94" stroke="url(#fgp-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M68 68 Q72 78 78 92" stroke="url(#fgp-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Curly tentacle on side -->
+  <path d="M74 62 Q82 68 80 78 Q78 86 84 92" stroke="url(#fgp-grad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>
