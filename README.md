@@ -9,6 +9,20 @@
 
 FGP replaces slow MCP stdio servers with persistent UNIX socket daemons. Instead of spawning a new process for each tool call (~2.3s overhead), FGP keeps daemons warm and ready (~10-50ms latency).
 
+> This repository hosts the **FGP docs, tooling, and companion apps**, plus the `fgp-travel` daemon. Core SDKs and most service daemons live in their own repos—see **Related Repositories** below.
+
+## What lives in this repo
+
+| Path | Description |
+|------|-------------|
+| `docs/` | MkDocs documentation site content (published to https://fast-gateway-protocol.github.io/fgp/) |
+| `app/` | Tauri + SvelteKit desktop app for managing local FGP daemons |
+| `website/` | Marketing site (React + Vite) |
+| `travel/` | `fgp-travel` daemon for flight + hotel search via Kiwi/Skypicker and Xotelo |
+| `benchmarks/` | Benchmark scripts and chart generation for performance claims |
+| `install.sh` | Installer for the CLI + default daemons |
+| `mkdocs.yml` | MkDocs configuration for the docs site |
+
 ## Performance
 
 <p align="center">
@@ -86,146 +100,48 @@ Fast iMessage operations via direct SQLite queries to `chat.db`:
 
 **Key insight:** Latency is dominated by external API calls, not FGP overhead (~5-10ms). Local daemons (iMessage, Browser) are fastest. For MCP, add ~2.3s cold-start to every call.
 
-## Why FGP?
+## Quick paths for this repo
 
-LLM agents make many sequential tool calls. Cold-start overhead compounds:
-
-<p align="center">
-  <img src="docs/assets/benchmark-overhead.svg" alt="Cumulative Cold-Start Overhead" width="700">
-</p>
-
-| Agent Workflow | Tool Calls | MCP Overhead | FGP Overhead | Time Saved |
-|----------------|------------|--------------|--------------|------------|
-| Check email | 2 | 4.6s | 0.02s | **4.6s** |
-| Browse + fill form | 5 | 11.5s | 0.05s | **11.4s** |
-| Full productivity check | 10 | 23s | 0.1s | **22.9s** |
-| Complex agent task | 20 | 46s | 0.2s | **45.8s** |
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                       AI Agent / Claude                          │
-├─────────────────────────────────────────────────────────────────┤
-│                      FGP UNIX Sockets                            │
-│   ~/.fgp/services/{browser,gmail,calendar,github,imessage}/     │
-├──────────┬──────────┬──────────┬──────────┬──────────┬─────────┤
-│ Browser  │  Gmail   │ Calendar │  GitHub  │ iMessage │   ...   │
-│ Daemon   │  Daemon  │  Daemon  │  Daemon  │  Daemon  │         │
-│ (Rust)   │  (PyO3)  │  (PyO3)  │  (Rust)  │  (Rust)  │         │
-├──────────┴──────────┴──────────┴──────────┴──────────┴─────────┤
-│    Chrome    │    Google APIs    │  gh CLI  │ chat.db + AS     │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-**Key design decisions:**
-- **UNIX sockets** - Zero network overhead, file-based permissions
-- **NDJSON protocol** - Human-readable, streaming-friendly
-- **Per-service daemons** - Independent scaling, fault isolation
-- **Rust core** - Sub-millisecond latency, low memory (~10MB)
-
-## Installation
-
-### One-liner (Recommended)
+### Documentation site (MkDocs)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash
+cd docs
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+mkdocs serve
 ```
 
-This installs the FGP CLI and browser daemon to `~/.fgp/bin/`.
-
-### Install specific daemons
+### Desktop app (Tauri + SvelteKit)
 
 ```bash
-# Install Gmail and Calendar daemons
-curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash -s -- gmail calendar
-
-# Install all daemons
-curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash -s -- all
+cd app
+pnpm install
+pnpm dev
 ```
 
-### From source
+### Marketing website (React + Vite)
 
 ```bash
-git clone https://github.com/fast-gateway-protocol/browser
-cd browser && cargo build --release
+cd website
+pnpm install
+pnpm dev
 ```
 
-## Quick Start
-
-### Browser Daemon
+### Travel daemon (`fgp-travel`)
 
 ```bash
-# Start daemon
-fgp start browser
-
-# Or if installed from source:
-cd browser && cargo build --release
-
-# Start daemon
-./target/release/browser-gateway start
-
-# Use it
-browser-gateway open "https://example.com"
-browser-gateway snapshot
-browser-gateway click "button#submit"
-browser-gateway screenshot /tmp/page.png
+cd travel
+cargo build --release
+./target/release/fgp-travel start
 ```
 
-### Gmail Daemon
+### Benchmarks
 
 ```bash
-cd gmail && cargo build --release
-
-# Start daemon (requires OAuth setup)
-./target/release/fgp-gmail start
-
-# Use it
-fgp call gmail.inbox '{"limit": 5}'
-fgp call gmail.search '{"query": "from:important"}'
-```
-
-### Calendar Daemon
-
-```bash
-cd calendar && cargo build --release
-
-# Start daemon
-./target/release/fgp-calendar start
-
-# Use it
-fgp call calendar.today
-fgp call calendar.upcoming '{"days": 7}'
-fgp call calendar.free_slots '{"duration_minutes": 30}'
-```
-
-### GitHub Daemon
-
-```bash
-cd github && cargo build --release
-
-# Start daemon (uses gh CLI auth)
-./target/release/fgp-github start
-
-# Use it
-fgp call github.repos '{"limit": 10}'
-fgp call github.issues '{"repo": "owner/repo"}'
-fgp call github.notifications
-```
-
-### iMessage Daemon (macOS)
-
-```bash
-cd imessage && cargo build --release
-
-# Start daemon (requires Full Disk Access)
-./target/release/fgp-imessage-daemon start
-
-# Use it
-fgp call imessage.recent '{"limit": 10}'
-fgp call imessage.unread
-fgp call imessage.analytics '{"days": 30}'
-fgp call imessage.bundle '{"include": "unread_count,recent,analytics"}'
+cd benchmarks
+python3 browser_benchmark.py --iterations 5
+python3 generate_charts.py
 ```
 
 ## FGP Protocol
@@ -247,66 +163,21 @@ All daemons use the same NDJSON-over-UNIX-socket protocol.
 - `methods` - List available methods
 - `stop` - Graceful shutdown
 
-## Repository Structure
+## Related repositories
 
-```
-fgp/
-├── daemon/          # Core SDK (Rust) - Build your own FGP daemons
-├── daemon-py/       # Python SDK - For Python-based daemons
-├── protocol/        # FGP protocol specification
-├── cli/             # `fgp` CLI for daemon management
-│
-├── browser/         # Browser automation (Chrome DevTools Protocol)
-├── gmail/           # Gmail daemon (Google API)
-├── calendar/        # Google Calendar daemon
-├── github/          # GitHub daemon (GraphQL + REST)
-├── imessage/        # iMessage daemon (macOS - SQLite + AppleScript)
-└── ...
-```
+Core SDKs and service daemons live in their own repos under the FGP GitHub org:
 
-## Status
-
-| Component | Status | Performance |
-|-----------|--------|-------------|
-| imessage | **Production** | 5ms analytics, 8ms recent **(480x)** |
-| browser | **Production** | 8ms navigate, 9ms snapshot **(292x)** |
-| gmail | Beta | 116ms thread read, 881ms inbox |
-| calendar | Beta | 177ms search, 233ms avg |
-| github | Beta | 390ms issues, 474ms avg |
-| daemon SDK | Stable | Core library |
-| cli | WIP | Daemon management |
-
-## Building a New Daemon
-
-```rust
-use fgp_daemon::{FgpServer, FgpService};
-
-struct MyService { /* state */ }
-
-impl FgpService for MyService {
-    fn name(&self) -> &str { "my-service" }
-    fn version(&self) -> &str { "1.0.0" }
-
-    fn dispatch(&self, method: &str, params: HashMap<String, Value>) -> Result<Value> {
-        match method {
-            "my-service.hello" => Ok(json!({"message": "Hello!"})),
-            _ => bail!("Unknown method"),
-        }
-    }
-}
-
-fn main() {
-    let server = FgpServer::new(MyService::new(), "~/.fgp/services/my-service/daemon.sock")?;
-    server.serve()?;
-}
-```
+- [daemon](https://github.com/fast-gateway-protocol/daemon) - Core Rust SDK
+- [daemon-py](https://github.com/fast-gateway-protocol/daemon-py) - Python SDK
+- [cli](https://github.com/fast-gateway-protocol/cli) - `fgp` CLI
+- [browser](https://github.com/fast-gateway-protocol/browser) - Browser daemon
+- [gmail](https://github.com/fast-gateway-protocol/gmail) - Gmail daemon
+- [calendar](https://github.com/fast-gateway-protocol/calendar) - Calendar daemon
+- [github](https://github.com/fast-gateway-protocol/github) - GitHub daemon
+- [imessage](https://github.com/fast-gateway-protocol/imessage) - iMessage daemon
+- [neon](https://github.com/fast-gateway-protocol/neon) - Neon daemon
+- [vercel](https://github.com/fast-gateway-protocol/vercel) - Vercel daemon
 
 ## License
 
 MIT
-
-## Related
-
-- [daemon](https://github.com/fast-gateway-protocol/daemon) - Core SDK
-- [browser](https://github.com/fast-gateway-protocol/browser) - Browser daemon (292x faster)
-- [imessage](https://github.com/fast-gateway-protocol/imessage) - iMessage daemon (480x faster, macOS)

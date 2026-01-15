@@ -14,11 +14,12 @@ Performance benchmarks comparing FGP daemons against MCP servers and other autom
 | `gmail_workflow_benchmark.py` | Gmail operations | List, read, send timing |
 | `hn_workflow_benchmark.py` | HackerNews demo workflow | Real-world scraping scenario |
 | `mcp_server_benchmarks.py` | MCP baseline measurements | Cold-start overhead baseline |
+| `generate_charts.py` | Chart generation for docs | SVG/PNG charts in `docs/assets/` |
 
 ## Requirements
 
 ```bash
-pip install rich tabulate statistics
+pip install rich tabulate statistics plotly kaleido
 ```
 
 ## Quick Start
