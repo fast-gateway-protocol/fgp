@@ -54,7 +54,10 @@ impl HotelsClient {
             )
             .await?;
 
-        tracing::debug!("Hotel search response keys: {:?}", response.as_object().map(|o| o.keys().collect::<Vec<_>>()));
+        tracing::debug!(
+            "Hotel search response keys: {:?}",
+            response.as_object().map(|o| o.keys().collect::<Vec<_>>())
+        );
 
         // Check for error - but "error": null means no error
         if let Some(error) = response.get("error") {
@@ -141,10 +144,7 @@ impl HotelsClient {
             hotel_key: hotel_key.to_string(),
             check_in,
             check_out,
-            currency: result["currency"]
-                .as_str()
-                .unwrap_or(currency)
-                .to_string(),
+            currency: result["currency"].as_str().unwrap_or(currency).to_string(),
             rates,
         })
     }
@@ -184,8 +184,14 @@ impl HotelsClient {
             bail!("REST request failed: {}", response.status());
         }
 
-        let body = response.text().await.context("Failed to read response body")?;
-        tracing::debug!("Hotel API response body (first 500 chars): {}", &body[..body.len().min(500)]);
+        let body = response
+            .text()
+            .await
+            .context("Failed to read response body")?;
+        tracing::debug!(
+            "Hotel API response body (first 500 chars): {}",
+            &body[..body.len().min(500)]
+        );
 
         serde_json::from_str(&body).context("Failed to parse JSON response")
     }
@@ -330,10 +336,7 @@ impl HotelsClient {
             .or_else(|| data["rate"].as_f64())
             .unwrap_or(0.0);
 
-        let currency = data["currency"]
-            .as_str()
-            .unwrap_or("USD")
-            .to_string();
+        let currency = data["currency"].as_str().unwrap_or("USD").to_string();
 
         let room_type = data["room_type"].as_str().map(|s| s.to_string());
         let is_refundable = data["is_refundable"].as_bool();

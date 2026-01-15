@@ -1,12 +1,13 @@
 //! FGP service implementation for travel search.
 //!
 //! # CHANGELOG (recent first, max 5 entries)
+//! 01/15/2026 - Added search_cheapest_day for bulk parallel date search (Claude)
 //! 01/15/2026 - Added local location database for instant lookups (Claude)
 //! 01/15/2026 - Added response caching for all API methods (Claude)
 //! 01/14/2026 - Initial implementation (Claude)
 
 use anyhow::{Context, Result};
-use chrono::NaiveDate;
+use chrono::{Duration, NaiveDate};
 use fgp_daemon::service::{HealthStatus, MethodInfo, ParamInfo};
 use fgp_daemon::FgpService;
 use serde_json::{json, Value};
@@ -126,7 +127,11 @@ impl TravelService {
             locations
         };
 
-        tracing::debug!("Local location search '{}': {} results", term, locations.len());
+        tracing::debug!(
+            "Local location search '{}': {} results",
+            term,
+            locations.len()
+        );
 
         Ok(json!({
             "locations": locations,
@@ -177,7 +182,10 @@ impl TravelService {
             search_params.origin,
             search_params.destination,
             search_params.departure_from,
-            search_params.return_from.map(|d| d.to_string()).unwrap_or_default(),
+            search_params
+                .return_from
+                .map(|d| d.to_string())
+                .unwrap_or_default(),
             search_params.adults,
             search_params.limit
         );
@@ -200,6 +208,175 @@ impl TravelService {
         tracing::debug!("Cache MISS for roundtrip search, stored");
 
         Ok(result)
+    }
+
+    /// Search multiple dates in parallel to find the cheapest day to fly.
+    fn search_cheapest_day(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let origin = Self::get_str(&params, "origin")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: origin"))?
+            .to_string();
+
+        let destination = Self::get_str(&params, "destination")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: destination"))?
+            .to_string();
+
+        let date_from = Self::get_date(&params, "date_from")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: date_from"))?;
+
+        let date_to = Self::get_date(&params, "date_to")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: date_to"))?;
+
+        let adults = Self::get_u8(&params, "adults", 1);
+        let max_stops = params
+            .get("max_stops")
+            .and_then(|v| v.as_u64())
+            .map(|v| v as u8);
+
+        // Generate all dates in range
+        let mut dates = Vec::new();
+        let mut current = date_from;
+        while current <= date_to {
+            dates.push(current);
+            current += Duration::days(1);
+        }
+
+        if dates.is_empty() {
+            anyhow::bail!("Invalid date range: date_from must be <= date_to");
+        }
+
+        if dates.len() > 62 {
+            anyhow::bail!(
+                "Date range too large: maximum 62 days (got {})",
+                dates.len()
+            );
+        }
+
+        tracing::info!(
+            "Searching {} dates in parallel: {} to {}",
+            dates.len(),
+            date_from,
+            date_to
+        );
+
+        // Search all dates in parallel
+        let client = self.flights.clone();
+        let cache = self.cache.clone();
+        let origin_clone = origin.clone();
+        let destination_clone = destination.clone();
+
+        let results = self.runtime.block_on(async move {
+            use futures::future::join_all;
+
+            let tasks: Vec<_> = dates
+                .into_iter()
+                .map(|date| {
+                    let client = client.clone();
+                    let cache = cache.clone();
+                    let origin = origin_clone.clone();
+                    let destination = destination_clone.clone();
+
+                    async move {
+                        // Check cache first
+                        let cache_key =
+                            format!("flights:{}:{}:{}:{}:1", origin, destination, date, adults);
+                        if let Some(cached) = cache.get(&cache_key) {
+                            if let Some(flights) = cached.get("flights").and_then(|f| f.as_array())
+                            {
+                                if let Some(first) = flights.first() {
+                                    let price = first.get("price").and_then(|p| p.as_f64());
+                                    return (date, price, true);
+                                }
+                            }
+                            return (date, None, true);
+                        }
+
+                        // Search for this date
+                        let search_params = FlightSearchParams {
+                            origin: origin.clone(),
+                            destination: destination.clone(),
+                            departure_from: date,
+                            departure_to: date,
+                            return_from: None,
+                            return_to: None,
+                            adults,
+                            children: 0,
+                            infants: 0,
+                            cabin_class: CabinClass::Economy,
+                            max_stops,
+                            sort_by: SortBy::Price,
+                            limit: 1, // Only need cheapest
+                            max_price: None,
+                            min_price: None,
+                        };
+
+                        match client.search_flights(&search_params).await {
+                            Ok(flights) => {
+                                let price = flights.first().map(|f| f.price);
+
+                                // Cache the result
+                                let result = json!({
+                                    "flights": flights,
+                                    "count": flights.len(),
+                                });
+                                cache.set(cache_key, result);
+
+                                (date, price, false)
+                            }
+                            Err(e) => {
+                                tracing::warn!("Failed to search date {}: {}", date, e);
+                                (date, None, false)
+                            }
+                        }
+                    }
+                })
+                .collect();
+
+            join_all(tasks).await
+        });
+
+        // Find cheapest
+        let mut day_prices: Vec<_> = results
+            .iter()
+            .filter_map(|(date, price, _)| price.map(|p| (date, p)))
+            .collect();
+        day_prices.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal));
+
+        let cheapest = day_prices.first().map(|(date, price)| {
+            json!({
+                "date": date.to_string(),
+                "price": price,
+            })
+        });
+
+        let cache_hits = results.iter().filter(|(_, _, cached)| *cached).count();
+
+        // Build price calendar
+        let mut price_calendar: Vec<_> = results
+            .iter()
+            .map(|(date, price, cached)| {
+                json!({
+                    "date": date.to_string(),
+                    "price": price,
+                    "cached": cached,
+                })
+            })
+            .collect();
+        price_calendar.sort_by(|a, b| {
+            a.get("date")
+                .and_then(|d| d.as_str())
+                .cmp(&b.get("date").and_then(|d| d.as_str()))
+        });
+
+        Ok(json!({
+            "origin": origin,
+            "destination": destination,
+            "date_from": date_from.to_string(),
+            "date_to": date_to.to_string(),
+            "days_searched": results.len(),
+            "cache_hits": cache_hits,
+            "cheapest": cheapest,
+            "price_calendar": price_calendar,
+        }))
     }
 
     fn parse_flight_params(&self, params: &HashMap<String, Value>) -> Result<FlightSearchParams> {
@@ -325,7 +502,9 @@ impl TravelService {
 
         let rooms = Self::get_u8(&params, "rooms", 1);
         let adults = Self::get_u8(&params, "adults", 2);
-        let currency = Self::get_str(&params, "currency").unwrap_or("USD").to_string();
+        let currency = Self::get_str(&params, "currency")
+            .unwrap_or("USD")
+            .to_string();
 
         // Check cache (shorter TTL for rates - prices change frequently)
         let cache_key = format!(
@@ -382,6 +561,9 @@ impl FgpService for TravelService {
             "travel.find_location" | "find_location" => self.find_location(params),
             "travel.search_flights" | "search_flights" => self.search_flights(params),
             "travel.search_roundtrip" | "search_roundtrip" => self.search_roundtrip(params),
+            "travel.search_cheapest_day" | "search_cheapest_day" => {
+                self.search_cheapest_day(params)
+            }
 
             // Hotels
             "travel.search_hotels" | "search_hotels" => self.search_hotels(params),
@@ -521,6 +703,49 @@ impl FgpService for TravelService {
                         param_type: "integer".into(),
                         required: false,
                         default: Some(json!(10)),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "travel.search_cheapest_day".into(),
+                description: "Search multiple dates in parallel to find the cheapest day to fly"
+                    .into(),
+                params: vec![
+                    ParamInfo {
+                        name: "origin".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "destination".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "date_from".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "date_to".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "adults".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(json!(1)),
+                    },
+                    ParamInfo {
+                        name: "max_stops".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: None,
                     },
                 ],
             },
@@ -666,7 +891,10 @@ impl FgpService for TravelService {
                 );
             }
             Err(e) => {
-                checks.insert("skypicker_api".into(), HealthStatus::unhealthy(e.to_string()));
+                checks.insert(
+                    "skypicker_api".into(),
+                    HealthStatus::unhealthy(e.to_string()),
+                );
             }
         }
 

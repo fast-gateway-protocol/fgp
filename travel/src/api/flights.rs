@@ -134,7 +134,10 @@ impl FlightsClient {
         });
 
         tracing::debug!("GraphQL request URL: {}", url);
-        tracing::debug!("GraphQL variables: {}", serde_json::to_string_pretty(&variables).unwrap_or_default());
+        tracing::debug!(
+            "GraphQL variables: {}",
+            serde_json::to_string_pretty(&variables).unwrap_or_default()
+        );
 
         let response = self
             .client
@@ -149,8 +152,16 @@ impl FlightsClient {
             bail!("GraphQL request failed: {}", response.status());
         }
 
-        let json_response: Value = response.json().await.context("Failed to parse JSON response")?;
-        tracing::debug!("GraphQL response size: {} bytes", serde_json::to_string(&json_response).unwrap_or_default().len());
+        let json_response: Value = response
+            .json()
+            .await
+            .context("Failed to parse JSON response")?;
+        tracing::debug!(
+            "GraphQL response size: {} bytes",
+            serde_json::to_string(&json_response)
+                .unwrap_or_default()
+                .len()
+        );
 
         Ok(json_response)
     }
@@ -290,7 +301,10 @@ impl FlightsClient {
     }
 
     fn parse_flight_results(&self, response: &Value) -> Result<Vec<Flight>> {
-        tracing::debug!("Flight search response keys: {:?}", response.as_object().map(|o| o.keys().collect::<Vec<_>>()));
+        tracing::debug!(
+            "Flight search response keys: {:?}",
+            response.as_object().map(|o| o.keys().collect::<Vec<_>>())
+        );
 
         let result = &response["data"]["onewayItineraries"];
 
@@ -312,13 +326,11 @@ impl FlightsClient {
 
         let flights: Vec<Flight> = itineraries
             .iter()
-            .filter_map(|itin| {
-                match self.parse_oneway_itinerary(itin) {
-                    Ok(f) => Some(f),
-                    Err(e) => {
-                        tracing::warn!("Failed to parse itinerary: {}", e);
-                        None
-                    }
+            .filter_map(|itin| match self.parse_oneway_itinerary(itin) {
+                Ok(f) => Some(f),
+                Err(e) => {
+                    tracing::warn!("Failed to parse itinerary: {}", e);
+                    None
                 }
             })
             .collect();
@@ -352,13 +364,13 @@ impl FlightsClient {
 
     fn parse_oneway_itinerary(&self, itin: &Value) -> Result<Flight> {
         // Debug: log the raw itinerary structure
-        tracing::debug!("Raw itinerary keys: {:?}", itin.as_object().map(|o| o.keys().collect::<Vec<_>>()));
+        tracing::debug!(
+            "Raw itinerary keys: {:?}",
+            itin.as_object().map(|o| o.keys().collect::<Vec<_>>())
+        );
         tracing::debug!("Raw price value: {:?}", itin.get("price"));
 
-        let id = itin["id"]
-            .as_str()
-            .context("Missing id")?
-            .to_string();
+        let id = itin["id"].as_str().context("Missing id")?.to_string();
 
         // Handle price - may be string or number
         let price = itin["price"]["amount"]
@@ -391,13 +403,12 @@ impl FlightsClient {
             (String::new(), None)
         };
 
-        let (departure_time, arrival_time) = if let (Some(first), Some(last)) =
-            (segments.first(), segments.last())
-        {
-            (first.departure_time, last.arrival_time)
-        } else {
-            (Utc::now(), Utc::now())
-        };
+        let (departure_time, arrival_time) =
+            if let (Some(first), Some(last)) = (segments.first(), segments.last()) {
+                (first.departure_time, last.arrival_time)
+            } else {
+                (Utc::now(), Utc::now())
+            };
 
         let stops = if segments.is_empty() {
             0
@@ -429,13 +440,8 @@ impl FlightsClient {
     }
 
     fn parse_roundtrip_itinerary(&self, itin: &Value) -> Result<RoundTrip> {
-        let id = itin["id"]
-            .as_str()
-            .context("Missing id")?
-            .to_string();
-        let price = itin["price"]["amount"]
-            .as_f64()
-            .context("Missing price")?;
+        let id = itin["id"].as_str().context("Missing id")?.to_string();
+        let price = itin["price"]["amount"].as_f64().context("Missing price")?;
 
         let outbound = self.parse_sector_as_flight(&itin["outbound"], &id, "out")?;
         let inbound = self.parse_sector_as_flight(&itin["inbound"], &id, "in")?;
@@ -492,7 +498,12 @@ impl FlightsClient {
         })
     }
 
-    fn parse_sector_as_flight(&self, sector: &Value, base_id: &str, suffix: &str) -> Result<Flight> {
+    fn parse_sector_as_flight(
+        &self,
+        sector: &Value,
+        base_id: &str,
+        suffix: &str,
+    ) -> Result<Flight> {
         let duration_minutes = sector["duration"]
             .as_u64()
             .map(|d| (d / 60) as u32)
@@ -512,13 +523,12 @@ impl FlightsClient {
             (String::new(), None)
         };
 
-        let (departure_time, arrival_time) = if let (Some(first), Some(last)) =
-            (segments.first(), segments.last())
-        {
-            (first.departure_time, last.arrival_time)
-        } else {
-            (Utc::now(), Utc::now())
-        };
+        let (departure_time, arrival_time) =
+            if let (Some(first), Some(last)) = (segments.first(), segments.last()) {
+                (first.departure_time, last.arrival_time)
+            } else {
+                (Utc::now(), Utc::now())
+            };
 
         let stops = if segments.is_empty() {
             0
@@ -556,10 +566,7 @@ impl FlightsClient {
     }
 
     fn parse_segment(&self, seg: &Value) -> Result<Segment> {
-        let carrier = seg["carrier"]["code"]
-            .as_str()
-            .unwrap_or("")
-            .to_string();
+        let carrier = seg["carrier"]["code"].as_str().unwrap_or("").to_string();
         let carrier_name = seg["carrier"]["name"].as_str().map(|s| s.to_string());
 
         let origin = seg["source"]["station"]["code"]
@@ -623,10 +630,7 @@ impl FlightsClient {
             .context("Missing location name")?
             .to_string();
 
-        let slug = node["slug"]
-            .as_str()
-            .unwrap_or("")
-            .to_string();
+        let slug = node["slug"].as_str().unwrap_or("").to_string();
 
         let location_type = node["type"]
             .as_str()

@@ -11,9 +11,8 @@ use std::collections::HashMap;
 const LOCATIONS_JSON: &str = include_str!("../data/locations.json");
 
 /// Pre-parsed location database.
-static LOCATIONS: Lazy<LocationDb> = Lazy::new(|| {
-    LocationDb::load().expect("Failed to load embedded location data")
-});
+static LOCATIONS: Lazy<LocationDb> =
+    Lazy::new(|| LocationDb::load().expect("Failed to load embedded location data"));
 
 /// A searchable location (airport, city, etc).
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -82,7 +81,7 @@ impl LocationDb {
                     .iter()
                     .filter(|l| l.code.as_deref() != Some(&term_upper))
                     .filter(|l| self.matches(l, &term_lower))
-                    .take(limit.saturating_sub(1))
+                    .take(limit.saturating_sub(1)),
             );
             return results;
         }
@@ -137,7 +136,9 @@ impl LocationDb {
 
     /// Get location by exact code (e.g., "SFO").
     pub fn get_by_code(&self, code: &str) -> Option<&Location> {
-        self.by_code.get(&code.to_uppercase()).map(|&i| &self.locations[i])
+        self.by_code
+            .get(&code.to_uppercase())
+            .map(|&i| &self.locations[i])
     }
 
     /// Get location by ID.
@@ -165,8 +166,14 @@ mod tests {
         let db = LocationDb::instance();
         let results = db.search("SFO", 5);
         assert!(!results.is_empty());
-        assert!(results[0].code.as_deref() == Some("SFO") ||
-                results[0].name.as_ref().map(|n| n.contains("San Francisco")).unwrap_or(false));
+        assert!(
+            results[0].code.as_deref() == Some("SFO")
+                || results[0]
+                    .name
+                    .as_ref()
+                    .map(|n| n.contains("San Francisco"))
+                    .unwrap_or(false)
+        );
     }
 
     #[test]

@@ -133,9 +133,11 @@ impl HotelRates {
 
     /// Get the cheapest rate.
     pub fn cheapest(&self) -> Option<&HotelRate> {
-        self.rates
-            .iter()
-            .min_by(|a, b| a.price.partial_cmp(&b.price).unwrap_or(std::cmp::Ordering::Equal))
+        self.rates.iter().min_by(|a, b| {
+            a.price
+                .partial_cmp(&b.price)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })
     }
 
     /// Get the cheapest price.

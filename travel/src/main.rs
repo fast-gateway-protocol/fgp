@@ -222,8 +222,14 @@ fn cmd_status(socket: String) -> Result<()> {
             if response["ok"].as_bool() == Some(true) {
                 println!("Status: RUNNING");
                 if let Some(result) = response.get("result") {
-                    println!("Service: {}", result["service"].as_str().unwrap_or("travel"));
-                    println!("Version: {}", result["version"].as_str().unwrap_or("unknown"));
+                    println!(
+                        "Service: {}",
+                        result["service"].as_str().unwrap_or("travel")
+                    );
+                    println!(
+                        "Version: {}",
+                        result["version"].as_str().unwrap_or("unknown")
+                    );
                     println!(
                         "Uptime: {:.1}s",
                         result["uptime_secs"].as_f64().unwrap_or(0.0)

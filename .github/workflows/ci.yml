@@ -11,7 +11,7 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
-  # Lint and format check for Rust crates
+  # Lint and format check for travel daemon
   lint:
     name: Lint
     runs-on: macos-latest
@@ -26,14 +26,8 @@ jobs:
       - name: Check formatting (travel)
         run: cargo fmt --check --manifest-path travel/Cargo.toml
 
-      - name: Check formatting (app)
-        run: cargo fmt --check --manifest-path app/src-tauri/Cargo.toml
-
       - name: Clippy (travel)
         run: cargo clippy --manifest-path travel/Cargo.toml -- -D warnings
-
-      - name: Clippy (app)
-        run: cargo clippy --manifest-path app/src-tauri/Cargo.toml -- -D warnings
 
   # Build and test travel daemon
   travel-daemon:
@@ -60,37 +54,5 @@ jobs:
       - name: Test travel daemon
         run: cargo test --manifest-path travel/Cargo.toml
 
-  # Build Tauri app
-  tauri-app:
-    name: Tauri App
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Cache cargo registry
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            app/src-tauri/target
-          key: ${{ runner.os }}-cargo-tauri-${{ hashFiles('app/src-tauri/Cargo.lock') }}
-
-      - name: Install frontend dependencies
-        run: cd app && pnpm install
-
-      - name: Build Tauri app (check only)
-        run: cargo check --manifest-path app/src-tauri/Cargo.toml
+  # Note: Tauri app (app/src-tauri) is excluded from CI because it depends on
+  # fgp-daemon crate which lives in a separate repository (../daemon)
