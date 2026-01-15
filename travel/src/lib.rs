@@ -6,6 +6,8 @@
 //! 01/15/2026 - Added local location database for instant lookups (Claude)
 //! 01/14/2026 - Initial implementation (Claude)
 
+#![allow(dead_code)]
+
 pub mod api;
 pub mod cache;
 pub mod error;

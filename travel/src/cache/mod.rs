@@ -5,4 +5,4 @@
 
 mod lru;
 
-pub use lru::{CacheStats, TtlCache};
+pub use lru::TtlCache;

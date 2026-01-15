@@ -38,9 +38,25 @@ pub struct LocationDb {
 }
 
 impl LocationDb {
+    /// Extract airport code from id like "Station:airport:SFO" -> "SFO"
+    fn extract_code_from_id(id: &str) -> Option<String> {
+        if id.starts_with("Station:airport:") {
+            Some(id.strip_prefix("Station:airport:")?.to_string())
+        } else {
+            None
+        }
+    }
+
     /// Load and index locations from embedded JSON.
     fn load() -> Result<Self, serde_json::Error> {
-        let locations: Vec<Location> = serde_json::from_str(LOCATIONS_JSON)?;
+        let mut locations: Vec<Location> = serde_json::from_str(LOCATIONS_JSON)?;
+
+        // Populate code field from id for airports that have null code
+        for loc in &mut locations {
+            if loc.code.is_none() {
+                loc.code = Self::extract_code_from_id(&loc.id);
+            }
+        }
 
         let mut by_code = HashMap::new();
         let mut by_id = HashMap::new();

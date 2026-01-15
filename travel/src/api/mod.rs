@@ -6,6 +6,3 @@
 pub mod flights;
 pub mod graphql;
 pub mod hotels;
-
-pub use flights::FlightsClient;
-pub use hotels::HotelsClient;

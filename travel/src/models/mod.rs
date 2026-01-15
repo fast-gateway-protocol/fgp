@@ -6,7 +6,3 @@
 pub mod flight;
 pub mod hotel;
 pub mod location;
-
-pub use flight::*;
-pub use hotel::*;
-pub use location::*;

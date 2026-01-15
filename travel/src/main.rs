@@ -20,6 +20,8 @@
 //! # CHANGELOG (recent first, max 5 entries)
 //! 01/14/2026 - Initial implementation (Claude)
 
+#![allow(dead_code)]
+
 mod api;
 mod cache;
 mod error;

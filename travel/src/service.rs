@@ -399,7 +399,10 @@ impl TravelService {
             anyhow::bail!("destinations array cannot be empty");
         }
         if destinations.len() > 20 {
-            anyhow::bail!("Maximum 20 destinations allowed (got {})", destinations.len());
+            anyhow::bail!(
+                "Maximum 20 destinations allowed (got {})",
+                destinations.len()
+            );
         }
 
         let date = Self::get_date(&params, "date")
@@ -470,7 +473,7 @@ impl TravelService {
                     return None;
                 }
                 price.and_then(|p| {
-                    if max_price.map_or(true, |max| p <= max) {
+                    if max_price.is_none_or(|max| p <= max) {
                         Some((dest.clone(), p))
                     } else {
                         None
@@ -800,7 +803,10 @@ impl TravelService {
             join_all(tasks).await
         });
 
-        let successful = results.iter().filter(|r| r.get("ok") == Some(&json!(true))).count();
+        let successful = results
+            .iter()
+            .filter(|r| r.get("ok") == Some(&json!(true)))
+            .count();
 
         Ok(json!({
             "searches_requested": results.len(),

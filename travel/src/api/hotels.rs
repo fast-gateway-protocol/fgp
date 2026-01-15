@@ -80,13 +80,15 @@ impl HotelsClient {
         let hotels: Vec<Hotel> = hotels
             .into_iter()
             .filter(|h| {
-                params.min_price.map_or(true, |min| {
-                    h.price_range.as_ref().map_or(false, |p| p.minimum >= min)
-                }) && params.max_price.map_or(true, |max| {
-                    h.price_range.as_ref().map_or(false, |p| p.maximum <= max)
-                }) && params.min_rating.map_or(true, |min| {
-                    h.review_summary.as_ref().map_or(false, |r| r.rating >= min)
-                })
+                params
+                    .min_price
+                    .is_none_or(|min| h.price_range.as_ref().is_some_and(|p| p.minimum >= min))
+                    && params
+                        .max_price
+                        .is_none_or(|max| h.price_range.as_ref().is_some_and(|p| p.maximum <= max))
+                    && params.min_rating.is_none_or(|min| {
+                        h.review_summary.as_ref().is_some_and(|r| r.rating >= min)
+                    })
             })
             .collect();
 
