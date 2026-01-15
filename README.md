@@ -104,11 +104,42 @@ LLM agents make many sequential tool calls. Cold-start overhead compounds:
 - **Per-service daemons** - Independent scaling, fault isolation
 - **Rust core** - Sub-millisecond latency, low memory (~10MB)
 
+## Installation
+
+### One-liner (Recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash
+```
+
+This installs the FGP CLI and browser daemon to `~/.fgp/bin/`.
+
+### Install specific daemons
+
+```bash
+# Install Gmail and Calendar daemons
+curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash -s -- gmail calendar
+
+# Install all daemons
+curl -fsSL https://raw.githubusercontent.com/fast-gateway-protocol/fgp/master/install.sh | bash -s -- all
+```
+
+### From source
+
+```bash
+git clone https://github.com/fast-gateway-protocol/browser
+cd browser && cargo build --release
+```
+
 ## Quick Start
 
 ### Browser Daemon
 
 ```bash
+# Start daemon
+fgp start browser
+
+# Or if installed from source:
 cd browser && cargo build --release
 
 # Start daemon
