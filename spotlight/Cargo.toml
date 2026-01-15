@@ -1,0 +1,42 @@
+[package]
+name = "fgp-spotlight"
+version = "1.0.0"
+edition = "2021"
+description = "Fast Spotlight gateway for macOS - direct metadata queries"
+license = "MIT"
+repository = "https://github.com/fast-gateway-protocol/spotlight"
+
+[dependencies]
+# FGP daemon SDK
+fgp-daemon = { path = "../daemon" }
+
+# Spotlight query
+mdquery-rs = "0.2"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Async
+tokio = { version = "1", features = ["full"] }
+
+# Error handling
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+[[bin]]
+name = "fgp-spotlight"
+path = "src/main.rs"
+
+[[bin]]
+name = "fgp-spotlight-daemon"
+path = "src/bin/fgp-spotlight-daemon.rs"

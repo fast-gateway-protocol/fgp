@@ -162,6 +162,33 @@
       "featured": false,
       "official": true,
       "category": "deployment"
+    },
+    {
+      "name": "travel",
+      "display_name": "Travel Gateway",
+      "version": "1.0.0",
+      "description": "Flight and hotel search via Kiwi/Xotelo APIs. Token-optimized efficiency methods for LLM agents.",
+      "icon": "plane",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/travel",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/travel/releases/download/v1.0.0/fgp-travel-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/travel/releases/download/v1.0.0/fgp-travel-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "linux-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/travel/releases/download/v1.0.0/fgp-travel-linux-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 13,
+      "featured": true,
+      "official": true,
+      "category": "travel"
     }
   ],
   "categories": [
@@ -170,6 +197,7 @@
     {"id": "productivity", "name": "Productivity", "icon": "check-square"},
     {"id": "development", "name": "Development", "icon": "code"},
     {"id": "deployment", "name": "Deployment", "icon": "cloud"},
-    {"id": "database", "name": "Database", "icon": "database"}
+    {"id": "database", "name": "Database", "icon": "database"},
+    {"id": "travel", "name": "Travel", "icon": "plane"}
   ]
 }

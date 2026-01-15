@@ -1,0 +1,70 @@
+[package]
+name = "fgp-photos"
+version = "1.0.0"
+edition = "2021"
+description = "Fast Photos gateway for macOS - FGP daemon with direct SQLite access to Photos library"
+authors = ["Wolfgang Schoenberger"]
+license = "MIT"
+repository = "https://github.com/fast-gateway-protocol/photos"
+homepage = "https://github.com/fast-gateway-protocol"
+keywords = ["photos", "macos", "daemon", "fgp", "ai-agents"]
+categories = ["os::macos-apis", "network-programming"]
+
+[lib]
+name = "fgp_photos"
+path = "src/lib.rs"
+
+[[bin]]
+name = "fgp-photos"
+path = "src/main.rs"
+
+[[bin]]
+name = "fgp-photos-daemon"
+path = "src/bin/fgp-photos-daemon.rs"
+
+[dependencies]
+# CLI parsing
+clap = { version = "4", features = ["derive"] }
+
+# Database
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Date/time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# macOS utilities
+dirs = "6.0"
+
+# Daemon mode
+uuid = { version = "1.7", features = ["v4", "serde"] }
+daemonize = "0.5"
+shellexpand = "3.1"
+libc = "0.2"
+
+# FGP daemon SDK
+fgp-daemon = { path = "../daemon" }
+
+# Async runtime
+tokio = { version = "1", features = ["rt", "net", "io-util", "time", "sync"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+
+[profile.dev]
+opt-level = 0
+debug = true

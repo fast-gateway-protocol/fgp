@@ -1,0 +1,427 @@
+//! Photos FGP daemon service implementation.
+//!
+//! CHANGELOG:
+//! - 01/15/2026 - Initial implementation (Claude)
+
+use anyhow::{anyhow, Result};
+use fgp_daemon::service::{FgpService, HealthStatus, MethodInfo, ParamInfo};
+use rusqlite::Connection;
+use serde_json::Value;
+use std::collections::HashMap;
+use std::sync::Mutex;
+
+use crate::db::connection::open_photos_db;
+use crate::db::queries::{self, AssetKind};
+
+/// Photos daemon service with hot database connection.
+pub struct PhotosService {
+    conn: Mutex<Connection>,
+}
+
+impl PhotosService {
+    /// Create new Photos service with hot connection.
+    pub fn new() -> Result<Self> {
+        let conn = Mutex::new(open_photos_db()?);
+        Ok(Self { conn })
+    }
+
+    // ========================================================================
+    // Parameter Helpers
+    // ========================================================================
+
+    fn get_param_u32(params: &HashMap<String, Value>, key: &str, default: u32) -> u32 {
+        params
+            .get(key)
+            .and_then(|v| v.as_u64())
+            .map(|v| v as u32)
+            .unwrap_or(default)
+    }
+
+    fn get_param_i64(params: &HashMap<String, Value>, key: &str) -> Option<i64> {
+        params.get(key).and_then(|v| v.as_i64())
+    }
+
+    fn get_param_f64(params: &HashMap<String, Value>, key: &str) -> Option<f64> {
+        params.get(key).and_then(|v| v.as_f64())
+    }
+
+    fn get_param_str<'a>(params: &'a HashMap<String, Value>, key: &str) -> Option<&'a str> {
+        params.get(key).and_then(|v| v.as_str())
+    }
+
+    fn parse_kind(params: &HashMap<String, Value>) -> Option<AssetKind> {
+        params.get("kind").and_then(|v| v.as_str()).and_then(|s| {
+            match s.to_lowercase().as_str() {
+                "photo" | "photos" => Some(AssetKind::Photo),
+                "video" | "videos" => Some(AssetKind::Video),
+                _ => None,
+            }
+        })
+    }
+
+    // ========================================================================
+    // Handlers
+    // ========================================================================
+
+    /// Get recent photos/videos.
+    /// Params: days (default 30), limit (default 50), kind (optional: photo/video)
+    fn recent(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let days = Self::get_param_u32(&params, "days", 30);
+        let limit = Self::get_param_u32(&params, "limit", 50);
+        let kind = Self::parse_kind(&params);
+
+        let assets = queries::query_recent_assets(&self.conn.lock().unwrap(), days, limit, kind)?;
+
+        Ok(serde_json::json!({
+            "assets": assets,
+            "count": assets.len(),
+            "days": days,
+        }))
+    }
+
+    /// Get favorite photos.
+    /// Params: limit (default 50)
+    fn favorites(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let limit = Self::get_param_u32(&params, "limit", 50);
+
+        let assets = queries::query_favorites(&self.conn.lock().unwrap(), limit)?;
+
+        Ok(serde_json::json!({
+            "assets": assets,
+            "count": assets.len(),
+        }))
+    }
+
+    /// Search photos by date range.
+    /// Params: start (required ISO date), end (required ISO date), limit (default 100)
+    fn by_date(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let start = Self::get_param_str(&params, "start")
+            .ok_or_else(|| anyhow!("Missing required parameter: start"))?;
+        let end = Self::get_param_str(&params, "end")
+            .ok_or_else(|| anyhow!("Missing required parameter: end"))?;
+        let limit = Self::get_param_u32(&params, "limit", 100);
+
+        let assets =
+            queries::query_by_date_range(&self.conn.lock().unwrap(), start, end, limit)?;
+
+        Ok(serde_json::json!({
+            "assets": assets,
+            "count": assets.len(),
+            "start": start,
+            "end": end,
+        }))
+    }
+
+    /// Search photos near a location.
+    /// Params: lat (required), lon (required), radius (default 1 km), limit (default 50)
+    fn by_location(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let lat = Self::get_param_f64(&params, "lat")
+            .ok_or_else(|| anyhow!("Missing required parameter: lat"))?;
+        let lon = Self::get_param_f64(&params, "lon")
+            .ok_or_else(|| anyhow!("Missing required parameter: lon"))?;
+        let radius = Self::get_param_f64(&params, "radius").unwrap_or(1.0);
+        let limit = Self::get_param_u32(&params, "limit", 50);
+
+        let assets =
+            queries::query_by_location(&self.conn.lock().unwrap(), lat, lon, radius, limit)?;
+
+        Ok(serde_json::json!({
+            "assets": assets,
+            "count": assets.len(),
+            "location": {
+                "lat": lat,
+                "lon": lon,
+                "radius_km": radius,
+            },
+        }))
+    }
+
+    /// List albums.
+    /// Params: limit (default 50)
+    fn albums(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let limit = Self::get_param_u32(&params, "limit", 50);
+
+        let albums = queries::query_albums(&self.conn.lock().unwrap(), limit)?;
+
+        Ok(serde_json::json!({
+            "albums": albums,
+            "count": albums.len(),
+        }))
+    }
+
+    /// Get photos in an album.
+    /// Params: album_id (required), limit (default 100)
+    fn album_photos(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let album_id = Self::get_param_i64(&params, "album_id")
+            .ok_or_else(|| anyhow!("Missing required parameter: album_id"))?;
+        let limit = Self::get_param_u32(&params, "limit", 100);
+
+        let assets = queries::query_album_assets(&self.conn.lock().unwrap(), album_id, limit)?;
+
+        Ok(serde_json::json!({
+            "assets": assets,
+            "count": assets.len(),
+            "album_id": album_id,
+        }))
+    }
+
+    /// List recognized people.
+    /// Params: limit (default 50)
+    fn people(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let limit = Self::get_param_u32(&params, "limit", 50);
+
+        let people = queries::query_people(&self.conn.lock().unwrap(), limit)?;
+
+        Ok(serde_json::json!({
+            "people": people,
+            "count": people.len(),
+        }))
+    }
+
+    /// Get photos of a person.
+    /// Params: person_id (required), limit (default 50)
+    fn person_photos(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let person_id = Self::get_param_i64(&params, "person_id")
+            .ok_or_else(|| anyhow!("Missing required parameter: person_id"))?;
+        let limit = Self::get_param_u32(&params, "limit", 50);
+
+        let assets = queries::query_person_photos(&self.conn.lock().unwrap(), person_id, limit)?;
+
+        Ok(serde_json::json!({
+            "assets": assets,
+            "count": assets.len(),
+            "person_id": person_id,
+        }))
+    }
+
+    /// Get library statistics.
+    fn stats(&self, _params: HashMap<String, Value>) -> Result<Value> {
+        let stats = queries::query_stats(&self.conn.lock().unwrap())?;
+
+        Ok(serde_json::json!({
+            "total_assets": stats.total_assets,
+            "photos": stats.photos,
+            "videos": stats.videos,
+            "favorites": stats.favorites,
+            "hidden": stats.hidden,
+            "with_location": stats.with_location,
+            "albums": stats.albums,
+            "people": stats.people,
+        }))
+    }
+}
+
+impl FgpService for PhotosService {
+    fn name(&self) -> &str {
+        "photos"
+    }
+
+    fn version(&self) -> &str {
+        "1.0.0"
+    }
+
+    fn dispatch(&self, method: &str, params: HashMap<String, Value>) -> Result<Value> {
+        match method {
+            "photos.recent" | "recent" => self.recent(params),
+            "photos.favorites" | "favorites" => self.favorites(params),
+            "photos.by_date" | "by_date" => self.by_date(params),
+            "photos.by_location" | "by_location" => self.by_location(params),
+            "photos.albums" | "albums" => self.albums(params),
+            "photos.album_photos" | "album_photos" => self.album_photos(params),
+            "photos.people" | "people" => self.people(params),
+            "photos.person_photos" | "person_photos" => self.person_photos(params),
+            "photos.stats" | "stats" => self.stats(params),
+            _ => Err(anyhow!("Unknown method: {}", method)),
+        }
+    }
+
+    fn method_list(&self) -> Vec<MethodInfo> {
+        vec![
+            MethodInfo {
+                name: "recent".into(),
+                description: "Get recent photos/videos".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "days".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(Value::Number(30.into())),
+                    },
+                    ParamInfo {
+                        name: "limit".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(Value::Number(50.into())),
+                    },
+                    ParamInfo {
+                        name: "kind".into(),
+                        param_type: "string".into(),
+                        required: false,
+                        default: None,
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "favorites".into(),
+                description: "Get favorited photos/videos".into(),
+                params: vec![ParamInfo {
+                    name: "limit".into(),
+                    param_type: "integer".into(),
+                    required: false,
+                    default: Some(Value::Number(50.into())),
+                }],
+            },
+            MethodInfo {
+                name: "by_date".into(),
+                description: "Search photos by date range".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "start".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "end".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "limit".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(Value::Number(100.into())),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "by_location".into(),
+                description: "Search photos near a location".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "lat".into(),
+                        param_type: "number".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "lon".into(),
+                        param_type: "number".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "radius".into(),
+                        param_type: "number".into(),
+                        required: false,
+                        default: Some(Value::Number(serde_json::Number::from_f64(1.0).unwrap())),
+                    },
+                    ParamInfo {
+                        name: "limit".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(Value::Number(50.into())),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "albums".into(),
+                description: "List photo albums".into(),
+                params: vec![ParamInfo {
+                    name: "limit".into(),
+                    param_type: "integer".into(),
+                    required: false,
+                    default: Some(Value::Number(50.into())),
+                }],
+            },
+            MethodInfo {
+                name: "album_photos".into(),
+                description: "Get photos in an album".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "album_id".into(),
+                        param_type: "integer".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "limit".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(Value::Number(100.into())),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "people".into(),
+                description: "List recognized people".into(),
+                params: vec![ParamInfo {
+                    name: "limit".into(),
+                    param_type: "integer".into(),
+                    required: false,
+                    default: Some(Value::Number(50.into())),
+                }],
+            },
+            MethodInfo {
+                name: "person_photos".into(),
+                description: "Get photos of a person".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "person_id".into(),
+                        param_type: "integer".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "limit".into(),
+                        param_type: "integer".into(),
+                        required: false,
+                        default: Some(Value::Number(50.into())),
+                    },
+                ],
+            },
+            MethodInfo {
+                name: "stats".into(),
+                description: "Get library statistics".into(),
+                params: vec![],
+            },
+        ]
+    }
+
+    fn health_check(&self) -> HashMap<String, HealthStatus> {
+        let mut checks = HashMap::new();
+
+        let stats = queries::query_stats(&self.conn.lock().unwrap());
+        let (ok, msg) = match stats {
+            Ok(s) => (
+                true,
+                format!("{} photos, {} videos in library", s.photos, s.videos),
+            ),
+            Err(e) => (false, format!("Database error: {}", e)),
+        };
+
+        checks.insert(
+            "database".into(),
+            HealthStatus {
+                ok,
+                latency_ms: None,
+                message: Some(msg),
+            },
+        );
+
+        checks
+    }
+
+    fn on_start(&self) -> Result<()> {
+        let stats = queries::query_stats(&self.conn.lock().unwrap())?;
+        tracing::info!(
+            photos = stats.photos,
+            videos = stats.videos,
+            albums = stats.albums,
+            people = stats.people,
+            "Photos daemon starting - library loaded"
+        );
+        Ok(())
+    }
+}
