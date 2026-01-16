@@ -1,6 +1,6 @@
 # FGP Gateway Skill
 
-Fast Gateway Protocol (FGP) provides 10-100x faster tool execution compared to MCP stdio servers by using persistent Unix socket daemons.
+Fast Gateway Protocol (FGP) provides faster tool execution by using persistent Unix socket daemons. Eliminates cold-start latency and provides 3-50x speedup depending on operation type.
 
 ## Available Daemons
 
@@ -60,11 +60,13 @@ Example: fgp_browser_open, fgp_gmail_list, fgp_github_issues
 
 ## Performance Comparison
 
-| Operation | MCP Stdio | FGP Daemon | Speedup |
-|-----------|-----------|------------|---------|
-| Browser navigate | 2,300ms | 8ms | **292x** |
-| Gmail list | 2,400ms | 35ms | **69x** |
-| GitHub issues | 2,100ms | 28ms | **75x** |
+| Operation | FGP Daemon | MCP (warm) | Speedup |
+|-----------|------------|------------|---------|
+| Browser navigate | 2-8ms | 27ms | **3-12x** |
+| Browser snapshot | 0.7-9ms | 2-3ms | **3x** |
+| Local SQLite ops | 1-10ms | 60-80ms | **10-50x** |
+
+> Note: MCP servers stay warm within a session. Speedup is warm-to-warm comparison. Cold start elimination provides additional ~1-2s savings on first call.
 
 ## Troubleshooting
 

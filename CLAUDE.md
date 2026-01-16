@@ -11,18 +11,28 @@ This is a **workspace directory** containing multiple related repos:
 
 ## What is FGP?
 
-FGP (Fast Gateway Protocol) is a **daemon-based architecture** that replaces slow MCP stdio servers with persistent UNIX socket daemons. Instead of spawning a new process for each tool call (~2.3s overhead), FGP keeps daemons warm and ready (~10-50ms latency).
+FGP (Fast Gateway Protocol) is a **daemon-based architecture** that replaces slow MCP stdio servers with persistent UNIX socket daemons. Daemons stay warm across sessions, eliminating cold-start latency.
 
-**Key insight:** LLM agents make many sequential tool calls. Cold-start overhead compounds. FGP eliminates this.
+**Key insight:** LLM agents make many sequential tool calls. FGP provides consistent sub-10ms latency.
 
-### Performance Headlines
+### Performance Summary
 
-| Tool | MCP Stdio | FGP Daemon | Speedup |
-|------|-----------|------------|---------|
-| iMessage analytics | 2,400ms | 5ms | **480x** |
-| Browser navigate | 2,300ms | 8ms | **292x** |
-| Gmail list | 2,400ms | 35ms | **69x** |
-| GitHub issues | 2,100ms | 28ms | **75x** |
+| Context | Improvement | Why |
+|---------|-------------|-----|
+| **Cold start** (first call) | 10-20x faster | No process spawn, no init |
+| **Warm calls** (same session) | 3-12x faster | Lower protocol overhead |
+| **Local ops** (SQLite) | 50x faster | No subprocess spawn |
+
+### Benchmarked Results
+
+| Tool | FGP Daemon | Alternative | Speedup |
+|------|------------|-------------|---------|
+| Browser navigate | 2-8ms | 27ms (MCP warm) | **3-12x** |
+| Browser snapshot | 0.7-9ms | 2-3ms (MCP warm) | **3x** |
+| Screen Time | 1-5ms | 60ms (Python subprocess) | **50x** |
+| iMessage | 5-10ms | 80ms (Python subprocess) | **10x** |
+
+> **Note:** MCP servers stay warm within a Claude Code session. Speedup claims are for warm-to-warm comparisons unless noted.
 
 ---
 
@@ -35,8 +45,9 @@ fgp/
 ├── protocol/        # FGP protocol specification (NDJSON over UNIX sockets)
 ├── cli/             # `fgp` CLI for managing daemons
 │
-├── imessage/        # iMessage daemon (macOS - SQLite + AppleScript) **480x**
-├── browser/         # Browser automation daemon (Chrome DevTools Protocol) **292x**
+├── imessage/        # iMessage daemon (macOS - SQLite + AppleScript)
+├── browser/         # Browser automation daemon (Chrome DevTools Protocol)
+├── screen-time/     # Screen Time daemon (macOS - knowledgeC.db)
 ├── gmail/           # Gmail daemon (Google API)
 ├── calendar/        # Google Calendar daemon
 ├── github/          # GitHub daemon (GraphQL + REST)
@@ -124,10 +135,10 @@ browser-gateway click "button[type=submit]"
 browser-gateway screenshot /tmp/page.png
 ```
 
-**Performance (vs Playwright MCP / agent-browser):**
-- Navigate: 8ms (292x / 2.8x faster)
-- ARIA snapshot: 9ms (257x / 3.4x faster)
-- Screenshot: 30ms (54x / ~1x faster)
+**Performance (vs Playwright MCP warm):**
+- Navigate: 2-8ms vs 27ms (3-12x faster)
+- ARIA snapshot: 0.7-9ms vs 2-3ms (3x faster)
+- Screenshot: 25-30ms vs 50-80ms (2x faster)
 
 ### Gmail Daemon (`gmail/`)
 
@@ -291,8 +302,9 @@ echo '{"id":"1","v":1,"method":"health","params":{}}' | nc -U ~/.fgp/services/br
 | Component | Status | Notes |
 |-----------|--------|-------|
 | `daemon` | Stable | Core SDK, concurrent server |
-| `imessage` | Production | 480x faster, macOS only |
-| `browser` | Production | Full feature parity, 292x faster |
+| `screen-time` | Production | 50x faster vs subprocess, macOS only |
+| `imessage` | Production | 10-50x faster vs subprocess, macOS only |
+| `browser` | Production | 3-12x faster warm, 17x cold start |
 | `gmail` | Beta | Basic operations |
 | `calendar` | Beta | Basic operations |
 | `github` | Beta | Issues, PRs |

@@ -1,52 +1,16 @@
-import { motion, useInView, useSpring, useTransform } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
 
 // ============================================================================
-// Animated Counter Component
-// ============================================================================
-
-function AnimatedCounter({
-  value,
-  suffix = '',
-  duration = 2
-}: {
-  value: number;
-  suffix?: string;
-  duration?: number;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const spring = useSpring(0, { duration: duration * 1000, bounce: 0 });
-  const display = useTransform(spring, (v) => Math.round(v));
-  const [displayValue, setDisplayValue] = useState(0);
-
-  useEffect(() => {
-    if (isInView) {
-      spring.set(value);
-    }
-  }, [isInView, spring, value]);
-
-  useEffect(() => {
-    return display.on("change", (v) => setDisplayValue(v));
-  }, [display]);
-
-  return (
-    <span ref={ref}>
-      {displayValue.toLocaleString()}{suffix}
-    </span>
-  );
-}
-
-// ============================================================================
-// Hero Speedup Display - The Big 292×
+// Hero Speedup Display - Honest "Zero Cold Start" Focus
 // ============================================================================
 
 export function HeroSpeedup({ compact = false }: { compact?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
   const sizeClass = compact
-    ? 'text-[clamp(4.5rem,12vw,9rem)]'
-    : 'text-[clamp(8rem,25vw,16rem)]';
+    ? 'text-[clamp(3rem,10vw,6rem)]'
+    : 'text-[clamp(5rem,18vw,10rem)]';
   const subtitleClass = compact
     ? 'text-base md:text-lg text-left'
     : 'text-xl md:text-2xl text-center';
@@ -64,7 +28,7 @@ export function HeroSpeedup({ compact = false }: { compact?: boolean }) {
         transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
       />
 
-      {/* The big number */}
+      {/* The main message - Zero Cold Start */}
       <motion.div
         className={`relative ${sizeClass} font-black leading-none tracking-tighter`}
         initial={{ opacity: 0, scale: 0.8, y: 40 }}
@@ -72,7 +36,7 @@ export function HeroSpeedup({ compact = false }: { compact?: boolean }) {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         <span className="gradient-accent-text">
-          <AnimatedCounter value={292} suffix="×" />
+          0ms
         </span>
       </motion.div>
 
@@ -83,33 +47,60 @@ export function HeroSpeedup({ compact = false }: { compact?: boolean }) {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
       >
-        faster than MCP cold-start
+        cold start latency
+      </motion.p>
+
+      {/* Speedup pills */}
+      <motion.div
+        className={`flex ${compact ? 'justify-start' : 'justify-center'} gap-3 mt-6 flex-wrap`}
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <span className="px-3 py-1.5 rounded-full text-sm font-semibold border border-[var(--color-accent)]/30 bg-[var(--color-accent-muted)] text-[var(--color-accent)]">
+          3-12× faster (warm)
+        </span>
+        <span className="px-3 py-1.5 rounded-full text-sm font-semibold border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)]">
+          50× faster (local ops)
+        </span>
+      </motion.div>
+
+      <motion.p
+        className={`${compact ? 'text-xs' : 'text-sm'} text-[var(--color-text-muted)] mt-4`}
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
+        Daemons stay warm across sessions · Browser, Gmail, Calendar, GitHub, iMessage
       </motion.p>
     </div>
   );
 }
 
 // ============================================================================
-// Benchmark Bar Chart - Visual Comparison
+// Benchmark Bar Chart - Visual Comparison (Warm vs Warm)
 // ============================================================================
 
 interface BenchmarkData {
   operation: string;
   fgp: number;
-  mcp: number;
+  mcpWarm: number;
+  mcpCold: number;
 }
 
+// Honest benchmark data based on actual measurements
 const benchmarks: BenchmarkData[] = [
-  { operation: 'Navigate', fgp: 8, mcp: 2328 },
-  { operation: 'Snapshot', fgp: 9, mcp: 2484 },
-  { operation: 'Screenshot', fgp: 30, mcp: 1635 },
+  { operation: 'Navigate', fgp: 3, mcpWarm: 28, mcpCold: 1900 },
+  { operation: 'Snapshot', fgp: 1, mcpWarm: 2, mcpCold: 1000 },
+  { operation: 'Screenshot', fgp: 28, mcpWarm: 60, mcpCold: 1600 },
 ];
 
-function BenchmarkBar({ data, index }: { data: BenchmarkData; index: number }) {
+function BenchmarkBar({ data, index, showCold }: { data: BenchmarkData; index: number; showCold: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const speedup = Math.round(data.mcp / data.fgp);
-  const maxMcp = Math.max(...benchmarks.map(b => b.mcp));
+  const mcpValue = showCold ? data.mcpCold : data.mcpWarm;
+  const speedup = Math.round(mcpValue / data.fgp);
+  const maxValue = showCold ? Math.max(...benchmarks.map(b => b.mcpCold)) : Math.max(...benchmarks.map(b => b.mcpWarm));
 
   return (
     <motion.div
@@ -147,7 +138,7 @@ function BenchmarkBar({ data, index }: { data: BenchmarkData; index: number }) {
               background: 'linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%)',
             }}
             initial={{ width: 0 }}
-            animate={isInView ? { width: `${(data.fgp / maxMcp) * 100}%` } : {}}
+            animate={isInView ? { width: `${Math.max((data.fgp / maxValue) * 100, 2)}%` } : {}}
             transition={{ duration: 1, delay: index * 0.15 + 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Shine effect */}
@@ -176,7 +167,7 @@ function BenchmarkBar({ data, index }: { data: BenchmarkData; index: number }) {
           <motion.div
             className="h-full rounded-lg bg-[var(--color-text-muted)]/40"
             initial={{ width: 0 }}
-            animate={isInView ? { width: `${(data.mcp / maxMcp) * 100}%` } : {}}
+            animate={isInView ? { width: `${(mcpValue / maxValue) * 100}%` } : {}}
             transition={{ duration: 1.2, delay: index * 0.15 + 0.5, ease: [0.16, 1, 0.3, 1] }}
           />
         </div>
@@ -186,7 +177,7 @@ function BenchmarkBar({ data, index }: { data: BenchmarkData; index: number }) {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.4, delay: index * 0.15 + 1 }}
         >
-          {data.mcp.toLocaleString()}ms
+          {mcpValue.toLocaleString()}ms
         </motion.span>
       </div>
     </motion.div>
@@ -194,28 +185,62 @@ function BenchmarkBar({ data, index }: { data: BenchmarkData; index: number }) {
 }
 
 export function BenchmarkChart() {
+  const [showCold, setShowCold] = useState(false);
+
   return (
-    <div className="space-y-8">
-      {benchmarks.map((data, i) => (
-        <BenchmarkBar key={data.operation} data={data} index={i} />
-      ))}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-medium text-[var(--color-text-muted)] uppercase tracking-wider">
+          Browser Daemon
+        </span>
+        {/* Toggle between Cold and Warm */}
+        <div className="flex items-center gap-2 p-1 rounded-lg bg-[var(--color-surface-elevated)]">
+          <button
+            onClick={() => setShowCold(false)}
+            className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+              !showCold
+                ? 'bg-[var(--color-accent)] text-[var(--color-void)]'
+                : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            Warm vs Warm
+          </button>
+          <button
+            onClick={() => setShowCold(true)}
+            className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+              showCold
+                ? 'bg-[var(--color-accent)] text-[var(--color-void)]'
+                : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'
+            }`}
+          >
+            Cold Start
+          </button>
+        </div>
+      </div>
+
+      {/* Context note */}
+      <p className="text-xs text-[var(--color-text-muted)] -mt-2">
+        {showCold
+          ? "First call in new session (MCP spawns process)"
+          : "Subsequent calls (MCP server already running)"}
+      </p>
+
+      <div className="space-y-8">
+        {benchmarks.map((data, i) => (
+          <BenchmarkBar key={data.operation} data={data} index={i} showCold={showCold} />
+        ))}
+      </div>
     </div>
   );
 }
 
 // ============================================================================
-// Cumulative Overhead Visualization
+// Honest Value Proposition - When FGP Helps
 // ============================================================================
 
 export function CumulativeOverhead() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const toolCalls = 20;
-  const mcpOverhead = 2.3; // seconds per call
-  const fgpOverhead = 0.01; // seconds per call
-  const mcpTotal = toolCalls * mcpOverhead;
-  const fgpTotal = toolCalls * fgpOverhead;
 
   return (
     <div ref={ref} className="relative">
@@ -227,91 +252,115 @@ export function CumulativeOverhead() {
         transition={{ duration: 0.6 }}
       >
         <h3 className="text-2xl md:text-3xl font-bold mb-3">
-          Overhead <span className="gradient-accent-text">Compounds</span>
+          Where FGP <span className="gradient-accent-text">Shines</span>
         </h3>
         <p className="text-[var(--color-text-secondary)]">
-          Time wasted on cold-start over {toolCalls} tool calls
+          Consistent low latency across all scenarios
         </p>
       </motion.div>
 
-      {/* Comparison boxes */}
-      <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-        {/* MCP Box */}
+      {/* Three scenario cards */}
+      <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        {/* Cold Start Card */}
         <motion.div
-          className="relative p-8 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden"
-          initial={{ opacity: 0, x: -30 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          className="relative p-6 rounded-2xl border border-[var(--color-accent)]/30 bg-[var(--color-surface)] overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          {/* Red glow for MCP */}
-          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent" />
-
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/10 to-transparent" />
           <div className="relative">
-            <span className="text-sm font-medium text-[var(--color-text-muted)] uppercase tracking-wider">
-              MCP Stdio
+            <span className="text-xs font-medium text-[var(--color-accent)] uppercase tracking-wider">
+              Cold Start
             </span>
-            <div className="mt-4 flex items-baseline gap-2">
-              <motion.span
-                className="text-5xl md:text-6xl font-black text-red-400"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.6, delay: 0.5, type: "spring" }}
-              >
-                <AnimatedCounter value={mcpTotal} suffix="s" />
-              </motion.span>
-              <span className="text-lg text-[var(--color-text-muted)]">wasted</span>
-            </div>
-            <p className="mt-4 text-sm text-[var(--color-text-muted)]">
-              ~{mcpOverhead}s cold-start × {toolCalls} calls
+            <motion.div
+              className="mt-3 text-4xl font-black gradient-accent-text"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.4, type: "spring" }}
+            >
+              10-17×
+            </motion.div>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">
+              First call in new session
+            </p>
+            <p className="mt-2 text-xs text-[var(--color-text-muted)]">
+              ~1-2s → instant
             </p>
           </div>
         </motion.div>
 
-        {/* FGP Box */}
+        {/* Warm Calls Card */}
         <motion.div
-          className="relative p-8 rounded-2xl border border-[var(--color-accent)]/30 bg-[var(--color-surface)] overflow-hidden"
-          initial={{ opacity: 0, x: 30 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          className="relative p-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          {/* Cyan glow for FGP */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/10 to-transparent" />
-
           <div className="relative">
-            <span className="text-sm font-medium text-[var(--color-accent)] uppercase tracking-wider">
-              FGP Daemon
+            <span className="text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wider">
+              Warm Calls
             </span>
-            <div className="mt-4 flex items-baseline gap-2">
-              <motion.span
-                className="text-5xl md:text-6xl font-black gradient-accent-text"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.6, delay: 0.6, type: "spring" }}
-              >
-                {fgpTotal}s
-              </motion.span>
-              <span className="text-lg text-[var(--color-text-muted)]">total</span>
-            </div>
-            <p className="mt-4 text-sm text-[var(--color-text-muted)]">
-              ~{fgpOverhead * 1000}ms overhead × {toolCalls} calls
+            <motion.div
+              className="mt-3 text-4xl font-black text-[var(--color-text-primary)]"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.5, type: "spring" }}
+            >
+              3-12×
+            </motion.div>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">
+              MCP server already running
+            </p>
+            <p className="mt-2 text-xs text-[var(--color-text-muted)]">
+              ~27ms → ~3ms
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Local Ops Card */}
+        <motion.div
+          className="relative p-6 rounded-2xl border border-[var(--color-accent-secondary)]/30 bg-[var(--color-surface)] overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent-secondary)]/10 to-transparent" />
+          <div className="relative">
+            <span className="text-xs font-medium text-[var(--color-accent-secondary)] uppercase tracking-wider">
+              Local SQLite
+            </span>
+            <motion.div
+              className="mt-3 text-4xl font-black"
+              style={{ color: 'var(--color-accent-secondary)' }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.6, type: "spring" }}
+            >
+              50×
+            </motion.div>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">
+              iMessage, Screen Time
+            </p>
+            <p className="mt-2 text-xs text-[var(--color-text-muted)]">
+              ~60ms → ~1ms
             </p>
           </div>
         </motion.div>
       </div>
 
-      {/* Time saved callout */}
+      {/* Clarification note */}
       <motion.div
         className="mt-8 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent-muted)]">
-          <span className="text-lg font-bold gradient-accent-text">
-            {(mcpTotal - fgpTotal).toFixed(1)}s saved
-          </span>
-          <span className="text-[var(--color-text-secondary)]">per workflow</span>
-        </div>
+        <p className="text-sm text-[var(--color-text-muted)] max-w-xl mx-auto">
+          <strong>Note:</strong> MCP servers stay warm within a Claude Code session.
+          FGP's main advantage is eliminating cold starts and providing faster warm calls
+          through lower protocol overhead.
+        </p>
       </motion.div>
     </div>
   );

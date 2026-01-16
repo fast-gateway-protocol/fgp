@@ -4,14 +4,17 @@ This guide shows how to integrate FGP daemons with [Claude Code](https://claude.
 
 ## Why FGP with Claude Code?
 
-Claude Code uses MCP (Model Context Protocol) for tool integrations. Standard MCP stdio servers have ~2.3 seconds of cold-start overhead per call. For multi-step browser workflows, this compounds:
+Claude Code uses MCP (Model Context Protocol) for tool integrations. MCP stdio servers have cold-start overhead on first use (~1-2 seconds). FGP daemons stay warm across sessions.
 
-| Workflow | MCP Stdio | FGP Daemon | Improvement |
-|----------|-----------|------------|-------------|
-| 5-step login | 11.5s overhead | 0.05s overhead | **230x faster** |
-| 10-step form | 23s overhead | 0.1s overhead | **230x faster** |
+**Key benefits:**
 
-FGP daemons stay warm and respond in milliseconds.
+| Scenario | MCP Behavior | FGP Behavior | Improvement |
+|----------|--------------|--------------|-------------|
+| First tool call | ~1-2s cold start | Instant (daemon warm) | **10-20x faster** |
+| Subsequent calls | ~25-50ms warm | ~2-8ms | **3-12x faster** |
+| New Claude session | Cold start again | Still warm | **Consistent** |
+
+> **Note:** Claude Code keeps MCP servers running within a session after first use. FGP's advantage is eliminating cold starts and providing faster warm calls.
 
 ## Setup
 
@@ -143,7 +146,7 @@ fgp call browser press "Enter"
 
 ## Performance
 
-FGP browser is 292x faster than Playwright MCP for navigation (8ms vs 2,328ms).
+FGP browser is 3-12x faster than warm Playwright MCP (2-8ms vs 25-30ms), and eliminates ~1-2s cold start.
 ```
 
 ### Use the Skill
@@ -225,12 +228,16 @@ fgp start browser
 
 Real-world benchmark (4-step workflow: navigate, snapshot, click, snapshot):
 
-| Tool | Total Time | Cold Start | Per-Call |
-|------|------------|------------|----------|
-| **FGP Browser** | **585ms** | 0ms | ~8ms |
-| Playwright MCP | 11,211ms | ~2.3s | ~500ms |
+| Tool | Total Time | Cold Start | Per-Call (warm) |
+|------|------------|------------|-----------------|
+| **FGP Browser** | **~50ms** | 0ms | ~8ms |
+| Playwright MCP (warm) | ~120ms | 0ms (already warm) | ~25-30ms |
+| Playwright MCP (cold) | ~2,100ms | ~1,000ms | ~25-30ms |
 
-FGP is **19x faster** for multi-step workflows.
+**Key takeaways:**
+- FGP is **3-12x faster** for warm-to-warm comparisons
+- FGP eliminates cold-start delays on first call and new sessions
+- For multi-step workflows, the consistent low latency compounds
 
 ## Next Steps
 

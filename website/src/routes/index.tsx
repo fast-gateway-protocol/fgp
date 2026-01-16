@@ -143,9 +143,9 @@ function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
               >
-                <StatCard value="8ms" label="Browser navigate" />
-                <StatCard value="19x" label="Workflow speedup" />
-                <StatCard value="2.3s" label="MCP cold start" />
+                <StatCard value="3ms" label="FGP latency" />
+                <StatCard value="0ms" label="Cold start" />
+                <StatCard value="3-12×" label="Warm speedup" />
               </motion.div>
 
               <motion.div
@@ -216,23 +216,31 @@ function HomePage() {
                   Cold starts drag your agents. FGP keeps them warm.
                 </h2>
                 <p className="text-[var(--color-text-secondary)] text-balance">
-                  Every MCP tool call spins up a new process. That latency compounds across a workflow.
-                  FGP runs persistent daemons so responses feel immediate.
+                  MCP servers cold-start on first use (~1-2s). Even warm, they add 25-30ms per call.
+                  FGP daemons respond in 2-8ms and never need to restart.
                 </p>
               </div>
 
               <div className="section-panel space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[var(--color-text-muted)]">Typical overhead</span>
-                  <span className="text-sm text-[var(--color-text-muted)]">Per call</span>
+                  <span className="text-sm text-[var(--color-text-muted)]">First call (cold)</span>
+                  <span className="text-sm text-[var(--color-text-muted)]">Warm calls</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-lg font-semibold">MCP stdio</span>
-                  <span className="text-lg font-semibold text-red-400">~2.3s</span>
+                  <span className="text-lg">
+                    <span className="text-red-400 font-semibold">~1-2s</span>
+                    <span className="text-[var(--color-text-muted)] mx-2">/</span>
+                    <span className="text-orange-400 font-semibold">~27ms</span>
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-lg font-semibold">FGP daemon</span>
-                  <span className="text-lg font-semibold gradient-accent-text">10-50ms</span>
+                  <span className="text-lg">
+                    <span className="gradient-accent-text font-semibold">2-8ms</span>
+                    <span className="text-[var(--color-text-muted)] mx-2">/</span>
+                    <span className="gradient-accent-text font-semibold">2-8ms</span>
+                  </span>
                 </div>
               </div>
             </motion.div>

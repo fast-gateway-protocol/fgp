@@ -1,6 +1,6 @@
 # iMessage Daemon
 
-Fast iMessage gateway for macOS using direct SQLite queries. **480x faster** than MCP stdio.
+Fast iMessage gateway for macOS using direct SQLite queries. **10-50x faster** than Python subprocess alternatives.
 
 **Platform:** macOS only
 
@@ -241,13 +241,15 @@ fgp-imessage-client bundle --params '{"include":"unread_count,recent,analytics"}
 
 ## Performance
 
-| Operation | FGP Daemon | MCP Stdio | Speedup |
-|-----------|------------|-----------|---------|
-| Recent messages | **8ms** | 2,300ms | **292x** |
-| Unread messages | **10ms** | 2,300ms | **230x** |
-| Analytics | **5ms** | 2,400ms | **480x** |
-| Follow-up | **12ms** | 2,400ms | **200x** |
+| Operation | FGP Daemon | Python Subprocess | Speedup |
+|-----------|------------|-------------------|---------|
+| Recent messages | **8ms** | ~80ms | **10x** |
+| Unread messages | **10ms** | ~80ms | **8x** |
+| Analytics | **5ms** | ~100ms | **20x** |
+| Follow-up | **12ms** | ~100ms | **8x** |
 | Bundle query | **15ms** | N/A | Batched |
+
+> **Note:** Comparison is against Python subprocess spawning + SQLite query. The FGP daemon eliminates subprocess spawn overhead (~50-80ms) on every call.
 
 ## Architecture
 

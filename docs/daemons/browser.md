@@ -1,6 +1,6 @@
 # Browser Daemon
 
-Fast browser automation using Chrome DevTools Protocol directly. **292x faster** than Playwright MCP.
+Fast browser automation using Chrome DevTools Protocol directly. **3-17x faster** than Playwright MCP (warm to warm: 3-12x, cold start elimination: 17x).
 
 ## Installation
 
@@ -258,10 +258,12 @@ fgp call browser screenshot /tmp/page.png
 
 ## Performance
 
-| Operation | Time |
-|-----------|------|
-| Navigate | 8ms |
-| Snapshot | 9ms |
-| Click | 3ms |
-| Fill | 4ms |
-| Screenshot | 30ms |
+| Operation | FGP | MCP (warm) | MCP (cold) | Speedup |
+|-----------|-----|------------|------------|---------|
+| Navigate | 2-8ms | 27-29ms | ~1,900ms | 3-12x warm, 17x cold |
+| Snapshot | 0.7-9ms | 2-3ms | ~1,000ms | 3x warm, 11x cold |
+| Click | 2-3ms | 5-10ms | ~500ms | 2-5x warm |
+| Fill | 3-4ms | 8-12ms | ~500ms | 2-3x warm |
+| Screenshot | 25-30ms | 50-80ms | ~1,600ms | 2x warm |
+
+> **Note:** "Cold" = first call when MCP spawns new process. "Warm" = MCP server already running. FGP daemon is always warm.

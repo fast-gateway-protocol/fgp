@@ -5,35 +5,75 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.70%2B-orange.svg)](https://www.rust-lang.org/)
 
-**Daemon-based architecture for AI agent tools. 19x faster than MCP stdio.**
+**Daemon-based architecture for AI agent tools. Eliminates cold-start latency.**
 
-FGP replaces slow MCP stdio servers with persistent UNIX socket daemons. Instead of spawning a new process for each tool call (~2.3s overhead), FGP keeps daemons warm and ready (~10-50ms latency).
+FGP replaces slow MCP stdio servers with persistent UNIX socket daemons. Daemons stay warm across sessions, providing consistent sub-10ms latency.
 
 This repo is the umbrella docs/meta repo. Service implementations and tools live in separate repositories under the Fast Gateway Protocol org.
 
+## Performance Summary
+
+| Scenario | FGP vs MCP/CLI | Why |
+|----------|----------------|-----|
+| **Cold start** (new session) | 10-20x faster | No process spawn, no init |
+| **Warm calls** (same session) | 3-12x faster | Lower protocol overhead |
+| **Local daemons** (SQLite) | 50-100x faster | No subprocess spawn |
+
+## What is FGP?
+
+FGP is a **protocol and architecture** for building fast AI agent tools. The same pattern works across any domain:
+
+| Daemon | Use Case | Cold Start | Warm |
+|--------|----------|------------|------|
+| **Browser** | Web automation | 17x faster | 3-12x faster |
+| **Screen Time** | App usage analytics | 50x faster | N/A (local) |
+| **iMessage** | Message search | 50x+ faster | N/A (local) |
+| **Gmail** | Email access | 10x faster | ~same (API-bound) |
+| **Calendar** | Schedule queries | 10x faster | ~same (API-bound) |
+| **GitHub** | Repos, issues | 5x faster | ~same (API-bound) |
+| **Travel** | Flights & hotels | 10x faster | ~same (API-bound) |
+| **+ more** | Fly, Neon, Vercel | Alpha | Alpha |
+
+All daemons share the same NDJSON-over-UNIX-socket protocol. Build once, use everywhere.
+
 ## Performance
 
-<p align="center">
-  <img src="docs/assets/benchmark-browser.svg" alt="FGP vs MCP Browser Benchmark" width="700">
-</p>
+### Understanding the Benchmarks
 
-### Browser Automation (vs Playwright MCP)
+FGP speedups depend on context:
 
-| Operation | FGP Browser | Playwright MCP | Speedup |
-|-----------|-------------|----------------|---------|
-| Navigate  | **8ms**     | 2,328ms        | **292x** |
-| Snapshot  | **9ms**     | 2,484ms        | **276x** |
-| Screenshot| **30ms**    | 1,635ms        | **54x** |
+| Context | What's Compared | Typical Speedup |
+|---------|-----------------|-----------------|
+| **Cold start** | Fresh MCP spawn vs warm FGP daemon | 10-100x |
+| **Warm calls** | Already-running MCP vs FGP daemon | 3-12x |
+| **Local ops** | Python subprocess vs FGP daemon | 50-100x |
+
+> **Note:** Claude Code keeps MCP servers running within a session. The cold-start speedup applies to first tool use and new sessions. Warm speedups apply to subsequent calls.
+
+### Browser Automation
+
+**Cold start comparison** (first call, MCP spawns new process):
+
+| Operation | FGP Browser | Playwright MCP (cold) | Speedup |
+|-----------|-------------|----------------------|---------|
+| Navigate  | **8ms**     | ~1,900ms             | **~17x** |
+| Snapshot  | **9ms**     | ~1,000ms             | **~11x** |
+
+**Warm comparison** (MCP server already running):
+
+| Operation | FGP Browser | Playwright MCP (warm) | Speedup |
+|-----------|-------------|----------------------|---------|
+| Navigate  | **2.5ms**   | 29ms                 | **12x** |
+| Snapshot  | **0.7ms**   | 2.2ms                | **3x** |
 
 ### Multi-Step Workflow Benchmark
 
 4-step workflow: Navigate → Snapshot → Click → Snapshot
 
-| Tool | Total Time | vs MCP |
-|------|------------|--------|
+| Tool | Total Time | vs Cold MCP |
+|------|------------|-------------|
 | **FGP Browser** | **585ms** | **19x faster** |
-| Vercel agent-browser | 733ms | 15x faster |
-| Playwright MCP | 11,211ms | baseline |
+| Playwright MCP (cold) | 11,211ms | baseline |
 
 ### API Daemons
 
@@ -66,44 +106,75 @@ All methods tested at **100% success rate** (3 iterations each):
 | notifications | 521ms | 512ms | 535ms | 9.8KB |
 | issues | **390ms** | 343ms | 460ms | 75B |
 
-### iMessage Daemon (macOS)
+### Local Daemons (macOS)
 
-Fast iMessage operations via direct SQLite queries to `chat.db`:
+Local daemons (iMessage, Screen Time, Keychain) show the largest speedups because they compare FGP's warm daemon against Python subprocess spawn overhead (~50-80ms just to start Python).
 
-| Operation | FGP Daemon | MCP Stdio | Speedup |
-|-----------|------------|-----------|---------|
-| Recent messages | **8ms** | 2,300ms | **292x** |
-| Unread messages | **10ms** | 2,300ms | **230x** |
-| Analytics | **5ms** | 2,400ms | **480x** |
+**Screen Time Daemon** (vs Python subprocess with SQLite):
+
+| Operation | FGP Daemon | Python Subprocess | Speedup |
+|-----------|------------|-------------------|---------|
+| daily_total | **1.2ms** | ~60ms | **50x** |
+| weekly_summary | **5ms** | ~80ms | **16x** |
+| most_used | **2.1ms** | ~60ms | **29x** |
+
+**iMessage Daemon** (vs Python subprocess with SQLite):
+
+| Operation | FGP Daemon | Python Subprocess | Speedup |
+|-----------|------------|-------------------|---------|
+| Recent messages | **8ms** | ~80ms | **10x** |
+| Unread messages | **10ms** | ~80ms | **8x** |
+| Analytics | **5ms** | ~100ms | **20x** |
+
+> **Note:** The "480x" claim in earlier versions compared FGP against MCP stdio cold-start. Against warm Python subprocesses, the speedup is 10-50x (still significant).
 
 ### Summary by Daemon
 
-| Daemon | Avg Latency | Architecture | Speedup |
-|--------|-------------|--------------|---------|
-| **iMessage** | **8ms** | Native Rust + SQLite | **480x** |
-| **Browser** | **16ms** | Native Rust + CDP | **292x** |
-| **Calendar** | **233ms** | PyO3 + Google API | Beta |
-| **GitHub** | **474ms** | Native Rust + gh CLI | **75x** |
-| **Gmail** | **683ms** | PyO3 + Google API | **69x** |
+| Daemon | Avg Latency | Cold Speedup | Warm Speedup | Notes |
+|--------|-------------|--------------|--------------|-------|
+| **Screen Time** | **1-5ms** | 50x | N/A | Local SQLite |
+| **iMessage** | **5-10ms** | 50x | N/A | Local SQLite |
+| **Browser** | **1-8ms** | 17x | 3-12x | CDP protocol |
+| **Calendar** | **233ms** | 10x | ~1x | API-bound |
+| **GitHub** | **474ms** | 5x | ~1x | API-bound |
+| **Gmail** | **683ms** | 10x | ~1x | API-bound |
 
-**Key insight:** Latency is dominated by external API calls, not FGP overhead (~5-10ms). Local daemons (iMessage, Browser) are fastest. For MCP, add ~2.3s cold-start to every call.
+**Key insights:**
+- **Local daemons** (iMessage, Screen Time): Huge speedup because FGP eliminates subprocess spawn overhead entirely
+- **Browser**: Significant speedup from persistent Chrome connection and optimized CDP calls
+- **API daemons** (Gmail, Calendar, GitHub): Speedup mainly from cold-start elimination; warm calls are API-latency bound
 
 Additional alpha daemons (Fly, Neon, Vercel, Slack) are available; see the Status section for current performance ranges.
 
 ## Why FGP?
 
-LLM agents make many sequential tool calls. Cold-start overhead compounds:
+### The Real Value Proposition
 
-<p align="center">
-  <img src="docs/assets/benchmark-overhead.svg" alt="Cumulative Cold-Start Overhead" width="700">
-</p>
+1. **Eliminates cold-start delays** - No 1-2 second pause on first tool use
+2. **Cross-session persistence** - Daemons stay warm across Claude Code sessions
+3. **Consistent latency** - No surprise delays mid-conversation
+4. **Local operations become instant** - SQLite queries in 1-5ms instead of 50-80ms
 
-| Agent Workflow | Tool Calls | MCP Overhead | FGP Overhead | Time Saved |
-|----------------|------------|--------------|--------------|------------|
-| Check email | 2 | 4.6s | 0.02s | **4.6s** |
-| Browse + fill form | 5 | 11.5s | 0.05s | **11.4s** |
-| Full productivity check | 10 | 23s | 0.1s | **22.9s** |
-| Complex agent task | 20 | 46s | 0.2s | **45.8s** |
+### When FGP Helps Most
+
+| Scenario | Without FGP | With FGP | Impact |
+|----------|------------|----------|--------|
+| First tool call in session | ~2s delay | Instant | High |
+| Switching between services | Cold start each | All warm | High |
+| Local data (messages, files) | Subprocess spawn | Direct access | Very High |
+| API calls (Gmail, GitHub) | Cold start + API | Just API | Medium |
+
+### Workflow Impact
+
+For multi-step workflows, cold-start overhead compounds:
+
+| Agent Workflow | Tool Calls | Cold MCP Overhead | FGP Overhead | Savings |
+|----------------|------------|-------------------|--------------|---------|
+| Check email | 2 | ~2s (first call) | 0s | **2s** |
+| Browse + fill form | 5 | ~2s (first call) | 0s | **2s** |
+| Multi-service task | 10 | ~6s (if 3 services) | 0s | **6s** |
+
+> **Note:** Within a Claude Code session, MCP servers stay warm after first use. The savings above apply to session startup and switching services.
 
 ## Architecture
 
@@ -302,22 +373,23 @@ Tooling:
 
 ## Status
 
-| Component | Status | Performance |
-|-----------|--------|-------------|
-| imessage | **Production** | 5ms analytics, 8ms recent **(480x)** |
-| browser | **Production** | 8ms navigate, 9ms snapshot **(292x)** |
-| gmail | Beta | 116ms thread read, 881ms inbox |
-| calendar | Beta | 177ms search, 233ms avg |
-| github | Beta | 390ms issues, 474ms avg |
-| travel | Beta | 1-10ms location, 400-600ms flights |
-| fly | Alpha | 140ms user, 191ms avg |
-| neon | Alpha | 86ms user, 120ms avg |
-| vercel | Alpha | 55ms deployments, 82ms avg |
-| slack | Alpha | Not benchmarked yet |
-| daemon SDK | Stable | Core library |
-| daemon-py SDK | Beta | Python daemon SDK |
-| mcp-bridge | Beta | MCP compatibility |
-| cli | WIP | Daemon management |
+| Component | Status | Performance | Speedup |
+|-----------|--------|-------------|---------|
+| screen-time | **Production** | 1-5ms queries | 50x vs subprocess |
+| imessage | **Production** | 5-10ms queries | 10-50x vs subprocess |
+| browser | **Production** | 1-8ms operations | 3-12x warm, 17x cold |
+| gmail | Beta | 116ms thread, 881ms inbox | 10x cold |
+| calendar | Beta | 177ms search, 233ms avg | 10x cold |
+| github | Beta | 390ms issues, 474ms avg | 5x cold |
+| travel | Beta | 1-10ms location, 400-600ms flights | 10x cold |
+| fly | Alpha | 140ms user, 191ms avg | Alpha |
+| neon | Alpha | 86ms user, 120ms avg | Alpha |
+| vercel | Alpha | 55ms deployments, 82ms avg | Alpha |
+| slack | Alpha | Not benchmarked yet | Alpha |
+| daemon SDK | Stable | Core library | - |
+| daemon-py SDK | Beta | Python daemon SDK | - |
+| mcp-bridge | Beta | MCP compatibility | - |
+| cli | WIP | Daemon management | - |
 
 ## Building a New Daemon
 
@@ -351,6 +423,6 @@ MIT
 ## Related
 
 - [daemon](https://github.com/fast-gateway-protocol/daemon) - Core SDK
-- [browser](https://github.com/fast-gateway-protocol/browser) - Browser daemon (292x faster)
-- [imessage](https://github.com/fast-gateway-protocol/imessage) - iMessage daemon (480x faster, macOS)
+- [browser](https://github.com/fast-gateway-protocol/browser) - Browser daemon (3-17x faster)
+- [imessage](https://github.com/fast-gateway-protocol/imessage) - iMessage daemon (10-50x faster, macOS)
 - [travel](https://github.com/fast-gateway-protocol/travel) - Flight & hotel search with token-optimized methods
