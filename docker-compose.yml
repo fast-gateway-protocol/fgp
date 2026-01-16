@@ -57,6 +57,36 @@ services:
       - fgp-sockets:/home/fgp/.fgp/services
       - ${HOME}/.fgp/auth/google:/home/fgp/.fgp/auth/google:ro
 
+  # Direct Postgres operations daemon
+  postgres:
+    build: ./postgres
+    container_name: fgp-postgres
+    restart: unless-stopped
+    volumes:
+      - fgp-sockets:/home/fgp/.fgp/services
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+
+  # Linear issue tracking daemon
+  linear:
+    build: ./linear
+    container_name: fgp-linear
+    restart: unless-stopped
+    volumes:
+      - fgp-sockets:/home/fgp/.fgp/services
+    environment:
+      - LINEAR_API_KEY=${LINEAR_API_KEY}
+
+  # Notion pages/databases daemon
+  notion:
+    build: ./notion
+    container_name: fgp-notion
+    restart: unless-stopped
+    volumes:
+      - fgp-sockets:/home/fgp/.fgp/services
+    environment:
+      - NOTION_API_KEY=${NOTION_API_KEY}
+
 # Shared volume for UNIX sockets
 # Note: For host access to sockets, set FGP_SOCKET_DIR to a dedicated directory
 # (not ~/.fgp/services which may have Chrome profile locks)

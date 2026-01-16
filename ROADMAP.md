@@ -81,9 +81,9 @@ Make FGP the standard protocol for AI agent tool integrations - replacing slow s
 
 ### New Daemons
 - [x] Slack daemon
-- [ ] Linear daemon
-- [ ] Notion daemon
-- [ ] Postgres daemon (direct, not via Neon)
+- [x] Linear daemon
+- [x] Notion daemon
+- [x] Postgres daemon (direct, not via Neon)
 
 ### Performance & Reliability
 - [ ] Connection pooling
