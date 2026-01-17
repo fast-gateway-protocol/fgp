@@ -1192,10 +1192,6 @@ export const packages: Package[] = [
       { name: 'resend.domains', description: 'List domains' },
       { name: 'resend.emails', description: 'List sent emails' },
     ],
-    benchmark: {
-      avg_latency_ms: 20,
-      vs_mcp_speedup: '30-60x',
-    },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
     tier: 'free',
@@ -1349,10 +1345,6 @@ export const packages: Package[] = [
       { name: 'openai.models', description: 'List available models' },
       { name: 'openai.files', description: 'List uploaded files' },
     ],
-    benchmark: {
-      avg_latency_ms: 15,
-      vs_mcp_speedup: '20-40x',
-    },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
     tier: 'free',
@@ -1506,10 +1498,6 @@ export const packages: Package[] = [
       { name: 'sqlite.schema', description: 'Get table schema' },
       { name: 'sqlite.databases', description: 'List connected databases' },
     ],
-    benchmark: {
-      avg_latency_ms: 1,
-      vs_mcp_speedup: '20-100x',
-    },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
     tier: 'free',
