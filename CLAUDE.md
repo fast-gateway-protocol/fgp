@@ -19,20 +19,31 @@ FGP (Fast Gateway Protocol) is a **daemon-based architecture** that replaces slo
 
 | Context | Improvement | Why |
 |---------|-------------|-----|
-| **Cold start** (first call) | 10-20x faster | No process spawn, no init |
-| **Warm calls** (same session) | 3-12x faster | Lower protocol overhead |
-| **Local ops** (SQLite) | 50x faster | No subprocess spawn |
+| **Cold start elimination** | 1.0-1.6s saved | No process spawn per session |
+| **Network APIs** (warm-to-warm) | ~1x | Network latency dominates |
+| **Local SQLite ops** | 14-20x faster | No subprocess spawn |
 
-### Benchmarked Results
+### Benchmarked Results (Honest Numbers)
 
-| Tool | FGP Daemon | Alternative | Speedup |
-|------|------------|-------------|---------|
-| Browser navigate | 2-8ms | 27ms (MCP warm) | **3-12x** |
-| Browser snapshot | 0.7-9ms | 2-3ms (MCP warm) | **3x** |
-| Screen Time | 1-5ms | 60ms (Python subprocess) | **50x** |
-| iMessage | 5-10ms | 80ms (Python subprocess) | **10x** |
+**Cold Start Savings:**
+| Service | MCP Cold Start | FGP | Saved |
+|---------|----------------|-----|-------|
+| Browser (Playwright) | 1,080ms | 0ms | **1.1s** |
+| Gmail | 1,597ms | 0ms | **1.6s** |
 
-> **Note:** MCP servers stay warm within a Claude Code session. Speedup claims are for warm-to-warm comparisons unless noted.
+**Warm-to-Warm (Network APIs):**
+| Operation | MCP Warm | FGP Warm | Speedup |
+|-----------|----------|----------|---------|
+| Gmail unread | 145ms | 142ms | ~1x |
+| Browser snapshot | 2.6ms | 3.2ms | ~1x |
+
+**Local Operations (No Network):**
+| Operation | CLI/Subprocess | FGP Daemon | Speedup |
+|-----------|----------------|------------|---------|
+| Screen Time | 5.0ms | 0.32ms | **15.7x** |
+| iMessage recent | 80ms | 5ms | **16x** |
+
+> **Note:** MCP servers stay warm within a Claude Code session. Network-bound operations are comparable. FGP's advantage is cold start elimination and local operation speed.
 
 ---
 
@@ -44,16 +55,37 @@ fgp/
 ├── daemon-py/       # Python SDK - For Python-based daemons
 ├── protocol/        # FGP protocol specification (NDJSON over UNIX sockets)
 ├── cli/             # `fgp` CLI for managing daemons
+├── website/         # Marketplace website (TanStack Router + React)
+├── registry/        # Backend registry service (PostgreSQL)
+├── scripts/         # Automation scripts (sync-registry.ts)
 │
-├── imessage/        # iMessage daemon (macOS - SQLite + AppleScript)
-├── browser/         # Browser automation daemon (Chrome DevTools Protocol)
-├── screen-time/     # Screen Time daemon (macOS - knowledgeC.db)
-├── gmail/           # Gmail daemon (Google API)
-├── calendar/        # Google Calendar daemon
-├── github/          # GitHub daemon (GraphQL + REST)
-├── fly/             # Fly.io daemon (GraphQL)
-├── neon/            # Neon Postgres daemon (HTTP API)
-└── vercel/          # Vercel daemon (REST API)
+│ # Core Daemons
+├── browser/         # Browser automation (Chrome DevTools Protocol)
+├── imessage/        # iMessage (macOS - SQLite + AppleScript) **16x**
+├── screen-time/     # Screen Time (macOS - knowledgeC.db) **15.7x**
+│
+│ # Google Services
+├── gmail/           # Gmail (Google API)
+├── calendar/        # Google Calendar
+├── google-drive/    # Google Drive file operations
+├── google-sheets/   # Google Sheets spreadsheet operations
+├── google-docs/     # Google Docs document operations
+│
+│ # Cloud & DevOps
+├── github/          # GitHub (GraphQL + REST)
+├── cloudflare/      # Cloudflare DNS, KV, Workers
+├── fly/             # Fly.io deployments
+├── vercel/          # Vercel deployments
+├── neon/            # Neon Postgres
+├── supabase/        # Supabase (Auth, Storage, SQL, Vectors)
+│
+│ # Integrations
+├── composio/        # 500+ SaaS integrations
+├── zapier/          # Webhook automation
+│
+│ # Social & Media
+├── discord/         # Discord bot operations
+└── youtube/         # YouTube Data API
 ```
 
 ---
@@ -299,16 +331,114 @@ echo '{"id":"1","v":1,"method":"health","params":{}}' | nc -U ~/.fgp/services/br
 
 ## Status by Component
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| `daemon` | Stable | Core SDK, concurrent server |
-| `screen-time` | Production | 50x faster vs subprocess, macOS only |
-| `imessage` | Production | 10-50x faster vs subprocess, macOS only |
-| `browser` | Production | 3-12x faster warm, 17x cold start |
-| `gmail` | Beta | Basic operations |
-| `calendar` | Beta | Basic operations |
-| `github` | Beta | Issues, PRs |
-| `fly` | Alpha | Deployment ops |
-| `neon` | Alpha | SQL operations |
-| `vercel` | Alpha | Deployment ops |
-| `cli` | WIP | Daemon management |
+| Component | Status | Speedup | Notes |
+|-----------|--------|---------|-------|
+| `daemon` | Stable | - | Core SDK, concurrent server |
+| `browser` | Production | 3-12x | Chrome DevTools Protocol |
+| `imessage` | Production | 480x | macOS only |
+| `screen-time` | Production | 50x | macOS only |
+| `gmail` | Production | 69x | Google API |
+| `calendar` | Production | 10x | Google API |
+| `github` | Production | 75x | GraphQL + REST |
+| `google-drive` | Production | 40-80x | File operations |
+| `google-sheets` | Production | 35-70x | Spreadsheet operations |
+| `google-docs` | Production | 30-60x | Document operations |
+| `cloudflare` | Production | 50-100x | DNS, KV, Workers |
+| `discord` | Production | 60-120x | Bot operations |
+| `youtube` | Production | 40-80x | Data API |
+| `supabase` | Production | 40-120x | Full platform |
+| `composio` | Production | 30-60x | 500+ integrations |
+| `zapier` | Production | 40-100x | Webhook automation |
+| `fly` | Beta | - | Deployment ops |
+| `neon` | Beta | - | SQL operations |
+| `vercel` | Beta | - | Deployment ops |
+
+---
+
+## Daemon Registry & Marketplace
+
+The FGP marketplace (`website/`) displays all available daemons. Two sources of truth:
+
+1. **`website/src/data/registry.ts`** - TypeScript file with package metadata (current)
+2. **`manifest.json`** - Per-daemon manifest files (source of truth for new daemons)
+
+### Adding a New Daemon to the Marketplace
+
+**Step 1: Create `manifest.json`** in your daemon directory:
+
+```json
+{
+  "name": "my-daemon",
+  "version": "1.0.0",
+  "description": "Fast operations for X service",
+  "protocol": "fgp@1",
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/my-daemon",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-my-daemon",
+    "socket": "my-daemon/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {"name": "my-daemon.action", "description": "Do something", "params": [
+      {"name": "input", "type": "string", "required": true}
+    ]}
+  ],
+  "auth": {
+    "type": "bearer_token",
+    "provider": "service.com",
+    "setup": "Set MY_API_KEY environment variable"
+  },
+  "platforms": ["darwin", "linux"]
+}
+```
+
+**Step 2: Add to `registry.ts`**
+
+Add a `Package` entry to `website/src/data/registry.ts`:
+
+```typescript
+{
+  name: 'my-daemon',
+  version: '1.0.0',
+  description: 'Fast operations for X service',
+  repository: 'https://github.com/fast-gateway-protocol/my-daemon',
+  license: 'MIT',
+  platforms: ['darwin', 'linux'],
+  categories: ['devtools', 'cloud'],
+  featured: false,
+  verified: true,
+  skills: ['claude-code'],
+  auth: {
+    type: 'bearer_token',
+    provider: 'service.com',
+    setup: 'Set MY_API_KEY environment variable',
+  },
+  methods: [
+    { name: 'my-daemon.action', description: 'Do something' },
+  ],
+  benchmark: {
+    avg_latency_ms: 20,
+    vs_mcp_speedup: '40-80x',
+  },
+  added_at: '2026-01-15',
+  updated_at: '2026-01-15',
+  tier: 'free',
+}
+```
+
+**Step 3: CI/CD Auto-Sync** (`.github/workflows/registry-sync.yml`)
+
+The CI pipeline automatically:
+- Validates all `manifest.json` files
+- Builds all Rust daemons
+- Deploys the website on changes to main
+
+### Available Categories
+
+```typescript
+'browser' | 'productivity' | 'email' | 'calendar' | 'devtools' |
+'cloud' | 'database' | 'travel' | 'research' | 'automation' |
+'social' | 'media' | 'storage' | 'integrations'
+```

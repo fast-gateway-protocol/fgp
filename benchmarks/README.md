@@ -1,5 +1,10 @@
 # FGP Benchmarks
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 Performance benchmarks comparing FGP daemons against MCP servers and other automation tools.
 
 ## Benchmark Files
@@ -36,15 +41,44 @@ for f in *.py; do python3 "$f" --iterations 3; done
 
 ## Key Results
 
-| Operation | MCP Stdio | FGP Daemon | Speedup |
-|-----------|-----------|------------|---------|
-| iMessage analytics | 2,400ms | 5ms | **480x** |
-| iMessage recent | 2,300ms | 8ms | **292x** |
-| iMessage unread | 2,300ms | 10ms | **230x** |
-| Browser navigate | 2,300ms | 8ms | **292x** |
-| Browser snapshot | 2,300ms | 9ms | **257x** |
-| Gmail list | 2,400ms | 35ms | **69x** |
-| GitHub issues | 2,100ms | 28ms | **75x** |
+> **Methodology Note:** These benchmarks compare **warm-to-warm** performance (both FGP daemon and MCP server already running). Cold start elimination is measured separately.
+
+### Cold Start Elimination
+
+MCP servers spawn a new process per session. FGP daemons stay warm.
+
+| Service | MCP Cold Start | FGP | Savings |
+|---------|----------------|-----|---------|
+| Browser (Playwright) | 1,080ms | 0ms | **1.1s saved** |
+| Gmail | 1,597ms | 0ms | **1.6s saved** |
+| GitHub | ~1,000ms | 0ms | **1.0s saved** |
+
+### Warm-to-Warm Comparison
+
+Once both are running, network-bound operations are comparable:
+
+| Operation | MCP Warm | FGP Warm | Speedup |
+|-----------|----------|----------|---------|
+| Gmail unread count | 145ms | 142ms | ~1x |
+| Gmail inbox (10 msgs) | 323ms | 333ms | ~1x |
+| GitHub user | 300ms | 310ms | ~1x |
+| Browser snapshot | 2.6ms | 3.2ms | ~1x |
+
+### Local Operations (No Network)
+
+FGP shines for local database/file operations:
+
+| Operation | CLI/Subprocess | FGP Daemon | Speedup |
+|-----------|----------------|------------|---------|
+| Screen Time daily | 5.0ms | 0.32ms | **15.7x** |
+| iMessage recent | 80ms | 5ms | **16x** |
+| iMessage analytics | 100ms | 5ms | **20x** |
+
+### Summary
+
+- **Network APIs (Gmail, GitHub):** ~1x - network latency dominates
+- **Local SQLite (Screen Time, iMessage):** 14-20x faster
+- **Cold start:** 1.0-1.6s eliminated per session
 
 ## Output
 
