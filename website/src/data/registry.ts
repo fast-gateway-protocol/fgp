@@ -52,7 +52,7 @@ export const packages: Package[] = [
   {
     name: 'browser',
     version: '1.0.0',
-    description: 'Browser automation via Chrome DevTools Protocol - 3-12x faster than MCP (warm), eliminates cold start',
+    description: 'Browser automation via Chrome DevTools Protocol - eliminates cold start overhead',
     repository: 'https://github.com/fast-gateway-protocol/browser',
     license: 'MIT',
     platforms: ['darwin', 'linux'],
@@ -86,7 +86,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 5,
-      vs_mcp_speedup: '3-12x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2025-12-01',
     updated_at: '2026-01-14',
@@ -142,8 +142,8 @@ export const packages: Package[] = [
       },
     ],
     benchmark: {
-      avg_latency_ms: 35,
-      vs_mcp_speedup: '~10x cold',
+      avg_latency_ms: 145,
+      vs_mcp_speedup: '~1x warm, 1.6s cold start saved',
     },
     added_at: '2025-11-15',
     updated_at: '2026-01-10',
@@ -203,7 +203,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 233,
-      vs_mcp_speedup: '10x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2025-11-20',
     updated_at: '2026-01-08',
@@ -232,8 +232,8 @@ export const packages: Package[] = [
       { name: 'github.user', description: 'Get current authenticated user' },
     ],
     benchmark: {
-      avg_latency_ms: 474,
-      vs_mcp_speedup: '4x',
+      avg_latency_ms: 310,
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2025-10-15',
     updated_at: '2026-01-05',
@@ -772,7 +772,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 25,
-      vs_mcp_speedup: '40-120x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -806,7 +806,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 30,
-      vs_mcp_speedup: '30-60x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -840,7 +840,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 15,
-      vs_mcp_speedup: '40-100x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -878,7 +878,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 35,
-      vs_mcp_speedup: '40-80x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -914,7 +914,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 40,
-      vs_mcp_speedup: '35-70x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -949,7 +949,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 45,
-      vs_mcp_speedup: '30-60x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -989,7 +989,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 20,
-      vs_mcp_speedup: '50-100x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -1028,7 +1028,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 15,
-      vs_mcp_speedup: '60-120x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -1062,7 +1062,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 25,
-      vs_mcp_speedup: '40-80x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-15',
     updated_at: '2026-01-15',
@@ -1098,7 +1098,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 20,
-      vs_mcp_speedup: '50x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1131,7 +1131,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 30,
-      vs_mcp_speedup: '35-70x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1163,7 +1163,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 25,
-      vs_mcp_speedup: '25-50x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1223,7 +1223,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 25,
-      vs_mcp_speedup: '30-60x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1253,8 +1253,8 @@ export const packages: Package[] = [
       { name: 'imessage.unread', description: 'Get unread messages' },
     ],
     benchmark: {
-      avg_latency_ms: 2,
-      vs_mcp_speedup: '480x',
+      avg_latency_ms: 5,
+      vs_mcp_speedup: '16-20x (local SQLite)',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1284,8 +1284,8 @@ export const packages: Package[] = [
       { name: 'screentime.categories', description: 'Get category breakdown' },
     ],
     benchmark: {
-      avg_latency_ms: 3,
-      vs_mcp_speedup: '50x',
+      avg_latency_ms: 0.3,
+      vs_mcp_speedup: '15.7x (local SQLite)',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1315,7 +1315,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 2,
-      vs_mcp_speedup: '30-60x',
+      vs_mcp_speedup: '14-20x (local SQLite)',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1375,7 +1375,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 10,
-      vs_mcp_speedup: '5-20x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1407,7 +1407,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 8,
-      vs_mcp_speedup: '5-25x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1438,7 +1438,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 15,
-      vs_mcp_speedup: '10-30x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1469,7 +1469,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 20,
-      vs_mcp_speedup: '5-15x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1529,7 +1529,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 1,
-      vs_mcp_speedup: '15-50x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1559,7 +1559,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 50,
-      vs_mcp_speedup: '3-10x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1594,7 +1594,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 15,
-      vs_mcp_speedup: '15-30x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1628,7 +1628,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 15,
-      vs_mcp_speedup: '20-50x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1662,7 +1662,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 5,
-      vs_mcp_speedup: '25-60x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1695,7 +1695,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 8,
-      vs_mcp_speedup: '20-40x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1728,7 +1728,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 5,
-      vs_mcp_speedup: '10-30x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1761,7 +1761,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 10,
-      vs_mcp_speedup: '15-40x',
+      vs_mcp_speedup: 'Not benchmarked',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1795,7 +1795,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 12,
-      vs_mcp_speedup: '20-50x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1829,7 +1829,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 18,
-      vs_mcp_speedup: '30-60x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1863,7 +1863,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 15,
-      vs_mcp_speedup: '25-50x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',
@@ -1897,7 +1897,7 @@ export const packages: Package[] = [
     ],
     benchmark: {
       avg_latency_ms: 12,
-      vs_mcp_speedup: '20-40x',
+      vs_mcp_speedup: '~1x warm, 1s cold start saved',
     },
     added_at: '2026-01-17',
     updated_at: '2026-01-17',

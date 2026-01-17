@@ -95,7 +95,7 @@ function HomePage() {
             NEW
           </span>
           <span className="text-[var(--color-text-secondary)]">
-            FGP v1.0.0 released with <strong className="text-[var(--color-text-primary)]">58 daemons</strong> and Vercel agent-skills compatibility
+            FGP v1.0.0 released with <strong className="text-[var(--color-text-primary)]">24 daemons</strong> and Vercel agent-skills compatibility
           </span>
           <a
             href="https://github.com/fast-gateway-protocol/fgp-skills/releases/tag/v1.0.0"
@@ -163,9 +163,9 @@ function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
               >
-                <StatCard value="58" label="Daemons" />
+                <StatCard value="24" label="Daemons" />
                 <StatCard value="<10ms" label="Latency" />
-                <StatCard value="10-100×" label="Speedup" />
+                <StatCard value="14-20×" label="Local Ops" />
               </motion.div>
 
               <motion.div
