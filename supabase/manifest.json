@@ -1,0 +1,146 @@
+{
+  "name": "supabase",
+  "version": "1.0.0",
+  "description": "Fast Supabase operations - Auth, Storage, Functions, Vectors, and SQL",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/supabase",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-supabase",
+    "socket": "supabase/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "supabase.sql",
+      "description": "Execute raw SQL queries",
+      "params": [
+        {"name": "query", "type": "string", "required": true},
+        {"name": "params", "type": "array", "required": false}
+      ]
+    },
+    {
+      "name": "supabase.select",
+      "description": "Query table with filters",
+      "params": [
+        {"name": "table", "type": "string", "required": true},
+        {"name": "columns", "type": "string", "required": false, "default": "*"},
+        {"name": "filter", "type": "object", "required": false},
+        {"name": "limit", "type": "integer", "required": false}
+      ]
+    },
+    {
+      "name": "supabase.insert",
+      "description": "Insert rows into table",
+      "params": [
+        {"name": "table", "type": "string", "required": true},
+        {"name": "data", "type": "object", "required": true}
+      ]
+    },
+    {
+      "name": "supabase.update",
+      "description": "Update rows in table",
+      "params": [
+        {"name": "table", "type": "string", "required": true},
+        {"name": "data", "type": "object", "required": true},
+        {"name": "filter", "type": "object", "required": true}
+      ]
+    },
+    {
+      "name": "supabase.delete",
+      "description": "Delete rows from table",
+      "params": [
+        {"name": "table", "type": "string", "required": true},
+        {"name": "filter", "type": "object", "required": true}
+      ]
+    },
+    {
+      "name": "supabase.rpc",
+      "description": "Call database functions",
+      "params": [
+        {"name": "function", "type": "string", "required": true},
+        {"name": "params", "type": "object", "required": false}
+      ]
+    },
+    {
+      "name": "supabase.auth.signup",
+      "description": "Create new user",
+      "params": [
+        {"name": "email", "type": "string", "required": true},
+        {"name": "password", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "supabase.auth.signin",
+      "description": "Sign in user",
+      "params": [
+        {"name": "email", "type": "string", "required": true},
+        {"name": "password", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "supabase.auth.user",
+      "description": "Get user by ID",
+      "params": [
+        {"name": "user_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "supabase.storage.buckets",
+      "description": "List storage buckets",
+      "params": []
+    },
+    {
+      "name": "supabase.storage.list",
+      "description": "List files in bucket",
+      "params": [
+        {"name": "bucket", "type": "string", "required": true},
+        {"name": "path", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "supabase.storage.upload",
+      "description": "Upload file to storage",
+      "params": [
+        {"name": "bucket", "type": "string", "required": true},
+        {"name": "path", "type": "string", "required": true},
+        {"name": "file_path", "type": "string", "required": false},
+        {"name": "content_base64", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "supabase.storage.download",
+      "description": "Download file from storage",
+      "params": [
+        {"name": "bucket", "type": "string", "required": true},
+        {"name": "path", "type": "string", "required": true},
+        {"name": "save_path", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "supabase.functions.invoke",
+      "description": "Invoke edge function",
+      "params": [
+        {"name": "function", "type": "string", "required": true},
+        {"name": "body", "type": "object", "required": false}
+      ]
+    },
+    {
+      "name": "supabase.vectors.search",
+      "description": "Similarity search on vectors",
+      "params": [
+        {"name": "table", "type": "string", "required": true},
+        {"name": "column", "type": "string", "required": true},
+        {"name": "query_embedding", "type": "array", "required": true},
+        {"name": "limit", "type": "integer", "required": false, "default": 10}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer_token",
+    "provider": "supabase.com",
+    "setup": "Set SUPABASE_URL and SUPABASE_KEY environment variables"
+  },
+  "platforms": ["darwin", "linux"]
+}

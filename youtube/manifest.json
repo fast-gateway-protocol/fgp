@@ -1,0 +1,80 @@
+{
+  "name": "youtube",
+  "version": "1.0.0",
+  "description": "Fast YouTube Data API operations - search, videos, channels, playlists, and comments",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/youtube",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-youtube",
+    "socket": "youtube/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "youtube.search",
+      "description": "Search for videos, channels, or playlists",
+      "params": [
+        {"name": "query", "type": "string", "required": true},
+        {"name": "type", "type": "string", "required": false},
+        {"name": "max_results", "type": "integer", "required": false, "default": 10},
+        {"name": "page_token", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "youtube.video",
+      "description": "Get video details",
+      "params": [
+        {"name": "video_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "youtube.videos",
+      "description": "Get multiple videos",
+      "params": [
+        {"name": "video_ids", "type": "array", "required": true}
+      ]
+    },
+    {
+      "name": "youtube.channel",
+      "description": "Get channel details",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": false},
+        {"name": "username", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "youtube.playlists",
+      "description": "Get playlists for a channel",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true},
+        {"name": "max_results", "type": "integer", "required": false, "default": 25}
+      ]
+    },
+    {
+      "name": "youtube.playlist_items",
+      "description": "Get items in a playlist",
+      "params": [
+        {"name": "playlist_id", "type": "string", "required": true},
+        {"name": "max_results", "type": "integer", "required": false, "default": 25},
+        {"name": "page_token", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "youtube.comments",
+      "description": "Get comments on a video",
+      "params": [
+        {"name": "video_id", "type": "string", "required": true},
+        {"name": "max_results", "type": "integer", "required": false, "default": 25},
+        {"name": "page_token", "type": "string", "required": false}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "api_key",
+    "provider": "google",
+    "setup": "Set YOUTUBE_API_KEY environment variable"
+  },
+  "platforms": ["darwin", "linux"]
+}

@@ -1,0 +1,79 @@
+{
+  "name": "composio",
+  "version": "1.0.0",
+  "description": "Fast Composio operations - 500+ SaaS integrations via unified API",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/composio",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-composio",
+    "socket": "composio/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "composio.search_tools",
+      "description": "Search available tools by query",
+      "params": [
+        {"name": "query", "type": "string", "required": true},
+        {"name": "limit", "type": "integer", "required": false, "default": 10}
+      ]
+    },
+    {
+      "name": "composio.get_tool",
+      "description": "Get tool schema and metadata",
+      "params": [
+        {"name": "tool_slug", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "composio.execute",
+      "description": "Execute a single tool",
+      "params": [
+        {"name": "tool_slug", "type": "string", "required": true},
+        {"name": "params", "type": "object", "required": false},
+        {"name": "entity_id", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "composio.execute_batch",
+      "description": "Execute multiple tools in parallel (up to 50)",
+      "params": [
+        {"name": "actions", "type": "array", "required": true}
+      ]
+    },
+    {
+      "name": "composio.list_connections",
+      "description": "List connected OAuth accounts",
+      "params": [
+        {"name": "entity_id", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "composio.initiate_connection",
+      "description": "Start OAuth flow for an app",
+      "params": [
+        {"name": "app", "type": "string", "required": true},
+        {"name": "entity_id", "type": "string", "required": false},
+        {"name": "redirect_url", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "composio.proxy",
+      "description": "Proxy arbitrary API requests through connected accounts",
+      "params": [
+        {"name": "app", "type": "string", "required": true},
+        {"name": "endpoint", "type": "string", "required": true},
+        {"name": "method", "type": "string", "required": false, "default": "GET"},
+        {"name": "body", "type": "object", "required": false}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer_token",
+    "provider": "composio.dev",
+    "setup": "Set COMPOSIO_API_KEY environment variable"
+  },
+  "platforms": ["darwin", "linux"]
+}

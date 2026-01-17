@@ -1,0 +1,73 @@
+{
+  "name": "zapier",
+  "version": "1.0.0",
+  "description": "Fast Zapier operations - webhook automation and NLA actions",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/zapier",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-zapier",
+    "socket": "zapier/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "zapier.trigger",
+      "description": "Trigger Zap via webhook URL",
+      "params": [
+        {"name": "webhook_url", "type": "string", "required": true},
+        {"name": "data", "type": "object", "required": false}
+      ]
+    },
+    {
+      "name": "zapier.trigger_named",
+      "description": "Trigger registered Zap by alias",
+      "params": [
+        {"name": "name", "type": "string", "required": true},
+        {"name": "data", "type": "object", "required": false}
+      ]
+    },
+    {
+      "name": "zapier.register_webhook",
+      "description": "Register webhook URL with name",
+      "params": [
+        {"name": "name", "type": "string", "required": true},
+        {"name": "webhook_url", "type": "string", "required": true},
+        {"name": "description", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "zapier.list_webhooks",
+      "description": "List registered webhooks",
+      "params": []
+    },
+    {
+      "name": "zapier.remove_webhook",
+      "description": "Remove registered webhook",
+      "params": [
+        {"name": "name", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "zapier.nla_actions",
+      "description": "List NLA actions (AI-powered)",
+      "params": []
+    },
+    {
+      "name": "zapier.nla_execute",
+      "description": "Execute NLA action",
+      "params": [
+        {"name": "action_id", "type": "string", "required": true},
+        {"name": "instructions", "type": "string", "required": true},
+        {"name": "params", "type": "object", "required": false}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer_token",
+    "provider": "zapier.com",
+    "setup": "Set ZAPIER_ACCESS_TOKEN for NLA, or register webhooks manually"
+  },
+  "platforms": ["darwin", "linux"]
+}

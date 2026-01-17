@@ -1,0 +1,129 @@
+{
+  "name": "cloudflare",
+  "version": "1.0.0",
+  "description": "Fast Cloudflare operations - DNS, Workers KV, and cache management",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/cloudflare",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-cloudflare",
+    "socket": "cloudflare/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "cloudflare.zones",
+      "description": "List all zones",
+      "params": []
+    },
+    {
+      "name": "cloudflare.zone",
+      "description": "Get zone details",
+      "params": [
+        {"name": "zone_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "cloudflare.dns.list",
+      "description": "List DNS records",
+      "params": [
+        {"name": "zone_id", "type": "string", "required": true},
+        {"name": "type", "type": "string", "required": false},
+        {"name": "name", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "cloudflare.dns.create",
+      "description": "Create DNS record",
+      "params": [
+        {"name": "zone_id", "type": "string", "required": true},
+        {"name": "type", "type": "string", "required": true},
+        {"name": "name", "type": "string", "required": true},
+        {"name": "content", "type": "string", "required": true},
+        {"name": "ttl", "type": "integer", "required": false, "default": 1},
+        {"name": "proxied", "type": "boolean", "required": false, "default": false}
+      ]
+    },
+    {
+      "name": "cloudflare.dns.update",
+      "description": "Update DNS record",
+      "params": [
+        {"name": "zone_id", "type": "string", "required": true},
+        {"name": "record_id", "type": "string", "required": true},
+        {"name": "type", "type": "string", "required": true},
+        {"name": "name", "type": "string", "required": true},
+        {"name": "content", "type": "string", "required": true},
+        {"name": "ttl", "type": "integer", "required": false},
+        {"name": "proxied", "type": "boolean", "required": false}
+      ]
+    },
+    {
+      "name": "cloudflare.dns.delete",
+      "description": "Delete DNS record",
+      "params": [
+        {"name": "zone_id", "type": "string", "required": true},
+        {"name": "record_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "cloudflare.kv.namespaces",
+      "description": "List KV namespaces",
+      "params": []
+    },
+    {
+      "name": "cloudflare.kv.keys",
+      "description": "List keys in namespace",
+      "params": [
+        {"name": "namespace_id", "type": "string", "required": true},
+        {"name": "prefix", "type": "string", "required": false},
+        {"name": "limit", "type": "integer", "required": false}
+      ]
+    },
+    {
+      "name": "cloudflare.kv.read",
+      "description": "Read KV value",
+      "params": [
+        {"name": "namespace_id", "type": "string", "required": true},
+        {"name": "key", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "cloudflare.kv.write",
+      "description": "Write KV value",
+      "params": [
+        {"name": "namespace_id", "type": "string", "required": true},
+        {"name": "key", "type": "string", "required": true},
+        {"name": "value", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "cloudflare.kv.delete",
+      "description": "Delete KV key",
+      "params": [
+        {"name": "namespace_id", "type": "string", "required": true},
+        {"name": "key", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "cloudflare.workers",
+      "description": "List Workers scripts",
+      "params": []
+    },
+    {
+      "name": "cloudflare.purge_cache",
+      "description": "Purge cache for zone",
+      "params": [
+        {"name": "zone_id", "type": "string", "required": true},
+        {"name": "purge_everything", "type": "boolean", "required": false, "default": false},
+        {"name": "files", "type": "array", "required": false}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer_token",
+    "provider": "cloudflare.com",
+    "setup": "Set CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID environment variables"
+  },
+  "platforms": ["darwin", "linux"]
+}

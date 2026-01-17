@@ -1,0 +1,95 @@
+{
+  "name": "google-sheets",
+  "version": "1.0.0",
+  "description": "Fast Google Sheets operations - read, write, append, and manage spreadsheets",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/google-sheets",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-google-sheets",
+    "socket": "google-sheets/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "sheets.get",
+      "description": "Get spreadsheet metadata",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.values",
+      "description": "Read values from range",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true},
+        {"name": "range", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.batch_get",
+      "description": "Read multiple ranges",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true},
+        {"name": "ranges", "type": "array", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.update",
+      "description": "Update values in range",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true},
+        {"name": "range", "type": "string", "required": true},
+        {"name": "values", "type": "array", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.append",
+      "description": "Append rows to sheet",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true},
+        {"name": "range", "type": "string", "required": true},
+        {"name": "values", "type": "array", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.clear",
+      "description": "Clear values in range",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true},
+        {"name": "range", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.create",
+      "description": "Create new spreadsheet",
+      "params": [
+        {"name": "title", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.add_sheet",
+      "description": "Add sheet to spreadsheet",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true},
+        {"name": "title", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "sheets.delete_sheet",
+      "description": "Delete sheet from spreadsheet",
+      "params": [
+        {"name": "spreadsheet_id", "type": "string", "required": true},
+        {"name": "sheet_id", "type": "integer", "required": true}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "provider": "google",
+    "scopes": ["https://www.googleapis.com/auth/spreadsheets"],
+    "setup": "OAuth token at ~/.fgp/auth/google/token.json"
+  },
+  "platforms": ["darwin", "linux"]
+}

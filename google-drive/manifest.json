@@ -1,0 +1,113 @@
+{
+  "name": "google-drive",
+  "version": "1.0.0",
+  "description": "Fast Google Drive operations - list, upload, download, share, and organize files",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/google-drive",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-google-drive",
+    "socket": "google-drive/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "drive.list",
+      "description": "List files in Drive or folder",
+      "params": [
+        {"name": "query", "type": "string", "required": false},
+        {"name": "folder_id", "type": "string", "required": false},
+        {"name": "page_size", "type": "integer", "required": false},
+        {"name": "page_token", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "drive.get",
+      "description": "Get file metadata",
+      "params": [
+        {"name": "file_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "drive.download",
+      "description": "Download file content",
+      "params": [
+        {"name": "file_id", "type": "string", "required": true},
+        {"name": "save_path", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "drive.upload",
+      "description": "Upload a file",
+      "params": [
+        {"name": "name", "type": "string", "required": true},
+        {"name": "content_base64", "type": "string", "required": false},
+        {"name": "file_path", "type": "string", "required": false},
+        {"name": "mime_type", "type": "string", "required": false},
+        {"name": "parent_id", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "drive.create_folder",
+      "description": "Create a folder",
+      "params": [
+        {"name": "name", "type": "string", "required": true},
+        {"name": "parent_id", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "drive.move",
+      "description": "Move file to new folder",
+      "params": [
+        {"name": "file_id", "type": "string", "required": true},
+        {"name": "new_parent_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "drive.copy",
+      "description": "Copy a file",
+      "params": [
+        {"name": "file_id", "type": "string", "required": true},
+        {"name": "new_name", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "drive.delete",
+      "description": "Delete (trash) a file",
+      "params": [
+        {"name": "file_id", "type": "string", "required": true},
+        {"name": "permanent", "type": "boolean", "required": false, "default": false}
+      ]
+    },
+    {
+      "name": "drive.share",
+      "description": "Share file with user",
+      "params": [
+        {"name": "file_id", "type": "string", "required": true},
+        {"name": "email", "type": "string", "required": true},
+        {"name": "role", "type": "string", "required": false, "default": "reader"}
+      ]
+    },
+    {
+      "name": "drive.search",
+      "description": "Search for files",
+      "params": [
+        {"name": "query", "type": "string", "required": true},
+        {"name": "page_size", "type": "integer", "required": false}
+      ]
+    },
+    {
+      "name": "drive.about",
+      "description": "Get user and quota info",
+      "params": []
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "provider": "google",
+    "scopes": ["https://www.googleapis.com/auth/drive"],
+    "setup": "OAuth token at ~/.fgp/auth/google/token.json"
+  },
+  "platforms": ["darwin", "linux"]
+}

@@ -1,0 +1,89 @@
+{
+  "name": "google-docs",
+  "version": "1.0.0",
+  "description": "Fast Google Docs operations - create, read, and edit documents",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/google-docs",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-google-docs",
+    "socket": "google-docs/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "docs.get",
+      "description": "Get document metadata and content",
+      "params": [
+        {"name": "document_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "docs.text",
+      "description": "Extract plain text from document",
+      "params": [
+        {"name": "document_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "docs.create",
+      "description": "Create new document",
+      "params": [
+        {"name": "title", "type": "string", "required": true},
+        {"name": "content", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "docs.insert",
+      "description": "Insert text at index",
+      "params": [
+        {"name": "document_id", "type": "string", "required": true},
+        {"name": "text", "type": "string", "required": true},
+        {"name": "index", "type": "integer", "required": true}
+      ]
+    },
+    {
+      "name": "docs.append",
+      "description": "Append text to document",
+      "params": [
+        {"name": "document_id", "type": "string", "required": true},
+        {"name": "text", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "docs.delete",
+      "description": "Delete text range",
+      "params": [
+        {"name": "document_id", "type": "string", "required": true},
+        {"name": "start_index", "type": "integer", "required": true},
+        {"name": "end_index", "type": "integer", "required": true}
+      ]
+    },
+    {
+      "name": "docs.replace",
+      "description": "Find and replace text",
+      "params": [
+        {"name": "document_id", "type": "string", "required": true},
+        {"name": "find", "type": "string", "required": true},
+        {"name": "replace", "type": "string", "required": true},
+        {"name": "match_case", "type": "boolean", "required": false, "default": false}
+      ]
+    },
+    {
+      "name": "docs.batch_update",
+      "description": "Execute multiple updates",
+      "params": [
+        {"name": "document_id", "type": "string", "required": true},
+        {"name": "requests", "type": "array", "required": true}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "provider": "google",
+    "scopes": ["https://www.googleapis.com/auth/documents"],
+    "setup": "OAuth token at ~/.fgp/auth/google/token.json"
+  },
+  "platforms": ["darwin", "linux"]
+}

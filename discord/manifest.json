@@ -1,0 +1,112 @@
+{
+  "name": "discord",
+  "version": "1.0.0",
+  "description": "Fast Discord bot operations - guilds, channels, messages, and reactions",
+  "protocol": "fgp@1",
+  "author": "Wolfgang Schoenberger",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/discord",
+  "daemon": {
+    "entrypoint": "./target/release/fgp-discord",
+    "socket": "discord/daemon.sock",
+    "dependencies": []
+  },
+  "methods": [
+    {
+      "name": "discord.me",
+      "description": "Get current bot user",
+      "params": []
+    },
+    {
+      "name": "discord.user",
+      "description": "Get user by ID",
+      "params": [
+        {"name": "user_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "discord.guilds",
+      "description": "List guilds the bot is in",
+      "params": []
+    },
+    {
+      "name": "discord.guild",
+      "description": "Get guild by ID",
+      "params": [
+        {"name": "guild_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "discord.channels",
+      "description": "List channels in a guild",
+      "params": [
+        {"name": "guild_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "discord.channel",
+      "description": "Get channel by ID",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "discord.messages",
+      "description": "Get messages from a channel",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true},
+        {"name": "limit", "type": "integer", "required": false, "default": 50}
+      ]
+    },
+    {
+      "name": "discord.send",
+      "description": "Send a message to a channel",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true},
+        {"name": "content", "type": "string", "required": true},
+        {"name": "embeds", "type": "array", "required": false}
+      ]
+    },
+    {
+      "name": "discord.edit",
+      "description": "Edit a message",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true},
+        {"name": "message_id", "type": "string", "required": true},
+        {"name": "content", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "discord.delete",
+      "description": "Delete a message",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true},
+        {"name": "message_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "discord.react",
+      "description": "Add a reaction to a message",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true},
+        {"name": "message_id", "type": "string", "required": true},
+        {"name": "emoji", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "discord.reply",
+      "description": "Reply to a message",
+      "params": [
+        {"name": "channel_id", "type": "string", "required": true},
+        {"name": "message_id", "type": "string", "required": true},
+        {"name": "content", "type": "string", "required": true}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer_token",
+    "provider": "discord.com",
+    "setup": "Set DISCORD_BOT_TOKEN environment variable"
+  },
+  "platforms": ["darwin", "linux"]
+}
