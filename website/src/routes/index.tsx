@@ -391,7 +391,7 @@ function HomePage() {
           >
             <span className="eyebrow">Compatible</span>
             <h2 className="text-section mt-4 mb-12">Works With</h2>
-            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
+            <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-center gap-8 md:gap-12 max-w-md sm:max-w-none mx-auto">
               {/* Claude Code */}
               <div className="group flex flex-col items-center gap-3">
                 <div className="w-16 h-16 rounded-2xl bg-[#D97757]/10 flex items-center justify-center group-hover:bg-[#D97757]/20 transition-colors">
