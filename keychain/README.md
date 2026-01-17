@@ -1,5 +1,10 @@
 # FGP Keychain
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Fast macOS Keychain daemon using the native Security framework. Secure password storage and retrieval without spawning `security` CLI subprocesses.

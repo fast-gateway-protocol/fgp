@@ -1,0 +1,120 @@
+//! HTTP client for {{display_name}} API.
+//!
+//! # CHANGELOG (recent first, max 5 entries)
+//! {{date}} - Initial implementation ({{author}})
+
+use anyhow::{Context, Result};
+use reqwest::Client;
+use std::time::Duration;
+
+use crate::models::{Item, CreateItemRequest};
+
+/// Base URL for the {{display_name}} API.
+const BASE_URL: &str = "{{api_base_url}}";
+
+/// HTTP client for {{display_name}} operations.
+pub struct {{service_struct}}Client {
+    client: Client,
+    token: String,
+    base_url: String,
+}
+
+impl {{service_struct}}Client {
+    /// Create a new {{service_struct}}Client.
+    ///
+    /// Token resolution order:
+    /// 1. Explicit token parameter
+    /// 2. {{env_token}} environment variable
+    pub fn new(token: Option<String>) -> Result<Self> {
+        let token = token
+            .or_else(|| std::env::var("{{env_token}}").ok())
+            .ok_or_else(|| {
+                anyhow::anyhow!(
+                    "No API token found. Set {{env_token}} environment variable or pass --token"
+                )
+            })?;
+
+        let client = Client::builder()
+            .pool_max_idle_per_host(5)
+            .timeout(Duration::from_secs(30))
+            .user_agent(format!("fgp-{{service_name}}/{}", env!("CARGO_PKG_VERSION")))
+            .build()
+            .context("Failed to create HTTP client")?;
+
+        Ok(Self {
+            client,
+            token,
+            base_url: BASE_URL.to_string(),
+        })
+    }
+
+    /// Check API connectivity.
+    pub async fn ping(&self) -> Result<bool> {
+        // TODO: Implement actual ping/health endpoint
+        // This is a placeholder - replace with real API call
+        let _response = self
+            .client
+            .get(format!("{}/health", self.base_url))
+            .bearer_auth(&self.token)
+            .send()
+            .await
+            .context("Failed to ping API")?;
+
+        Ok(true)
+    }
+
+    /// List items.
+    pub async fn list(&self, limit: i32) -> Result<Vec<Item>> {
+        let response = self
+            .client
+            .get(format!("{}/items", self.base_url))
+            .bearer_auth(&self.token)
+            .query(&[("limit", limit)])
+            .send()
+            .await
+            .context("Failed to list items")?
+            .error_for_status()
+            .context("API returned error")?;
+
+        let items: Vec<Item> = response.json().await.context("Failed to parse response")?;
+        Ok(items)
+    }
+
+    /// Get an item by ID.
+    pub async fn get(&self, id: &str) -> Result<Item> {
+        let response = self
+            .client
+            .get(format!("{}/items/{}", self.base_url, id))
+            .bearer_auth(&self.token)
+            .send()
+            .await
+            .context("Failed to get item")?
+            .error_for_status()
+            .context("API returned error")?;
+
+        let item: Item = response.json().await.context("Failed to parse response")?;
+        Ok(item)
+    }
+
+    /// Create a new item.
+    pub async fn create(&self, name: &str, description: Option<&str>) -> Result<Item> {
+        let request = CreateItemRequest {
+            name: name.to_string(),
+            description: description.map(|s| s.to_string()),
+        };
+
+        let response = self
+            .client
+            .post(format!("{}/items", self.base_url))
+            .bearer_auth(&self.token)
+            .json(&request)
+            .send()
+            .await
+            .context("Failed to create item")?
+            .error_for_status()
+            .context("API returned error")?;
+
+        let item: Item = response.json().await.context("Failed to parse response")?;
+        Ok(item)
+    }
+}

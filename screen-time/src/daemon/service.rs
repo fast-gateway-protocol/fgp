@@ -268,3 +268,78 @@ impl FgpService for ScreenTimeService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_param_helpers() {
+        let mut params = HashMap::new();
+        params.insert("date".to_string(), Value::String("2026-01-15".to_string()));
+        params.insert("days".to_string(), Value::from(5));
+
+        assert_eq!(
+            ScreenTimeService::get_param_str(&params, "date"),
+            Some("2026-01-15")
+        );
+        assert_eq!(ScreenTimeService::get_param_str(&params, "missing"), None);
+        assert_eq!(ScreenTimeService::get_param_i64(&params, "days"), Some(5));
+        assert_eq!(ScreenTimeService::get_param_i64(&params, "missing"), None);
+    }
+
+    #[test]
+    fn test_method_list_defaults() {
+        let service = ScreenTimeService::new().expect("service");
+        let methods = service.method_list();
+
+        let daily = methods
+            .iter()
+            .find(|m| m.name == "daily_total")
+            .expect("daily_total");
+        let daily_date = daily
+            .params
+            .iter()
+            .find(|p| p.name == "date")
+            .expect("date param");
+        assert_eq!(
+            daily_date.default.as_ref().and_then(Value::as_str),
+            Some("today")
+        );
+
+        let app_usage = methods
+            .iter()
+            .find(|m| m.name == "app_usage")
+            .expect("app_usage");
+        let app_days = app_usage
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days param");
+        assert_eq!(
+            app_days.default.as_ref().and_then(Value::as_str),
+            Some("7")
+        );
+
+        let most_used = methods
+            .iter()
+            .find(|m| m.name == "most_used")
+            .expect("most_used");
+        let limit = most_used
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit param");
+        assert_eq!(
+            limit.default.as_ref().and_then(Value::as_str),
+            Some("10")
+        );
+    }
+
+    #[test]
+    fn test_dispatch_unknown_method() {
+        let service = ScreenTimeService::new().expect("service");
+        let result = service.dispatch("screen-time.unknown", HashMap::new());
+        assert!(result.is_err());
+    }
+}

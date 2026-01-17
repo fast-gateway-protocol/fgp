@@ -190,3 +190,107 @@ impl Default for HotelSearchParams {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::NaiveDate;
+
+    #[test]
+    fn review_summary_rating_label() {
+        let summary = HotelReviewSummary { rating: 4.6, count: 10 };
+        assert_eq!(summary.rating_label(), "Excellent");
+        let summary = HotelReviewSummary { rating: 4.0, count: 10 };
+        assert_eq!(summary.rating_label(), "Very Good");
+        let summary = HotelReviewSummary { rating: 3.5, count: 10 };
+        assert_eq!(summary.rating_label(), "Good");
+        let summary = HotelReviewSummary { rating: 3.0, count: 10 };
+        assert_eq!(summary.rating_label(), "Average");
+        let summary = HotelReviewSummary { rating: 2.5, count: 10 };
+        assert_eq!(summary.rating_label(), "Below Average");
+    }
+
+    #[test]
+    fn price_range_midpoint() {
+        let range = HotelPriceRange {
+            minimum: 100.0,
+            maximum: 200.0,
+            currency: "USD".to_string(),
+        };
+        assert_eq!(range.midpoint(), 150.0);
+    }
+
+    #[test]
+    fn hotel_helpers_extract_ids() {
+        let hotel = Hotel {
+            key: "g60763-d23448880".to_string(),
+            name: "Demo".to_string(),
+            accommodation_type: "Hotel".to_string(),
+            url: None,
+            review_summary: None,
+            price_range: None,
+            location: None,
+            image_url: None,
+            mentions: vec![],
+            labels: vec![],
+        };
+
+        assert_eq!(hotel.tripadvisor_id(), Some("23448880"));
+        assert_eq!(hotel.location_id(), Some("g60763"));
+    }
+
+    #[test]
+    fn hotel_rates_helpers() {
+        let rates = HotelRates {
+            hotel_key: "g1".to_string(),
+            check_in: NaiveDate::from_ymd_opt(2026, 1, 1).unwrap(),
+            check_out: NaiveDate::from_ymd_opt(2026, 1, 4).unwrap(),
+            currency: "USD".to_string(),
+            rates: vec![
+                HotelRate {
+                    provider: "OTA".to_string(),
+                    price: 200.0,
+                    currency: "USD".to_string(),
+                    room_type: None,
+                    is_refundable: None,
+                    url: None,
+                },
+                HotelRate {
+                    provider: "OTA2".to_string(),
+                    price: 150.0,
+                    currency: "USD".to_string(),
+                    room_type: None,
+                    is_refundable: None,
+                    url: None,
+                },
+            ],
+        };
+
+        assert_eq!(rates.nights(), 3);
+        assert_eq!(rates.cheapest_price(), Some(150.0));
+    }
+
+    #[test]
+    fn hotel_search_results_has_more() {
+        let results = HotelSearchResults {
+            location_key: "g1".to_string(),
+            total_count: 10,
+            hotels: vec![Hotel {
+                key: "g1-d1".to_string(),
+                name: "Demo".to_string(),
+                accommodation_type: "Hotel".to_string(),
+                url: None,
+                review_summary: None,
+                price_range: None,
+                location: None,
+                image_url: None,
+                mentions: vec![],
+                labels: vec![],
+            }],
+            offset: 0,
+            limit: 1,
+        };
+
+        assert!(results.has_more());
+    }
+}

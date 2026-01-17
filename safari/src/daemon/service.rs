@@ -285,3 +285,85 @@ impl FgpService for SafariService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::SafariService;
+    use fgp_daemon::service::FgpService;
+    use rusqlite::Connection;
+    use serde_json::json;
+    use std::collections::HashMap;
+    use std::sync::Mutex;
+
+    fn test_service() -> SafariService {
+        SafariService {
+            history_conn: Mutex::new(Connection::open_in_memory().expect("history db")),
+            cloud_tabs_conn: None,
+            started_at: "test".to_string(),
+        }
+    }
+
+    #[test]
+    fn get_param_helpers_read_values() {
+        let mut params = HashMap::new();
+        params.insert("days".to_string(), json!(14));
+        params.insert("query".to_string(), json!("example"));
+
+        assert_eq!(SafariService::get_param_u32(&params, "days", 7), 14);
+        assert_eq!(SafariService::get_param_u32(&params, "missing", 7), 7);
+        assert_eq!(SafariService::get_param_str(&params, "query"), Some("example"));
+        assert_eq!(SafariService::get_param_str(&params, "missing"), None);
+    }
+
+    #[test]
+    fn method_list_includes_defaults_and_required_fields() {
+        let methods = test_service().method_list();
+
+        let history_method = methods.iter().find(|m| m.name == "history").expect("history");
+        let days_param = history_method
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days");
+        let limit_param = history_method
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(days_param.default, Some(json!(7)));
+        assert_eq!(limit_param.default, Some(json!(50)));
+
+        let search_method = methods.iter().find(|m| m.name == "search").expect("search");
+        let query_param = search_method
+            .params
+            .iter()
+            .find(|p| p.name == "query")
+            .expect("query");
+        assert!(query_param.required);
+
+        let stats_method = methods.iter().find(|m| m.name == "stats").expect("stats");
+        let stats_days = stats_method
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days");
+        assert_eq!(stats_days.default, Some(json!(30)));
+
+        let bundle_method = methods.iter().find(|m| m.name == "bundle").expect("bundle");
+        let include_param = bundle_method
+            .params
+            .iter()
+            .find(|p| p.name == "include")
+            .expect("include");
+        assert_eq!(include_param.default, Some(json!("history,top_sites")));
+    }
+
+    #[test]
+    fn dispatch_rejects_unknown_method() {
+        let service = test_service();
+        let err = service
+            .dispatch("safari.nope", HashMap::new())
+            .expect_err("unknown method");
+        assert!(err.to_string().contains("Unknown method"));
+    }
+}

@@ -1522,3 +1522,122 @@ impl FgpService for TravelService {
         checks
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    fn test_service() -> TravelService {
+        TravelService::new().expect("service")
+    }
+
+    #[test]
+    fn test_param_helpers() {
+        let mut params = HashMap::new();
+        params.insert("origin".to_string(), Value::String("SFO".to_string()));
+        params.insert("limit".to_string(), Value::from(12));
+        params.insert("adults".to_string(), Value::from(2));
+        params.insert("max_price".to_string(), Value::from(499.5));
+        params.insert("departure_from".to_string(), Value::String("2026-01-15".to_string()));
+        params.insert(
+            "types".to_string(),
+            json!(["airport", "city"]),
+        );
+
+        assert_eq!(TravelService::get_str(&params, "origin"), Some("SFO"));
+        assert_eq!(TravelService::get_str(&params, "missing"), None);
+        assert_eq!(TravelService::get_u32(&params, "limit", 10), 12);
+        assert_eq!(TravelService::get_u32(&params, "missing", 10), 10);
+        assert_eq!(TravelService::get_u8(&params, "adults", 1), 2);
+        assert_eq!(TravelService::get_u8(&params, "missing", 1), 1);
+        assert_eq!(TravelService::get_f64(&params, "max_price"), Some(499.5));
+        assert_eq!(TravelService::get_f64(&params, "missing"), None);
+        assert_eq!(
+            TravelService::get_date(&params, "departure_from")
+                .map(|d| d.to_string()),
+            Some("2026-01-15".to_string())
+        );
+        assert_eq!(
+            TravelService::get_str_array(&params, "types"),
+            Some(vec!["airport".to_string(), "city".to_string()])
+        );
+    }
+
+    #[test]
+    fn test_parse_flight_params_defaults_and_mappings() {
+        let service = test_service();
+        let mut params = HashMap::new();
+        params.insert("origin".to_string(), json!("SFO"));
+        params.insert("destination".to_string(), json!("LHR"));
+        params.insert("departure_from".to_string(), json!("2026-01-15"));
+        params.insert("departure_to".to_string(), json!("2026-01-20"));
+        params.insert("adults".to_string(), json!(2));
+        params.insert("cabin_class".to_string(), json!("BUSINESS"));
+        params.insert("sort_by".to_string(), json!("DURATION"));
+        params.insert("max_stops".to_string(), json!(1));
+        params.insert("limit".to_string(), json!(5));
+        params.insert("max_price".to_string(), json!(1000.0));
+
+        let parsed = service.parse_flight_params(&params).expect("parsed");
+        assert_eq!(parsed.origin, "SFO");
+        assert_eq!(parsed.destination, "LHR");
+        assert_eq!(parsed.departure_from.to_string(), "2026-01-15");
+        assert_eq!(parsed.departure_to.to_string(), "2026-01-20");
+        assert_eq!(parsed.adults, 2);
+        assert_eq!(parsed.cabin_class, CabinClass::Business);
+        assert_eq!(parsed.sort_by, SortBy::Duration);
+        assert_eq!(parsed.max_stops, Some(1));
+        assert_eq!(parsed.limit, 5);
+        assert_eq!(parsed.max_price, Some(1000.0));
+    }
+
+    #[test]
+    fn test_parse_flight_params_unknown_values_fallback() {
+        let service = test_service();
+        let mut params = HashMap::new();
+        params.insert("origin".to_string(), json!("SFO"));
+        params.insert("departure_from".to_string(), json!("2026-01-15"));
+        params.insert("cabin_class".to_string(), json!("UNKNOWN"));
+        params.insert("sort_by".to_string(), json!("UNKNOWN"));
+
+        let parsed = service.parse_flight_params(&params).expect("parsed");
+        assert_eq!(parsed.cabin_class, CabinClass::Economy);
+        assert_eq!(parsed.sort_by, SortBy::Price);
+        assert_eq!(parsed.destination, "anywhere");
+        assert_eq!(parsed.departure_to, parsed.departure_from);
+    }
+
+    #[test]
+    fn test_method_list_defaults() {
+        let service = test_service();
+        let methods = service.method_list();
+
+        let flights = methods
+            .iter()
+            .find(|m| m.name == "travel.search_flights")
+            .expect("search_flights");
+        let destination = flights
+            .params
+            .iter()
+            .find(|p| p.name == "destination")
+            .expect("destination");
+        assert_eq!(
+            destination.default.as_ref().and_then(Value::as_str),
+            Some("anywhere")
+        );
+        let limit = flights
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(limit.default.as_ref().and_then(Value::as_i64), Some(10));
+    }
+
+    #[test]
+    fn test_dispatch_unknown_method() {
+        let service = test_service();
+        let result = service.dispatch("travel.unknown", HashMap::new());
+        assert!(result.is_err());
+    }
+}

@@ -1,5 +1,10 @@
 # FGP Travel Daemon
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 Fast flight and hotel search via Kiwi/Skypicker and Xotelo APIs.
 
 ## Quick Start

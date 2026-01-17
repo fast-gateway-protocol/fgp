@@ -434,10 +434,21 @@ fn nsdate_to_string(date: &NSDate) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::DateTime;
 
     #[test]
     fn test_authorization_status() {
         let status = ReminderStore::authorization_status();
         println!("Reminders authorization status: {:?}", status);
+    }
+
+    #[test]
+    fn test_datetime_nsdate_roundtrip() {
+        let local = Local.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
+        let nsdate = datetime_to_nsdate(local);
+        let iso = nsdate_to_string(&nsdate);
+        let parsed = DateTime::parse_from_rfc3339(&iso).expect("parse iso");
+
+        assert_eq!(parsed.timestamp(), local.timestamp());
     }
 }

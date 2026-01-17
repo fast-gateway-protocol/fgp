@@ -1,5 +1,10 @@
 # Tauri + SvelteKit + TypeScript
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
 
 ## Recommended IDE Setup

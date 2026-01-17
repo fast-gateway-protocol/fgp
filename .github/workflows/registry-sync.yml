@@ -1,0 +1,237 @@
+name: Registry Sync
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - '**/manifest.json'
+      - '**/Cargo.toml'
+      - 'website/src/data/registry.ts'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - '**/manifest.json'
+      - '**/Cargo.toml'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # Discover and validate all daemons
+  discover-daemons:
+    name: Discover Daemons
+    runs-on: ubuntu-latest
+    outputs:
+      daemons: ${{ steps.find.outputs.daemons }}
+      manifest_count: ${{ steps.find.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find daemon manifests
+        id: find
+        run: |
+          # Find all manifest.json files (excluding node_modules, .vite, etc.)
+          MANIFESTS=$(find . -name manifest.json \
+            -not -path "*/node_modules/*" \
+            -not -path "*/.vite/*" \
+            -not -path "*/extension/*" \
+            -type f | sort)
+
+          # Extract daemon names from paths
+          DAEMONS=$(echo "$MANIFESTS" | while read -r manifest; do
+            dirname "$manifest" | sed 's|^\./||'
+          done | jq -R -s -c 'split("\n") | map(select(length > 0))')
+
+          COUNT=$(echo "$DAEMONS" | jq 'length')
+
+          echo "daemons=$DAEMONS" >> $GITHUB_OUTPUT
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+          echo "Found $COUNT daemon manifests"
+          echo "$MANIFESTS"
+
+  # Validate manifest.json files
+  validate-manifests:
+    name: Validate Manifests
+    runs-on: ubuntu-latest
+    needs: discover-daemons
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate manifest schema
+        run: |
+          echo "Validating daemon manifests..."
+
+          for manifest in $(find . -name manifest.json \
+            -not -path "*/node_modules/*" \
+            -not -path "*/.vite/*" \
+            -not -path "*/extension/*" \
+            -type f); do
+
+            echo "Checking $manifest"
+
+            # Validate JSON syntax
+            if ! jq empty "$manifest" 2>/dev/null; then
+              echo "❌ Invalid JSON: $manifest"
+              exit 1
+            fi
+
+            # Check required fields
+            NAME=$(jq -r '.name // empty' "$manifest")
+            VERSION=$(jq -r '.version // empty' "$manifest")
+
+            if [ -z "$NAME" ]; then
+              echo "❌ Missing 'name' field in $manifest"
+              exit 1
+            fi
+
+            if [ -z "$VERSION" ]; then
+              echo "❌ Missing 'version' field in $manifest"
+              exit 1
+            fi
+
+            echo "✅ Valid: $NAME v$VERSION"
+          done
+
+          echo "All manifests valid!"
+
+  # Sync manifests to registry.ts
+  sync-registry:
+    name: Sync Registry
+    runs-on: ubuntu-latest
+    needs: [discover-daemons, validate-manifests]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check registry consistency
+        run: |
+          echo "Checking registry.ts against manifests..."
+
+          # Extract package names from registry.ts
+          REGISTRY_PACKAGES=$(grep -oP "name: '[^']+'" website/src/data/registry.ts | \
+            sed "s/name: '//g" | sed "s/'//g" | sort | uniq)
+
+          echo "Packages in registry.ts:"
+          echo "$REGISTRY_PACKAGES"
+
+          # Extract daemon names from manifests
+          MANIFEST_PACKAGES=$(find . -name manifest.json \
+            -not -path "*/node_modules/*" \
+            -not -path "*/.vite/*" \
+            -not -path "*/extension/*" \
+            -type f \
+            -exec jq -r '.name' {} \; 2>/dev/null | sort | uniq)
+
+          echo ""
+          echo "Packages in manifest.json files:"
+          echo "$MANIFEST_PACKAGES"
+
+          # Note: We don't fail on mismatches since not all daemons have manifests yet
+          # This is informational to help track coverage
+
+  # Build all Rust daemons
+  build-daemons:
+    name: Build Daemons
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        daemon:
+          - browser
+          - github
+          - fly
+          - imessage
+          - travel
+          - cloudflare
+          - discord
+          - youtube
+          - google-drive
+          - google-sheets
+          - google-docs
+          - supabase
+          - composio
+          - zapier
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ${{ matrix.daemon }}/target
+          key: ${{ runner.os }}-cargo-${{ matrix.daemon }}-${{ hashFiles(format('{0}/Cargo.lock', matrix.daemon)) }}
+
+      - name: Check if daemon exists
+        id: check
+        run: |
+          if [ -f "${{ matrix.daemon }}/Cargo.toml" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Daemon ${{ matrix.daemon }} not found, skipping"
+          fi
+
+      - name: Build daemon
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          cd ${{ matrix.daemon }}
+          # Check if daemon depends on ../daemon (local path)
+          if grep -q 'path = "../daemon"' Cargo.toml; then
+            echo "Daemon depends on local fgp-daemon, checking availability..."
+            if [ -d "../daemon" ]; then
+              cargo build --release
+            else
+              echo "⚠️ Skipping build - depends on ../daemon which is not in this repo"
+            fi
+          else
+            cargo build --release
+          fi
+
+  # Website build and deploy
+  website:
+    name: Website
+    runs-on: ubuntu-latest
+    needs: [validate-manifests]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: |
+          cd website
+          pnpm install
+
+      - name: Build website
+        run: |
+          cd website
+          pnpm build
+
+      # Note: Add deployment step here (Vercel, Cloudflare Pages, etc.)
+      # - name: Deploy to Vercel
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.ORG_ID }}
+      #     vercel-project-id: ${{ secrets.PROJECT_ID }}
+      #     working-directory: ./website

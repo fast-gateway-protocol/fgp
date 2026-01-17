@@ -722,3 +722,42 @@ struct GraphQLResponse<T> {
 struct GraphQLError {
     message: String,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::GraphQLResponse;
+    use serde_json::json;
+
+    #[test]
+    fn graphql_response_with_data() {
+        let value = json!({
+            "data": {
+                "viewer": {
+                    "id": "user_1"
+                }
+            }
+        });
+        let response: GraphQLResponse<serde_json::Value> =
+            serde_json::from_value(value).expect("deserialize response");
+
+        let data = response.data.expect("data");
+        assert_eq!(data["viewer"]["id"].as_str(), Some("user_1"));
+        assert!(response.errors.is_none());
+    }
+
+    #[test]
+    fn graphql_response_with_errors() {
+        let value = json!({
+            "errors": [
+                { "message": "Unauthorized" }
+            ]
+        });
+        let response: GraphQLResponse<serde_json::Value> =
+            serde_json::from_value(value).expect("deserialize response");
+
+        assert!(response.data.is_none());
+        let errors = response.errors.expect("errors");
+        assert_eq!(errors.len(), 1);
+        assert_eq!(errors[0].message, "Unauthorized");
+    }
+}

@@ -81,4 +81,24 @@ mod tests {
     fn test_check_access() {
         assert!(KeychainStore::check_access());
     }
+
+    #[test]
+    fn test_password_info_roundtrip() {
+        let info = PasswordInfo {
+            service: "svc".to_string(),
+            account: "acct".to_string(),
+            label: Some("label".to_string()),
+            created: Some("2026-01-01T00:00:00Z".to_string()),
+            modified: None,
+        };
+
+        let json = serde_json::to_string(&info).expect("serialize");
+        let parsed: PasswordInfo = serde_json::from_str(&json).expect("deserialize");
+
+        assert_eq!(parsed.service, "svc");
+        assert_eq!(parsed.account, "acct");
+        assert_eq!(parsed.label.as_deref(), Some("label"));
+        assert_eq!(parsed.created.as_deref(), Some("2026-01-01T00:00:00Z"));
+        assert!(parsed.modified.is_none());
+    }
 }

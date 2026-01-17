@@ -1,5 +1,10 @@
 # FGP Safari Daemon
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 Fast Safari gateway for macOS - direct SQLite access to browser history, cloud tabs, and bookmarks.
 
 ## Performance

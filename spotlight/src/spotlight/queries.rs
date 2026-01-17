@@ -320,3 +320,58 @@ pub fn search_by_size(
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_content_type_for_kind() {
+        assert_eq!(content_type_for_kind("pdf"), Some("com.adobe.pdf"));
+        assert_eq!(content_type_for_kind("image"), Some("public.image"));
+        assert_eq!(content_type_for_kind("unknown"), None);
+    }
+
+    #[test]
+    fn test_search_by_size_requires_bounds() {
+        let result = search_by_size(None, None, None, 10);
+        assert!(result.is_err());
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("At least one of min_bytes"));
+    }
+
+    #[test]
+    fn test_search_by_size_accepts_empty_scope() {
+        let result = search_by_size(Some(1), None, Some(""), 10);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_parse_scope_variants() {
+        assert!(matches!(parse_scope("home"), MDQueryScope::Home));
+        assert!(matches!(parse_scope("computer"), MDQueryScope::Computer));
+        assert!(matches!(parse_scope("network"), MDQueryScope::Network));
+        assert!(matches!(parse_scope("all"), MDQueryScope::AllIndexed));
+        assert!(matches!(parse_scope("indexed"), MDQueryScope::AllIndexed));
+
+        let custom = parse_scope("/tmp");
+        match custom {
+            MDQueryScope::Custom(path) => {
+                assert!(path.ends_with("tmp"));
+            }
+            _ => panic!("expected custom scope"),
+        }
+    }
+
+    #[test]
+    fn test_search_by_kind_rejects_unknown() {
+        let result = search_by_kind("unknown", None, None, 5);
+        assert!(result.is_err());
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("Unknown kind"));
+    }
+}

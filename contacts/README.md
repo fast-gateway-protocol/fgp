@@ -1,5 +1,10 @@
 # FGP Contacts Daemon
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 Fast Contacts gateway for macOS - direct SQLite access to AddressBook database.
 
 ## Performance

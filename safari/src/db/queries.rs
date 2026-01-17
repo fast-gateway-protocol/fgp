@@ -264,6 +264,7 @@ pub fn query_cloud_devices(conn: &Connection) -> Result<Vec<CloudDevice>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rusqlite::Connection;
 
     #[test]
     fn test_timestamp_conversion() {
@@ -280,5 +281,85 @@ mod tests {
         // Should be a reasonable Core Data timestamp (positive, not too large)
         assert!(cutoff > 0.0);
         assert!(cutoff < 1000000000.0);
+    }
+
+    fn setup_history_db() -> Connection {
+        let conn = Connection::open_in_memory().expect("open memory db");
+        conn.execute_batch(
+            r#"
+            CREATE TABLE history_items (
+                id INTEGER PRIMARY KEY,
+                url TEXT NOT NULL,
+                visit_count INTEGER NOT NULL,
+                domain_expansion TEXT
+            );
+            CREATE TABLE history_visits (
+                id INTEGER PRIMARY KEY,
+                history_item INTEGER NOT NULL,
+                title TEXT,
+                visit_time REAL NOT NULL
+            );
+            "#,
+        )
+        .expect("create schema");
+        conn
+    }
+
+    #[test]
+    fn test_query_history_stats_counts() {
+        let conn = setup_history_db();
+        let visit_time = unix_to_core_data(1704067200);
+
+        conn.execute(
+            "INSERT INTO history_items (id, url, visit_count, domain_expansion) VALUES (1, ?, 2, ?)",
+            rusqlite::params!["https://example.com", "example.com"],
+        )
+        .expect("insert item");
+        conn.execute(
+            "INSERT INTO history_visits (history_item, title, visit_time) VALUES (1, ?, ?)",
+            rusqlite::params!["Example", visit_time],
+        )
+        .expect("insert visit");
+        conn.execute(
+            "INSERT INTO history_visits (history_item, title, visit_time) VALUES (1, ?, ?)",
+            rusqlite::params!["Example 2", visit_time],
+        )
+        .expect("insert visit");
+
+        let (total, unique_pages, active_days) =
+            query_history_stats(&conn, 36500).expect("stats");
+
+        assert_eq!(total, 2);
+        assert_eq!(unique_pages, 1);
+        assert_eq!(active_days, 1);
+    }
+
+    #[test]
+    fn test_query_recent_history_orders_visits() {
+        let conn = setup_history_db();
+        let visit_time_old = unix_to_core_data(1704067200);
+        let visit_time_new = unix_to_core_data(1704153600);
+
+        conn.execute(
+            "INSERT INTO history_items (id, url, visit_count, domain_expansion) VALUES (1, ?, 1, ?)",
+            rusqlite::params!["https://example.com", "example.com"],
+        )
+        .expect("insert item");
+        conn.execute(
+            "INSERT INTO history_visits (history_item, title, visit_time) VALUES (1, ?, ?)",
+            rusqlite::params!["Old", visit_time_old],
+        )
+        .expect("insert visit");
+        conn.execute(
+            "INSERT INTO history_visits (history_item, title, visit_time) VALUES (1, ?, ?)",
+            rusqlite::params!["New", visit_time_new],
+        )
+        .expect("insert visit");
+
+        let results = query_recent_history(&conn, 36500, 10).expect("query history");
+
+        assert_eq!(results.len(), 2);
+        assert_eq!(results[0].title.as_deref(), Some("New"));
+        assert_eq!(results[1].title.as_deref(), Some("Old"));
     }
 }

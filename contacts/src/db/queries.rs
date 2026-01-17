@@ -498,10 +498,198 @@ fn query_phones_for_contact(conn: &Connection, contact_id: i64) -> Result<Vec<Ph
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rusqlite::Connection;
 
     #[test]
     fn test_days_ago() {
         let cutoff = days_ago_core_data(7);
         assert!(cutoff > 0.0);
+    }
+
+    #[test]
+    fn test_display_name_variants() {
+        let base = Contact {
+            id: 1,
+            first_name: None,
+            last_name: None,
+            organization: None,
+            job_title: None,
+            department: None,
+            nickname: None,
+            emails: vec![],
+            phones: vec![],
+            modification_date: None,
+        };
+
+        let contact = Contact {
+            first_name: Some("Ada".to_string()),
+            last_name: Some("Lovelace".to_string()),
+            ..base.clone()
+        };
+        assert_eq!(contact.display_name(), "Ada Lovelace");
+
+        let contact = Contact {
+            first_name: Some("Ada".to_string()),
+            ..base.clone()
+        };
+        assert_eq!(contact.display_name(), "Ada");
+
+        let contact = Contact {
+            last_name: Some("Lovelace".to_string()),
+            ..base.clone()
+        };
+        assert_eq!(contact.display_name(), "Lovelace");
+
+        let contact = Contact {
+            organization: Some("Org".to_string()),
+            ..base.clone()
+        };
+        assert_eq!(contact.display_name(), "Org");
+
+        let contact = Contact {
+            nickname: Some("Ace".to_string()),
+            ..base
+        };
+        assert_eq!(contact.display_name(), "Ace");
+    }
+
+    fn setup_contacts_db() -> Connection {
+        let conn = Connection::open_in_memory().expect("open memory db");
+        conn.execute_batch(
+            r#"
+            CREATE TABLE ZABCDRECORD (
+                Z_PK INTEGER PRIMARY KEY,
+                ZFIRSTNAME TEXT,
+                ZLASTNAME TEXT,
+                ZORGANIZATION TEXT,
+                ZJOBTITLE TEXT,
+                ZDEPARTMENT TEXT,
+                ZNICKNAME TEXT,
+                ZMODIFICATIONDATE REAL,
+                ZSORTINGLASTNAME TEXT,
+                ZSORTINGFIRSTNAME TEXT,
+                ZNAME TEXT
+            );
+            CREATE TABLE ZABCDEMAILADDRESS (
+                ZOWNER INTEGER,
+                ZADDRESS TEXT,
+                ZLABEL TEXT,
+                ZISPRIMARY INTEGER,
+                ZORDERINGINDEX INTEGER
+            );
+            CREATE TABLE ZABCDPHONENUMBER (
+                ZOWNER INTEGER,
+                ZFULLNUMBER TEXT,
+                ZLABEL TEXT,
+                ZISPRIMARY INTEGER,
+                ZORDERINGINDEX INTEGER,
+                ZLASTFOURDIGITS TEXT
+            );
+            "#,
+        )
+        .expect("create schema");
+        conn
+    }
+
+    #[test]
+    fn test_query_contact_stats_counts() {
+        let conn = setup_contacts_db();
+        conn.execute(
+            "INSERT INTO ZABCDRECORD (Z_PK, ZFIRSTNAME, ZLASTNAME, ZORGANIZATION, ZNAME) VALUES (1, 'Ada', 'Lovelace', NULL, NULL)",
+            [],
+        )
+        .expect("insert contact");
+        conn.execute(
+            "INSERT INTO ZABCDRECORD (Z_PK, ZFIRSTNAME, ZLASTNAME, ZORGANIZATION, ZNAME) VALUES (2, NULL, NULL, 'Org', NULL)",
+            [],
+        )
+        .expect("insert org");
+        conn.execute(
+            "INSERT INTO ZABCDRECORD (Z_PK, ZFIRSTNAME, ZLASTNAME, ZORGANIZATION, ZNAME) VALUES (3, NULL, NULL, NULL, 'Friends')",
+            [],
+        )
+        .expect("insert group");
+
+        conn.execute(
+            "INSERT INTO ZABCDEMAILADDRESS (ZOWNER, ZADDRESS, ZLABEL, ZISPRIMARY, ZORDERINGINDEX) VALUES (1, 'Ada@Example.com', 'home', 1, 0)",
+            [],
+        )
+        .expect("insert email");
+        conn.execute(
+            "INSERT INTO ZABCDPHONENUMBER (ZOWNER, ZFULLNUMBER, ZLABEL, ZISPRIMARY, ZORDERINGINDEX, ZLASTFOURDIGITS) VALUES (2, '555-1234', 'mobile', 1, 0, '1234')",
+            [],
+        )
+        .expect("insert phone");
+
+        let stats = query_contact_stats(&conn).expect("stats");
+
+        assert_eq!(stats.total_contacts, 2);
+        assert_eq!(stats.with_email, 1);
+        assert_eq!(stats.with_phone, 1);
+        assert_eq!(stats.with_organization, 1);
+        assert_eq!(stats.total_groups, 1);
+    }
+
+    #[test]
+    fn test_query_contact_by_email() {
+        let conn = setup_contacts_db();
+        conn.execute(
+            "INSERT INTO ZABCDRECORD (Z_PK, ZFIRSTNAME, ZLASTNAME) VALUES (1, 'Ada', 'Lovelace')",
+            [],
+        )
+        .expect("insert contact");
+        conn.execute(
+            "INSERT INTO ZABCDEMAILADDRESS (ZOWNER, ZADDRESS, ZLABEL, ZISPRIMARY, ZORDERINGINDEX) VALUES (1, 'Ada@Example.com', NULL, 1, 0)",
+            [],
+        )
+        .expect("insert email");
+
+        let contact = query_contact_by_email(&conn, "ada@example.com")
+            .expect("query email")
+            .expect("contact");
+        assert_eq!(contact.id, 1);
+        assert_eq!(contact.emails[0].address, "Ada@Example.com");
+    }
+
+    #[test]
+    fn test_query_contact_by_phone_matches_last_four() {
+        let conn = setup_contacts_db();
+        conn.execute(
+            "INSERT INTO ZABCDRECORD (Z_PK, ZFIRSTNAME, ZLASTNAME) VALUES (1, 'Ada', 'Lovelace')",
+            [],
+        )
+        .expect("insert contact");
+        conn.execute(
+            "INSERT INTO ZABCDPHONENUMBER (ZOWNER, ZFULLNUMBER, ZLABEL, ZISPRIMARY, ZORDERINGINDEX, ZLASTFOURDIGITS) VALUES (1, '555-1234', NULL, 1, 0, '1234')",
+            [],
+        )
+        .expect("insert phone");
+
+        let contact = query_contact_by_phone(&conn, "(555) 1234")
+            .expect("query phone")
+            .expect("contact");
+        assert_eq!(contact.id, 1);
+        assert_eq!(contact.phones[0].number, "555-1234");
+    }
+
+    #[test]
+    fn test_query_contacts_list_orders_by_sorting_name() {
+        let conn = setup_contacts_db();
+        conn.execute(
+            "INSERT INTO ZABCDRECORD (Z_PK, ZFIRSTNAME, ZLASTNAME, ZSORTINGLASTNAME, ZSORTINGFIRSTNAME) VALUES (1, 'Ada', 'Lovelace', 'Lovelace', 'Ada')",
+            [],
+        )
+        .expect("insert contact");
+        conn.execute(
+            "INSERT INTO ZABCDRECORD (Z_PK, ZFIRSTNAME, ZLASTNAME, ZSORTINGLASTNAME, ZSORTINGFIRSTNAME) VALUES (2, 'Grace', 'Hopper', 'Hopper', 'Grace')",
+            [],
+        )
+        .expect("insert contact");
+
+        let results = query_contacts_list(&conn, 10).expect("list");
+
+        assert_eq!(results.len(), 2);
+        assert_eq!(results[0].last_name.as_deref(), Some("Hopper"));
+        assert_eq!(results[1].last_name.as_deref(), Some("Lovelace"));
     }
 }

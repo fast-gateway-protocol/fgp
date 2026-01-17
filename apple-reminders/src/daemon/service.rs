@@ -436,3 +436,100 @@ impl FgpService for RemindersService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::RemindersService;
+    use fgp_daemon::service::FgpService;
+    use serde_json::json;
+    use std::collections::HashMap;
+
+    #[test]
+    fn get_param_helpers_read_values() {
+        let mut params = HashMap::new();
+        params.insert("days".to_string(), json!(5));
+        params.insert("query".to_string(), json!("walk"));
+        params.insert("include_completed".to_string(), json!(true));
+
+        assert_eq!(RemindersService::get_param_u32(&params, "days", 7), 5);
+        assert_eq!(RemindersService::get_param_u32(&params, "missing", 7), 7);
+        assert_eq!(RemindersService::get_param_str(&params, "query"), Some("walk"));
+        assert_eq!(RemindersService::get_param_str(&params, "missing"), None);
+        assert!(RemindersService::get_param_bool(&params, "include_completed", false));
+        assert!(!RemindersService::get_param_bool(&params, "missing", false));
+    }
+
+    #[test]
+    fn get_list_ids_parses_arrays_and_csv() {
+        let mut params = HashMap::new();
+        params.insert("lists".to_string(), json!(["one", "two"]));
+        assert_eq!(
+            RemindersService::get_list_ids(&params),
+            Some(vec!["one".to_string(), "two".to_string()])
+        );
+
+        let mut params = HashMap::new();
+        params.insert("lists".to_string(), json!("one, two"));
+        assert_eq!(
+            RemindersService::get_list_ids(&params),
+            Some(vec!["one".to_string(), "two".to_string()])
+        );
+
+        let mut params = HashMap::new();
+        params.insert("lists".to_string(), json!(5));
+        assert_eq!(RemindersService::get_list_ids(&params), None);
+    }
+
+    #[test]
+    fn method_list_includes_defaults_and_required_fields() {
+        let methods = RemindersService::new().expect("service").method_list();
+
+        let all_method = methods.iter().find(|m| m.name == "all").expect("all");
+        let limit_param = all_method
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(limit_param.default, Some(json!(100)));
+
+        let completed_method = methods
+            .iter()
+            .find(|m| m.name == "completed")
+            .expect("completed");
+        let days_param = completed_method
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days");
+        let completed_limit = completed_method
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(days_param.default, Some(json!(30)));
+        assert_eq!(completed_limit.default, Some(json!(50)));
+
+        let search_method = methods.iter().find(|m| m.name == "search").expect("search");
+        let query_param = search_method
+            .params
+            .iter()
+            .find(|p| p.name == "query")
+            .expect("query");
+        let include_param = search_method
+            .params
+            .iter()
+            .find(|p| p.name == "include_completed")
+            .expect("include_completed");
+        assert!(query_param.required);
+        assert_eq!(include_param.default, Some(json!(false)));
+    }
+
+    #[test]
+    fn dispatch_rejects_unknown_method() {
+        let service = RemindersService::new().expect("service");
+        let err = service
+            .dispatch("apple-reminders.nope", HashMap::new())
+            .expect_err("unknown method");
+        assert!(err.to_string().contains("Unknown method"));
+    }
+}

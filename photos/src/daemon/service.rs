@@ -302,3 +302,121 @@ impl FgpService for PhotosService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::PhotosService;
+    use fgp_daemon::service::FgpService;
+    use rusqlite::Connection;
+    use serde_json::json;
+    use std::collections::HashMap;
+    use std::sync::Mutex;
+
+    fn test_service() -> PhotosService {
+        let conn = Connection::open_in_memory().expect("in memory db");
+        PhotosService {
+            conn: Mutex::new(conn),
+        }
+    }
+
+    #[test]
+    fn get_param_helpers_read_values() {
+        let mut params = HashMap::new();
+        params.insert("days".to_string(), json!(12));
+        params.insert("album_id".to_string(), json!(42));
+        params.insert("lat".to_string(), json!(37.3));
+        params.insert("start".to_string(), json!("2026-01-01"));
+
+        assert_eq!(PhotosService::get_param_u32(&params, "days", 7), 12);
+        assert_eq!(PhotosService::get_param_u32(&params, "missing", 7), 7);
+        assert_eq!(PhotosService::get_param_i64(&params, "album_id"), Some(42));
+        assert_eq!(PhotosService::get_param_i64(&params, "missing"), None);
+        assert_eq!(PhotosService::get_param_f64(&params, "lat"), Some(37.3));
+        assert_eq!(PhotosService::get_param_f64(&params, "missing"), None);
+        assert_eq!(PhotosService::get_param_str(&params, "start"), Some("2026-01-01"));
+        assert_eq!(PhotosService::get_param_str(&params, "missing"), None);
+    }
+
+    #[test]
+    fn parse_kind_handles_known_and_unknown_values() {
+        let mut params = HashMap::new();
+        params.insert("kind".to_string(), json!("photo"));
+        assert!(PhotosService::parse_kind(&params).is_some());
+
+        params.insert("kind".to_string(), json!("videos"));
+        assert!(PhotosService::parse_kind(&params).is_some());
+
+        params.insert("kind".to_string(), json!("other"));
+        assert!(PhotosService::parse_kind(&params).is_none());
+    }
+
+    #[test]
+    fn method_list_includes_defaults_and_required_fields() {
+        let methods = test_service().method_list();
+
+        let recent_method = methods.iter().find(|m| m.name == "recent").expect("recent");
+        let days_param = recent_method
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days");
+        let limit_param = recent_method
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(days_param.default, Some(json!(30)));
+        assert_eq!(limit_param.default, Some(json!(50)));
+
+        let by_date_method = methods.iter().find(|m| m.name == "by_date").expect("by_date");
+        let start_param = by_date_method
+            .params
+            .iter()
+            .find(|p| p.name == "start")
+            .expect("start");
+        let end_param = by_date_method
+            .params
+            .iter()
+            .find(|p| p.name == "end")
+            .expect("end");
+        assert!(start_param.required);
+        assert!(end_param.required);
+
+        let by_location_method = methods
+            .iter()
+            .find(|m| m.name == "by_location")
+            .expect("by_location");
+        let lat_param = by_location_method
+            .params
+            .iter()
+            .find(|p| p.name == "lat")
+            .expect("lat");
+        let lon_param = by_location_method
+            .params
+            .iter()
+            .find(|p| p.name == "lon")
+            .expect("lon");
+        assert!(lat_param.required);
+        assert!(lon_param.required);
+
+        let album_method = methods
+            .iter()
+            .find(|m| m.name == "album_photos")
+            .expect("album_photos");
+        let album_id = album_method
+            .params
+            .iter()
+            .find(|p| p.name == "album_id")
+            .expect("album_id");
+        assert!(album_id.required);
+    }
+
+    #[test]
+    fn dispatch_rejects_unknown_method() {
+        let service = test_service();
+        let err = service
+            .dispatch("photos.nope", HashMap::new())
+            .expect_err("unknown method");
+        assert!(err.to_string().contains("Unknown method"));
+    }
+}

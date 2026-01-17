@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      padding: 48px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 600;
+      color: #58a6ff;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #8b949e;
+    }
+
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #161b22;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th {
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #21262d;
+      border-bottom: 1px solid #30363d;
+    }
+
+    td {
+      padding: 16px 20px;
+      font-size: 15px;
+      border-bottom: 1px solid #21262d;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .operation {
+      color: #e6edf3;
+      font-weight: 500;
+    }
+
+    .mcp {
+      color: #f85149;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .fgp {
+      color: #3fb950;
+      font-weight: 600;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .speedup {
+      background: linear-gradient(90deg, #238636 0%, #2ea043 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-block;
+    }
+
+    .insight {
+      background: #161b22;
+      border-left: 3px solid #58a6ff;
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 24px;
+    }
+
+    .insight-text {
+      color: #8b949e;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .insight-text strong {
+      color: #e6edf3;
+    }
+
+    .footer {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #21262d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .github {
+      color: #8b949e;
+      font-size: 14px;
+    }
+
+    .github a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    .tag {
+      background: #21262d;
+      color: #8b949e;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">FGP - FAST GATEWAY PROTOCOL</div>
+      <h1>292x Faster Than MCP</h1>
+      <p class="subtitle">Persistent daemons vs. cold-start processes</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Browser Automation</div>
+      <table>
+        <tr>
+          <th>Operation</th>
+          <th>MCP Stdio</th>
+          <th>FGP Daemon</th>
+          <th>Speedup</th>
+        </tr>
+        <tr>
+          <td class="operation">Navigate</td>
+          <td class="mcp">2,328ms</td>
+          <td class="fgp">8ms</td>
+          <td><span class="speedup">292x</span></td>
+        </tr>
+        <tr>
+          <td class="operation">Snapshot</td>
+          <td class="mcp">2,484ms</td>
+          <td class="fgp">9ms</td>
+          <td><span class="speedup">276x</span></td>
+        </tr>
+        <tr>
+          <td class="operation">Screenshot</td>
+          <td class="mcp">1,635ms</td>
+          <td class="fgp">30ms</td>
+          <td><span class="speedup">54x</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Real-World Impact (20 tool calls)</div>
+      <table>
+        <tr>
+          <th>Metric</th>
+          <th>MCP</th>
+          <th>FGP</th>
+          <th>Time Saved</th>
+        </tr>
+        <tr>
+          <td class="operation">Cold-start overhead</td>
+          <td class="mcp">46 seconds</td>
+          <td class="fgp">0.2 seconds</td>
+          <td><span class="speedup">45.8s</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="insight">
+      <p class="insight-text">
+        <strong>Why it matters:</strong> LLM agents make many sequential tool calls.
+        With MCP, a 20-step workflow wastes <strong>46 seconds</strong> just on process spawning.
+        FGP daemons stay warm — the overhead disappears.
+      </p>
+    </div>
+
+    <div class="footer">
+      <span class="github">github.com/<a href="https://github.com/fast-gateway-protocol">fast-gateway-protocol</a></span>
+      <span class="tag">Written in Rust</span>
+    </div>
+  </div>
+</body>
+</html>

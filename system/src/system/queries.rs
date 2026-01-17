@@ -738,4 +738,79 @@ mod tests {
 
         assert_eq!(hw1.chip, hw2.chip);
     }
+
+    #[test]
+    fn test_parse_size_variants() {
+        assert_eq!(parse_size("1G"), 1024 * 1024 * 1024);
+        assert_eq!(parse_size("512M"), 512 * 1024 * 1024);
+        assert_eq!(parse_size("1.5K"), 1536);
+        assert_eq!(parse_size("100"), 100);
+    }
+
+    #[test]
+    fn test_parse_load_average() {
+        let loads = parse_load_average("{ 1.23 0.45 0.67 }");
+        assert!((loads[0] - 1.23).abs() < 1e-6);
+        assert!((loads[1] - 0.45).abs() < 1e-6);
+        assert!((loads[2] - 0.67).abs() < 1e-6);
+    }
+
+    #[test]
+    fn test_parse_boottime() {
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_secs();
+        let input = format!("{{ sec = {}, usec = 0 }}", now.saturating_sub(60));
+        let uptime = parse_boottime(&input);
+        assert!(uptime <= 120);
+    }
+
+    #[test]
+    fn test_parse_vm_stat() {
+        let input = "\
+Pages active: 100.\n\
+Pages wired: 50.\n\
+Pages occupied by compressor: 25.\n\
+Pages free: 75.\n\
+Pages speculative: 50.\n";
+        let (used_gb, total_gb) = parse_vm_stat(input);
+        let page_size = 16384_u64;
+        let used_pages = 100_u64 + 50 + 25;
+        let total_pages = used_pages + 75 + 50;
+        let expected_used = (used_pages * page_size) as f64 / 1024.0 / 1024.0 / 1024.0;
+        let expected_total = (total_pages * page_size) as f64 / 1024.0 / 1024.0 / 1024.0;
+        assert!((used_gb - expected_used).abs() < 1e-9);
+        assert!((total_gb - expected_total).abs() < 1e-9);
+    }
+
+    #[test]
+    fn test_parse_swap() {
+        let input = "total = 6144.00M  used = 1024.00M  free = 5120.00M";
+        let (used, total) = parse_swap(input);
+        assert!((total - 6.0).abs() < 1e-6);
+        assert!((used - 1.0).abs() < 1e-6);
+    }
+
+    #[test]
+    fn test_extract_field() {
+        let input = "Model Name: MacBook Pro\nMemory: 32 GB\n";
+        assert_eq!(extract_field(input, "Model Name:"), Some("MacBook Pro".to_string()));
+        assert_eq!(extract_field(input, "Memory:"), Some("32 GB".to_string()));
+        assert!(extract_field(input, "Chip:").is_none());
+    }
+
+    #[test]
+    fn test_cache_stats_entries_default_zero() {
+        let cache = SystemCache::new();
+        let stats = cache.cache_stats();
+
+        assert_eq!(stats["hardware"]["entries"].as_u64(), Some(0));
+        assert_eq!(stats["disk"]["entries"].as_u64(), Some(0));
+        assert_eq!(stats["network"]["entries"].as_u64(), Some(0));
+        assert_eq!(stats["processes"]["entries"].as_u64(), Some(0));
+        assert_eq!(stats["apps"]["entries"].as_u64(), Some(0));
+        assert_eq!(stats["battery"]["entries"].as_u64(), Some(0));
+        assert_eq!(stats["stats"]["entries"].as_u64(), Some(0));
+    }
 }

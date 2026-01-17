@@ -1,5 +1,10 @@
 # FGP Screen Time
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Fast macOS Screen Time daemon via SQLite queries to `knowledgeC.db`. Access app usage analytics without Apple's Swift-only frameworks.

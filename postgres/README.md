@@ -1,5 +1,10 @@
 # FGP Postgres Daemon
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 Fast PostgreSQL database operations via FGP protocol. Connect to any PostgreSQL database with connection pooling and low-latency queries.
 
 ## Quick Start

@@ -1,0 +1,186 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DFE957C4C15843BBBD4EDC2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01BFF1731EF4FD89A43A4F5 /* AppDelegate.swift */; };
+		24FEF091D14A4849A0A26606 /* FGPManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D279D1F225974830B6B5B3E8 /* FGPManagerApp.swift */; };
+		4EF4EF6D8329497CBEA4CCAF /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8820F21B9D463D8F012C13 /* VisualEffectView.swift */; };
+		6643931C226D4C16987FB087 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17920270212446CA039D782 /* WindowManager.swift */; };
+		0455935C4FB64C4F850CF559 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE70D2E365A44208DA90895 /* PopoverView.swift */; };
+		3901E693FEDC4610A557D151 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A429E2FD58B452F8A084B53 /* SettingsView.swift */; };
+		5AB20C5D8C8F433AB5B19D26 /* MarketplaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E54CE1232454147BF649456 /* MarketplaceView.swift */; };
+		38C6D478AD7E4B3092F0A936 /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895AE42B986B4BA0A7A846E7 /* ViewModels.swift */; };
+		8E1E6C711A5246C387F5FE76 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA064DAB8E6446CBC6BF3EE /* Models.swift */; };
+		20B21C0C841C4161AE786B4D /* FGPProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF514C85D6184611B34E0FEF /* FGPProtocol.swift */; };
+		F49EE98FF5274329A5D48F92 /* UnixSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41DF907AB3544AB888CACFD /* UnixSocketClient.swift */; };
+		398243D91A9143EF94120C1C /* DaemonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2BD21888644FA8687E3BB /* DaemonService.swift */; };
+		46F350A5D575484C8FCF55EF /* RegistryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225247ECD38E4E03B2F1BE78 /* RegistryService.swift */; };
+		58A00CA171474F4891D55674 /* AgentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE0DBF0FB63456DAB04DEAF /* AgentService.swift */; };
+		79382F4877E24741AA8400CA /* AutostartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879BB7F2F1E242A58EFCA2CB /* AutostartService.swift */; };
+		899100F79D094D7F88AEC82F /* ResourcePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D200EF4E4FC4FA4B55329CD /* ResourcePaths.swift */; };
+		431380460C304E7EBA1982EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F0F5A759B634C28925AEBD4 /* Assets.xcassets */; };
+		E65D77ACD3964DD2A411EAC1 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = C3A05F324B01463EB8035EAB /* Resources */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AE713E75DD724F0CB1166840 /* FGPManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = "FGPManager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B01BFF1731EF4FD89A43A4F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D279D1F225974830B6B5B3E8 /* FGPManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FGPManagerApp.swift; sourceTree = "<group>"; };
+		FE8820F21B9D463D8F012C13 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		A17920270212446CA039D782 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		6FE70D2E365A44208DA90895 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
+		3A429E2FD58B452F8A084B53 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5E54CE1232454147BF649456 /* MarketplaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceView.swift; sourceTree = "<group>"; };
+		895AE42B986B4BA0A7A846E7 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
+		FCA064DAB8E6446CBC6BF3EE /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		FF514C85D6184611B34E0FEF /* FGPProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FGPProtocol.swift; sourceTree = "<group>"; };
+		C41DF907AB3544AB888CACFD /* UnixSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnixSocketClient.swift; sourceTree = "<group>"; };
+		81E2BD21888644FA8687E3BB /* DaemonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonService.swift; sourceTree = "<group>"; };
+		225247ECD38E4E03B2F1BE78 /* RegistryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistryService.swift; sourceTree = "<group>"; };
+		DDE0DBF0FB63456DAB04DEAF /* AgentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentService.swift; sourceTree = "<group>"; };
+		879BB7F2F1E242A58EFCA2CB /* AutostartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutostartService.swift; sourceTree = "<group>"; };
+		3D200EF4E4FC4FA4B55329CD /* ResourcePaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePaths.swift; sourceTree = "<group>"; };
+		4F0F5A759B634C28925AEBD4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C3A05F324B01463EB8035EAB /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		10F5B724238844738B6AB9F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0D04D38B35D14724863C8DC6 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		674C5DCB8C3D4F428E8EFA3D = {isa = PBXGroup; children = (
+			CE93FCCA536B49AD91BD4E95 /* Sources */,
+			4F0F5A759B634C28925AEBD4 /* Assets.xcassets */,
+			10F5B724238844738B6AB9F6 /* Info.plist */,
+			0D5CA014068248909A3FE245 /* Products */,
+		); sourceTree = "<group>"; };
+		CE93FCCA536B49AD91BD4E95 /* Sources */ = {isa = PBXGroup; children = (
+
+			B01BFF1731EF4FD89A43A4F5 /* AppDelegate.swift */,
+			D279D1F225974830B6B5B3E8 /* FGPManagerApp.swift */,
+			FE8820F21B9D463D8F012C13 /* VisualEffectView.swift */,
+			A17920270212446CA039D782 /* WindowManager.swift */,
+			6FE70D2E365A44208DA90895 /* PopoverView.swift */,
+			3A429E2FD58B452F8A084B53 /* SettingsView.swift */,
+			5E54CE1232454147BF649456 /* MarketplaceView.swift */,
+			895AE42B986B4BA0A7A846E7 /* ViewModels.swift */,
+			FCA064DAB8E6446CBC6BF3EE /* Models.swift */,
+			FF514C85D6184611B34E0FEF /* FGPProtocol.swift */,
+			C41DF907AB3544AB888CACFD /* UnixSocketClient.swift */,
+			81E2BD21888644FA8687E3BB /* DaemonService.swift */,
+			225247ECD38E4E03B2F1BE78 /* RegistryService.swift */,
+			DDE0DBF0FB63456DAB04DEAF /* AgentService.swift */,
+			879BB7F2F1E242A58EFCA2CB /* AutostartService.swift */,
+			3D200EF4E4FC4FA4B55329CD /* ResourcePaths.swift */,
+			C3A05F324B01463EB8035EAB /* Resources */,
+		); path = Sources/FGPManager; sourceTree = "<group>"; };
+		0D5CA014068248909A3FE245 /* Products */ = {isa = PBXGroup; children = (
+			AE713E75DD724F0CB1166840 /* FGPManager.app */,
+		); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA158E09CF8841B7BB805F6B /* FGPManager */ = {isa = PBXNativeTarget; buildConfigurationList = A531F6E7007C48F79139437C /* Build configuration list for PBXNativeTarget "FGPManager" */; buildPhases = (
+			DC1B8027A7B44BA9B5AE3A68 /* Sources */,
+			AADEBE8C94F24C4E9C96A75B /* Resources */,
+			0D04D38B35D14724863C8DC6 /* Frameworks */,
+		); buildRules = (); dependencies = (); name = FGPManager; productName = FGPManager; productReference = AE713E75DD724F0CB1166840 /* FGPManager.app */; productType = "com.apple.product-type.application"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C7A0DA188A22422DA0CF6B1D /* Project object */ = {isa = PBXProject; buildConfigurationList = C2054E3A30064181BD1DD008 /* Build configuration list for PBXProject "FGPManager" */; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; mainGroup = 674C5DCB8C3D4F428E8EFA3D; productRefGroup = 0D5CA014068248909A3FE245 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (
+			AA158E09CF8841B7BB805F6B /* FGPManager */,
+		); };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AADEBE8C94F24C4E9C96A75B /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
+			431380460C304E7EBA1982EB /* Assets.xcassets in Resources */,
+			E65D77ACD3964DD2A411EAC1 /* Resources in Resources */,
+		); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DC1B8027A7B44BA9B5AE3A68 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+
+			DFE957C4C15843BBBD4EDC2F /* AppDelegate.swift in Sources */,
+			24FEF091D14A4849A0A26606 /* FGPManagerApp.swift in Sources */,
+			4EF4EF6D8329497CBEA4CCAF /* VisualEffectView.swift in Sources */,
+			6643931C226D4C16987FB087 /* WindowManager.swift in Sources */,
+			0455935C4FB64C4F850CF559 /* PopoverView.swift in Sources */,
+			3901E693FEDC4610A557D151 /* SettingsView.swift in Sources */,
+			5AB20C5D8C8F433AB5B19D26 /* MarketplaceView.swift in Sources */,
+			38C6D478AD7E4B3092F0A936 /* ViewModels.swift in Sources */,
+			8E1E6C711A5246C387F5FE76 /* Models.swift in Sources */,
+			20B21C0C841C4161AE786B4D /* FGPProtocol.swift in Sources */,
+			F49EE98FF5274329A5D48F92 /* UnixSocketClient.swift in Sources */,
+			398243D91A9143EF94120C1C /* DaemonService.swift in Sources */,
+			46F350A5D575484C8FCF55EF /* RegistryService.swift in Sources */,
+			58A00CA171474F4891D55674 /* AgentService.swift in Sources */,
+			79382F4877E24741AA8400CA /* AutostartService.swift in Sources */,
+			899100F79D094D7F88AEC82F /* ResourcePaths.swift in Sources */,
+		); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E517529449F141F0BD3071F9 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+			ALWAYS_SEARCH_USER_PATHS = NO;
+			CLANG_ENABLE_OBJC_ARC = YES;
+			CODE_SIGN_STYLE = Automatic;
+			DEAD_CODE_STRIPPING = YES;
+			GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
+			MACOSX_DEPLOYMENT_TARGET = 13.0;
+			PRODUCT_NAME = "FGP Manager";
+			SWIFT_VERSION = 5.9;
+		}; name = Debug; };
+		55FC9D97810346039F66A391 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+			ALWAYS_SEARCH_USER_PATHS = NO;
+			CLANG_ENABLE_OBJC_ARC = YES;
+			CODE_SIGN_STYLE = Automatic;
+			DEAD_CODE_STRIPPING = YES;
+			MACOSX_DEPLOYMENT_TARGET = 13.0;
+			PRODUCT_NAME = "FGP Manager";
+			SWIFT_VERSION = 5.9;
+		}; name = Release; };
+		D81C782414564ACCA55AF119 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+			CODE_SIGN_STYLE = Automatic;
+			INFOPLIST_FILE = Info.plist;
+			LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks");
+			MACOSX_DEPLOYMENT_TARGET = 13.0;
+			PRODUCT_BUNDLE_IDENTIFIER = com.fgp.manager;
+			PRODUCT_NAME = "FGP Manager";
+			SWIFT_VERSION = 5.9;
+		}; name = Debug; };
+		05396A021D5C4500BC73945F /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+			CODE_SIGN_STYLE = Automatic;
+			INFOPLIST_FILE = Info.plist;
+			LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks");
+			MACOSX_DEPLOYMENT_TARGET = 13.0;
+			PRODUCT_BUNDLE_IDENTIFIER = com.fgp.manager;
+			PRODUCT_NAME = "FGP Manager";
+			SWIFT_VERSION = 5.9;
+		}; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C2054E3A30064181BD1DD008 /* Build configuration list for PBXProject "FGPManager" */ = {isa = XCConfigurationList; buildConfigurations = (
+			E517529449F141F0BD3071F9 /* Debug */,
+			55FC9D97810346039F66A391 /* Release */,
+		); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		A531F6E7007C48F79139437C /* Build configuration list for PBXNativeTarget "FGPManager" */ = {isa = XCConfigurationList; buildConfigurations = (
+			D81C782414564ACCA55AF119 /* Debug */,
+			05396A021D5C4500BC73945F /* Release */,
+		); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+
+	};
+	rootObject = C7A0DA188A22422DA0CF6B1D /* Project object */;
+}

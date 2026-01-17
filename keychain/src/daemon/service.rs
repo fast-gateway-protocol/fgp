@@ -237,3 +237,79 @@ impl FgpService for KeychainService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::KeychainService;
+    use fgp_daemon::FgpService;
+    use serde_json::json;
+    use std::collections::HashMap;
+
+    #[test]
+    fn get_param_str_reads_required_values() {
+        let mut params = HashMap::new();
+        params.insert("service".to_string(), json!("login"));
+
+        let value = KeychainService::get_param_str(&params, "service").expect("service");
+        assert_eq!(value, "login");
+    }
+
+    #[test]
+    fn get_param_str_errors_on_missing_or_invalid() {
+        let params = HashMap::new();
+        let err = KeychainService::get_param_str(&params, "service").expect_err("missing");
+        assert!(err.to_string().contains("service"));
+
+        let mut params = HashMap::new();
+        params.insert("service".to_string(), json!(42));
+        let err = KeychainService::get_param_str(&params, "service").expect_err("invalid");
+        assert!(err.to_string().contains("service"));
+    }
+
+    #[test]
+    fn get_param_str_opt_handles_optional_values() {
+        let mut params = HashMap::new();
+        params.insert("account".to_string(), json!("me"));
+
+        assert_eq!(KeychainService::get_param_str_opt(&params, "account"), Some("me"));
+        assert_eq!(KeychainService::get_param_str_opt(&params, "missing"), None);
+    }
+
+    #[test]
+    fn method_list_includes_required_fields() {
+        let service = KeychainService::new().expect("service");
+        let methods = service.method_list();
+
+        let set_method = methods
+            .iter()
+            .find(|m| m.name == "set_generic")
+            .expect("set_generic");
+        let service_param = set_method
+            .params
+            .iter()
+            .find(|p| p.name == "service")
+            .expect("service");
+        let account_param = set_method
+            .params
+            .iter()
+            .find(|p| p.name == "account")
+            .expect("account");
+        let password_param = set_method
+            .params
+            .iter()
+            .find(|p| p.name == "password")
+            .expect("password");
+        assert!(service_param.required);
+        assert!(account_param.required);
+        assert!(password_param.required);
+    }
+
+    #[test]
+    fn dispatch_rejects_unknown_method() {
+        let service = KeychainService::new().expect("service");
+        let err = service
+            .dispatch("keychain.nope", HashMap::new())
+            .expect_err("unknown method");
+        assert!(err.to_string().contains("Unknown method"));
+    }
+}

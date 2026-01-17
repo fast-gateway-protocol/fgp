@@ -1,5 +1,10 @@
 # FGP Linear Daemon
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 Fast Linear issue tracking operations via FGP protocol.
 
 ## Quick Start

@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-01-14T00:00:00Z",
+  "packages": [
+    {
+      "name": "browser",
+      "display_name": "Browser Gateway",
+      "version": "1.0.0",
+      "description": "Fast browser automation via Chrome DevTools Protocol. 292x faster than Playwright MCP.",
+      "icon": "globe",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/browser",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/browser/releases/download/v1.0.0/browser-gateway-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/browser/releases/download/v1.0.0/browser-gateway-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 18,
+      "featured": true,
+      "official": true,
+      "category": "automation"
+    },
+    {
+      "name": "gmail",
+      "display_name": "Gmail Gateway",
+      "version": "1.0.0",
+      "description": "Fast Gmail operations via Google API. Read, send, and search emails with 69x speedup.",
+      "icon": "mail",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/gmail",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/gmail/releases/download/v1.0.0/gmail-gateway-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/gmail/releases/download/v1.0.0/gmail-gateway-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 6,
+      "featured": true,
+      "official": true,
+      "category": "communication"
+    },
+    {
+      "name": "calendar",
+      "display_name": "Calendar Gateway",
+      "version": "1.0.0",
+      "description": "Google Calendar integration. Create, update, and query calendar events.",
+      "icon": "calendar",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/calendar",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/calendar/releases/download/v1.0.0/calendar-gateway-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/calendar/releases/download/v1.0.0/calendar-gateway-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 4,
+      "featured": false,
+      "official": true,
+      "category": "productivity"
+    },
+    {
+      "name": "github",
+      "display_name": "GitHub Gateway",
+      "version": "1.0.0",
+      "description": "GitHub operations via GraphQL and REST. Issues, PRs, repos with 75x speedup.",
+      "icon": "code",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/github",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/github/releases/download/v1.0.0/github-gateway-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/github/releases/download/v1.0.0/github-gateway-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 8,
+      "featured": true,
+      "official": true,
+      "category": "development"
+    },
+    {
+      "name": "fly",
+      "display_name": "Fly.io Gateway",
+      "version": "1.0.0",
+      "description": "Fly.io deployment operations. Manage apps, machines, and deployments.",
+      "icon": "cloud",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/fly",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/fly/releases/download/v1.0.0/fly-gateway-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/fly/releases/download/v1.0.0/fly-gateway-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 6,
+      "featured": false,
+      "official": true,
+      "category": "deployment"
+    },
+    {
+      "name": "neon",
+      "display_name": "Neon Gateway",
+      "version": "1.0.0",
+      "description": "Neon Postgres operations. Run SQL, manage branches, and optimize queries.",
+      "icon": "database",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/neon",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/neon/releases/download/v1.0.0/neon-gateway-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/neon/releases/download/v1.0.0/neon-gateway-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 10,
+      "featured": false,
+      "official": true,
+      "category": "database"
+    },
+    {
+      "name": "vercel",
+      "display_name": "Vercel Gateway",
+      "version": "1.0.0",
+      "description": "Vercel deployment operations. Deploy, manage domains, and check logs.",
+      "icon": "triangle",
+      "author": "FGP Team",
+      "repository": "https://github.com/fast-gateway-protocol/vercel",
+      "platforms": {
+        "darwin-aarch64": {
+          "url": "https://github.com/fast-gateway-protocol/vercel/releases/download/v1.0.0/vercel-gateway-darwin-aarch64.tar.gz",
+          "sha256": "placeholder"
+        },
+        "darwin-x86_64": {
+          "url": "https://github.com/fast-gateway-protocol/vercel/releases/download/v1.0.0/vercel-gateway-darwin-x86_64.tar.gz",
+          "sha256": "placeholder"
+        }
+      },
+      "methods_count": 5,
+      "featured": false,
+      "official": true,
+      "category": "deployment"
+    }
+  ],
+  "categories": [
+    {"id": "automation", "name": "Automation", "icon": "zap"},
+    {"id": "communication", "name": "Communication", "icon": "message-circle"},
+    {"id": "productivity", "name": "Productivity", "icon": "check-square"},
+    {"id": "development", "name": "Development", "icon": "code"},
+    {"id": "deployment", "name": "Deployment", "icon": "cloud"},
+    {"id": "database", "name": "Database", "icon": "database"}
+  ]
+}

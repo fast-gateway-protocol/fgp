@@ -450,3 +450,69 @@ pub fn query_stats(conn: &Connection) -> Result<NotesStats> {
         pinned_notes,
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rusqlite::Connection;
+
+    fn setup_notes_db() -> Connection {
+        let conn = Connection::open_in_memory().expect("open memory db");
+        conn.execute_batch(
+            r#"
+            CREATE TABLE ZICCLOUDSYNCINGOBJECT (
+                Z_PK INTEGER PRIMARY KEY,
+                ZTITLE1 TEXT,
+                ZSNIPPET TEXT,
+                ZCREATIONDATE3 REAL,
+                ZMODIFICATIONDATE1 REAL,
+                ZISPINNED INTEGER,
+                ZHASCHECKLIST INTEGER,
+                ZFOLDER INTEGER,
+                ZENT INTEGER,
+                Z_ENT INTEGER,
+                ZMARKEDFORDELETION INTEGER
+            );
+            CREATE TABLE ZICNOTEDATA (
+                ZNOTE INTEGER,
+                ZDATA BLOB
+            );
+            "#,
+        )
+        .expect("create schema");
+        conn
+    }
+
+    #[test]
+    fn test_extract_note_text_requires_gzip() {
+        let data = b"not-gzip";
+        assert!(extract_note_text(data).is_none());
+    }
+
+    #[test]
+    fn test_query_stats_counts() {
+        let conn = setup_notes_db();
+        conn.execute(
+            "INSERT INTO ZICCLOUDSYNCINGOBJECT (Z_PK, Z_ENT, ZMARKEDFORDELETION, ZHASCHECKLIST, ZISPINNED) VALUES (1, 12, 0, 1, 1)",
+            [],
+        )
+        .expect("insert note");
+        conn.execute(
+            "INSERT INTO ZICCLOUDSYNCINGOBJECT (Z_PK, Z_ENT, ZMARKEDFORDELETION, ZHASCHECKLIST, ZISPINNED) VALUES (2, 12, 0, 0, 0)",
+            [],
+        )
+        .expect("insert note");
+        conn.execute(
+            "INSERT INTO ZICCLOUDSYNCINGOBJECT (Z_PK, Z_ENT, ZMARKEDFORDELETION) VALUES (3, 9, 0)",
+            [],
+        )
+        .expect("insert folder");
+
+        let stats = query_stats(&conn).expect("stats");
+
+        assert_eq!(stats.total_notes, 2);
+        assert_eq!(stats.total_folders, 1);
+        assert_eq!(stats.notes_with_checklists, 1);
+        assert_eq!(stats.pinned_notes, 1);
+    }
+}

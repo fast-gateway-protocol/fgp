@@ -621,6 +621,7 @@ pub fn query_stats(conn: &Connection) -> Result<PhotoStats> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rusqlite::Connection;
 
     #[test]
     fn test_asset_kind_conversion() {
@@ -633,5 +634,66 @@ mod tests {
     fn test_days_ago() {
         let cutoff = days_ago_core_data(7);
         assert!(cutoff > 0.0);
+    }
+
+    #[test]
+    fn test_query_stats_counts() {
+        let conn = Connection::open_in_memory().expect("open memory db");
+        conn.execute_batch(
+            r#"
+            CREATE TABLE ZASSET (
+                ZTRASHEDSTATE INTEGER,
+                ZVISIBILITYSTATE INTEGER,
+                ZKIND INTEGER,
+                ZFAVORITE INTEGER,
+                ZHIDDEN INTEGER,
+                ZLATITUDE REAL
+            );
+            CREATE TABLE ZGENERICALBUM (
+                ZTITLE TEXT,
+                ZTRASHEDSTATE INTEGER,
+                ZKIND INTEGER
+            );
+            CREATE TABLE ZPERSON (
+                ZFACECOUNT INTEGER
+            );
+            "#,
+        )
+        .expect("create schema");
+
+        conn.execute(
+            "INSERT INTO ZASSET (ZTRASHEDSTATE, ZVISIBILITYSTATE, ZKIND, ZFAVORITE, ZHIDDEN, ZLATITUDE) VALUES (0, 0, 0, 1, 0, 12.0)",
+            [],
+        )
+        .expect("insert asset 1");
+        conn.execute(
+            "INSERT INTO ZASSET (ZTRASHEDSTATE, ZVISIBILITYSTATE, ZKIND, ZFAVORITE, ZHIDDEN, ZLATITUDE) VALUES (0, 0, 1, 0, 0, -180.0)",
+            [],
+        )
+        .expect("insert asset 2");
+        conn.execute(
+            "INSERT INTO ZASSET (ZTRASHEDSTATE, ZVISIBILITYSTATE, ZKIND, ZFAVORITE, ZHIDDEN, ZLATITUDE) VALUES (1, 0, 0, 0, 1, 0.0)",
+            [],
+        )
+        .expect("insert asset 3");
+
+        conn.execute(
+            "INSERT INTO ZGENERICALBUM (ZTITLE, ZTRASHEDSTATE, ZKIND) VALUES ('Album', 0, 2)",
+            [],
+        )
+        .expect("insert album");
+        conn.execute("INSERT INTO ZPERSON (ZFACECOUNT) VALUES (3)", [])
+            .expect("insert person");
+
+        let stats = query_stats(&conn).expect("stats");
+
+        assert_eq!(stats.total_assets, 2);
+        assert_eq!(stats.photos, 1);
+        assert_eq!(stats.videos, 1);
+        assert_eq!(stats.favorites, 1);
+        assert_eq!(stats.hidden, 0);
+        assert_eq!(stats.with_location, 1);
+        assert_eq!(stats.albums, 1);
+        assert_eq!(stats.people, 1);
     }
 }

@@ -1,5 +1,10 @@
 # FGP Apple Reminders
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Fast Apple Reminders daemon using native EventKit framework. Direct access to macOS reminders without spawning subprocesses.

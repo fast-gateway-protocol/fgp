@@ -281,3 +281,88 @@ impl FgpService for ContactsService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::ContactsService;
+    use fgp_daemon::service::FgpService;
+    use rusqlite::Connection;
+    use serde_json::json;
+    use std::collections::HashMap;
+    use std::sync::Mutex;
+
+    fn test_service() -> ContactsService {
+        let conn = Connection::open_in_memory().expect("in memory db");
+        ContactsService {
+            conn: Mutex::new(conn),
+            started_at: "test".to_string(),
+        }
+    }
+
+    #[test]
+    fn get_param_helpers_read_values() {
+        let mut params = HashMap::new();
+        params.insert("limit".to_string(), json!(42));
+        params.insert("query".to_string(), json!("Ada"));
+
+        assert_eq!(ContactsService::get_param_u32(&params, "limit", 10), 42);
+        assert_eq!(ContactsService::get_param_u32(&params, "missing", 10), 10);
+        assert_eq!(ContactsService::get_param_str(&params, "query"), Some("Ada"));
+        assert_eq!(ContactsService::get_param_str(&params, "missing"), None);
+    }
+
+    #[test]
+    fn method_list_includes_defaults_and_required_fields() {
+        let methods = test_service().method_list();
+
+        let list_method = methods.iter().find(|m| m.name == "list").expect("list");
+        let list_limit = list_method
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(list_limit.required, false);
+        assert_eq!(list_limit.default, Some(json!(100)));
+
+        let search_method = methods
+            .iter()
+            .find(|m| m.name == "search")
+            .expect("search");
+        let search_query = search_method
+            .params
+            .iter()
+            .find(|p| p.name == "query")
+            .expect("query");
+        assert!(search_query.required);
+
+        let search_limit = search_method
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(search_limit.default, Some(json!(20)));
+
+        let recent_method = methods.iter().find(|m| m.name == "recent").expect("recent");
+        let days_param = recent_method
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days");
+        let limit_param = recent_method
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(days_param.default, Some(json!(30)));
+        assert_eq!(limit_param.default, Some(json!(20)));
+    }
+
+    #[test]
+    fn dispatch_rejects_unknown_method() {
+        let service = test_service();
+        let err = service
+            .dispatch("contacts.nope", HashMap::new())
+            .expect_err("unknown method");
+        assert!(err.to_string().contains("Unknown method"));
+    }
+}

@@ -1,0 +1,261 @@
+//! FGP {{display_name}} Daemon
+//!
+//! Fast daemon for {{display_name}} operations via the FGP protocol.
+//!
+//! # Usage
+//!
+//! ```bash
+//! # Start daemon (background)
+//! fgp-{{service_name}} start
+//!
+//! # Start in foreground (for debugging)
+//! fgp-{{service_name}} start -f
+//!
+//! # Check status
+//! fgp-{{service_name}} status
+//!
+//! # Stop daemon
+//! fgp-{{service_name}} stop
+//! ```
+//!
+//! # Authentication
+//!
+//! Set `{{env_token}}` environment variable or configure via config file.
+//!
+//! # Methods
+//!
+//! - `{{service_name}}.health` - Health check
+//! - `{{service_name}}.list` - List items
+//! - `{{service_name}}.get` - Get item by ID
+//!
+//! # CHANGELOG (recent first, max 5 entries)
+//! {{date}} - Initial implementation ({{author}})
+
+use anyhow::{Context, Result};
+use clap::{Parser, Subcommand};
+use fgp_daemon::FgpServer;
+use std::fs;
+use std::io::{BufRead, BufReader, Write};
+use std::os::unix::net::UnixStream;
+use std::path::Path;
+use std::process;
+
+mod api;
+mod models;
+mod service;
+
+use service::{{service_struct}}Service;
+
+const DEFAULT_SOCKET: &str = "~/.fgp/services/{{service_name}}/daemon.sock";
+const PID_FILE: &str = "~/.fgp/services/{{service_name}}/daemon.pid";
+
+#[derive(Parser)]
+#[command(name = "fgp-{{service_name}}")]
+#[command(about = "FGP daemon for {{display_name}}")]
+#[command(version)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// Start the daemon
+    Start {
+        /// Socket path
+        #[arg(short, long, default_value = DEFAULT_SOCKET)]
+        socket: String,
+
+        /// Run in foreground (don't daemonize)
+        #[arg(short, long)]
+        foreground: bool,
+
+        /// API token (or set {{env_token}})
+        #[arg(long, env = "{{env_token}}")]
+        token: Option<String>,
+    },
+
+    /// Stop the daemon
+    Stop {
+        /// Socket path
+        #[arg(short, long, default_value = DEFAULT_SOCKET)]
+        socket: String,
+    },
+
+    /// Check daemon status
+    Status {
+        /// Socket path
+        #[arg(short, long, default_value = DEFAULT_SOCKET)]
+        socket: String,
+    },
+
+    /// Health check
+    Health {
+        /// Socket path
+        #[arg(short, long, default_value = DEFAULT_SOCKET)]
+        socket: String,
+    },
+}
+
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+
+    match cli.command {
+        Commands::Start {
+            socket,
+            foreground,
+            token,
+        } => cmd_start(socket, foreground, token),
+        Commands::Stop { socket } => cmd_stop(socket),
+        Commands::Status { socket } => cmd_status(socket),
+        Commands::Health { socket } => cmd_health(socket),
+    }
+}
+
+fn cmd_start(socket: String, foreground: bool, token: Option<String>) -> Result<()> {
+    let socket_path = shellexpand::tilde(&socket).to_string();
+    let pid_path = shellexpand::tilde(PID_FILE).to_string();
+
+    // Create parent directory if needed
+    if let Some(parent) = Path::new(&socket_path).parent() {
+        fs::create_dir_all(parent)?;
+    }
+
+    // Remove stale socket
+    if Path::new(&socket_path).exists() {
+        fs::remove_file(&socket_path)?;
+    }
+
+    if foreground {
+        // Foreground mode - run directly with logging
+        tracing_subscriber::fmt()
+            .with_env_filter("fgp_{{service_name}}=debug,fgp_daemon=debug")
+            .init();
+
+        tracing::info!("Starting {{display_name}} daemon in foreground mode");
+        tracing::info!("Socket: {}", socket_path);
+
+        let service = {{service_struct}}Service::new(token)
+            .context("Failed to create {{display_name}} service")?;
+        let server = FgpServer::new(service, &socket_path)?;
+        server.serve()?;
+    } else {
+        // Daemonize BEFORE creating tokio runtime
+        let daemonize = daemonize::Daemonize::new()
+            .pid_file(&pid_path)
+            .chown_pid_file(true)
+            .working_directory(".");
+
+        match daemonize.start() {
+            Ok(_) => {
+                // We're now in the daemon process
+                // Initialize logging to syslog or file here if needed
+
+                let service = {{service_struct}}Service::new(token)
+                    .context("Failed to create {{display_name}} service")?;
+                let server = FgpServer::new(service, &socket_path)?;
+                server.serve()?;
+            }
+            Err(e) => {
+                eprintln!("Failed to daemonize: {}", e);
+                process::exit(1);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn cmd_stop(socket: String) -> Result<()> {
+    let socket_path = shellexpand::tilde(&socket).to_string();
+
+    if !Path::new(&socket_path).exists() {
+        println!("Daemon not running (socket not found)");
+        return Ok(());
+    }
+
+    // Send stop command via socket
+    let request = serde_json::json!({
+        "id": uuid::Uuid::new_v4().to_string(),
+        "v": 1,
+        "method": "stop",
+        "params": {}
+    });
+
+    match send_request(&socket_path, &request) {
+        Ok(response) => {
+            if response.get("ok").and_then(|v| v.as_bool()).unwrap_or(false) {
+                println!("Daemon stopped");
+            } else {
+                println!("Stop command sent, but received unexpected response");
+            }
+        }
+        Err(e) => {
+            println!("Failed to send stop command: {}", e);
+            println!("Daemon may not be running");
+        }
+    }
+
+    Ok(())
+}
+
+fn cmd_status(socket: String) -> Result<()> {
+    let socket_path = shellexpand::tilde(&socket).to_string();
+
+    if !Path::new(&socket_path).exists() {
+        println!("Status: NOT RUNNING (socket not found)");
+        return Ok(());
+    }
+
+    let request = serde_json::json!({
+        "id": uuid::Uuid::new_v4().to_string(),
+        "v": 1,
+        "method": "health",
+        "params": {}
+    });
+
+    match send_request(&socket_path, &request) {
+        Ok(response) => {
+            if response.get("ok").and_then(|v| v.as_bool()).unwrap_or(false) {
+                println!("Status: RUNNING");
+                if let Some(result) = response.get("result") {
+                    println!("{}", serde_json::to_string_pretty(result)?);
+                }
+            } else {
+                println!("Status: UNHEALTHY");
+                if let Some(error) = response.get("error") {
+                    println!("Error: {}", error);
+                }
+            }
+        }
+        Err(e) => {
+            println!("Status: NOT RUNNING (connection failed: {})", e);
+        }
+    }
+
+    Ok(())
+}
+
+fn cmd_health(socket: String) -> Result<()> {
+    cmd_status(socket)
+}
+
+/// Send a JSON-RPC request to the daemon and return the response.
+fn send_request(socket_path: &str, request: &serde_json::Value) -> Result<serde_json::Value> {
+    let mut stream = UnixStream::connect(socket_path)
+        .context("Failed to connect to daemon socket")?;
+
+    let mut request_str = serde_json::to_string(request)?;
+    request_str.push('\n');
+    stream.write_all(request_str.as_bytes())?;
+
+    let reader = BufReader::new(&stream);
+    let mut lines = reader.lines();
+
+    if let Some(line) = lines.next() {
+        let response: serde_json::Value = serde_json::from_str(&line?)?;
+        Ok(response)
+    } else {
+        anyhow::bail!("No response from daemon")
+    }
+}

@@ -1050,3 +1050,110 @@ pub fn run() {
             }
         });
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        calculate_tray_status, get_launchd_plist_path, remove_from_mcp_config,
+        update_mcp_config, DaemonInfo, TrayStatus,
+    };
+    use serde_json::{json, Value};
+    use std::fs;
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    fn temp_path(name: &str) -> std::path::PathBuf {
+        let stamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("time")
+            .as_nanos();
+        std::env::temp_dir().join(format!("fgp-manager-{}-{}.json", name, stamp))
+    }
+
+    fn daemon(name: &str, is_running: bool) -> DaemonInfo {
+        DaemonInfo {
+            name: name.to_string(),
+            status: if is_running { "running" } else { "stopped" }.to_string(),
+            version: None,
+            uptime_seconds: None,
+            is_running,
+            has_manifest: true,
+        }
+    }
+
+    #[test]
+    fn update_mcp_config_sets_fgp_entry() {
+        let path = temp_path("mcp");
+        let mcp = json!({"command": "python3", "args": ["/tmp/fgp.py"]});
+        update_mcp_config(&path, &mcp).expect("update");
+
+        let content = fs::read_to_string(&path).expect("read");
+        let config: Value = serde_json::from_str(&content).expect("json");
+        assert_eq!(config["mcpServers"]["fgp"], mcp);
+
+        let _ = fs::remove_file(&path);
+    }
+
+    #[test]
+    fn update_mcp_config_preserves_existing_servers() {
+        let path = temp_path("mcp-existing");
+        let existing = json!({"mcpServers": {"other": {"command": "node"}}});
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent).expect("mkdir");
+        }
+        fs::write(&path, serde_json::to_string_pretty(&existing).unwrap()).expect("write");
+
+        let mcp = json!({"command": "python3", "args": ["/tmp/fgp.py"]});
+        update_mcp_config(&path, &mcp).expect("update");
+
+        let content = fs::read_to_string(&path).expect("read");
+        let config: Value = serde_json::from_str(&content).expect("json");
+        assert!(config["mcpServers"]["other"].is_object());
+        assert_eq!(config["mcpServers"]["fgp"], mcp);
+
+        let _ = fs::remove_file(&path);
+    }
+
+    #[test]
+    fn remove_from_mcp_config_removes_only_fgp() {
+        let path = temp_path("mcp-remove");
+        let config = json!({
+            "mcpServers": {
+                "fgp": {"command": "python3"},
+                "other": {"command": "node"}
+            }
+        });
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent).expect("mkdir");
+        }
+        fs::write(&path, serde_json::to_string_pretty(&config).unwrap()).expect("write");
+
+        remove_from_mcp_config(&path).expect("remove");
+        let content = fs::read_to_string(&path).expect("read");
+        let updated: Value = serde_json::from_str(&content).expect("json");
+        assert!(updated["mcpServers"]["fgp"].is_null());
+        assert!(updated["mcpServers"]["other"].is_object());
+
+        let _ = fs::remove_file(&path);
+    }
+
+    #[test]
+    fn calculate_tray_status_reflects_running_counts() {
+        assert_eq!(calculate_tray_status(&[]), TrayStatus::Error);
+
+        let none_running = vec![daemon("a", false), daemon("b", false)];
+        assert_eq!(calculate_tray_status(&none_running), TrayStatus::Error);
+
+        let partial = vec![daemon("a", true), daemon("b", false)];
+        assert_eq!(calculate_tray_status(&partial), TrayStatus::Degraded);
+
+        let all_running = vec![daemon("a", true), daemon("b", true)];
+        assert_eq!(calculate_tray_status(&all_running), TrayStatus::Healthy);
+    }
+
+    #[test]
+    fn launchd_path_ends_with_plist_name() {
+        if let Ok(path) = get_launchd_plist_path() {
+            assert!(path.ends_with("Library/LaunchAgents/com.fgp.manager.plist"));
+        }
+    }
+}

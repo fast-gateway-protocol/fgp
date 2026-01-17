@@ -260,3 +260,61 @@ impl FgpService for SpotlightService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_param_helpers() {
+        let mut params = HashMap::new();
+        params.insert("limit".to_string(), Value::from(25));
+        params.insert("query".to_string(), Value::String("name:report".to_string()));
+        params.insert("min_bytes".to_string(), Value::from(1024));
+
+        assert_eq!(SpotlightService::get_param_u32(&params, "limit", 50), 25);
+        assert_eq!(SpotlightService::get_param_u32(&params, "missing", 50), 50);
+        assert_eq!(
+            SpotlightService::get_param_str(&params, "query"),
+            Some("name:report")
+        );
+        assert_eq!(SpotlightService::get_param_str(&params, "missing"), None);
+        assert_eq!(SpotlightService::get_param_u64(&params, "min_bytes"), Some(1024));
+        assert_eq!(SpotlightService::get_param_u64(&params, "missing"), None);
+    }
+
+    #[test]
+    fn test_method_list_defaults() {
+        let service = SpotlightService::new().expect("service");
+        let methods = service.method_list();
+
+        let search = methods.iter().find(|m| m.name == "search").expect("search");
+        let search_scope = search
+            .params
+            .iter()
+            .find(|p| p.name == "scope")
+            .expect("scope param");
+        assert_eq!(
+            search_scope.default.as_ref().and_then(Value::as_str),
+            Some("home")
+        );
+
+        let recent = methods.iter().find(|m| m.name == "recent").expect("recent");
+        let recent_days = recent
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days param");
+        assert_eq!(
+            recent_days.default.as_ref().and_then(Value::as_i64),
+            Some(7)
+        );
+    }
+
+    #[test]
+    fn test_dispatch_unknown_method() {
+        let service = SpotlightService::new().expect("service");
+        let result = service.dispatch("spotlight.unknown", HashMap::new());
+        assert!(result.is_err());
+    }
+}

@@ -203,3 +203,156 @@ impl SortBy {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::{TimeZone, Utc};
+
+    #[test]
+    fn flight_helpers_format_duration_and_stops() {
+        let segment = Segment {
+            carrier: "AA".to_string(),
+            carrier_name: Some("Airline".to_string()),
+            flight_number: Some("AA1".to_string()),
+            departure_time: Utc.with_ymd_and_hms(2026, 1, 1, 8, 0, 0).unwrap(),
+            arrival_time: Utc.with_ymd_and_hms(2026, 1, 1, 10, 0, 0).unwrap(),
+            origin: "SFO".to_string(),
+            origin_name: None,
+            destination: "LAX".to_string(),
+            destination_name: None,
+            duration_minutes: 120,
+            cabin_class: None,
+        };
+        let flight = Flight {
+            id: "f1".to_string(),
+            price: 120.0,
+            currency: "USD".to_string(),
+            departure_time: segment.departure_time,
+            arrival_time: segment.arrival_time,
+            origin: "SFO".to_string(),
+            origin_city: None,
+            destination: "LAX".to_string(),
+            destination_city: None,
+            duration_minutes: 120,
+            stops: 0,
+            segments: vec![segment],
+            deep_link: None,
+        };
+
+        assert_eq!(flight.duration_formatted(), "2h 0m");
+        assert_eq!(flight.stops_label(), "Direct");
+    }
+
+    #[test]
+    fn flight_carriers_and_layovers() {
+        let segment1 = Segment {
+            carrier: "AA".to_string(),
+            carrier_name: Some("Airline".to_string()),
+            flight_number: None,
+            departure_time: Utc.with_ymd_and_hms(2026, 1, 1, 8, 0, 0).unwrap(),
+            arrival_time: Utc.with_ymd_and_hms(2026, 1, 1, 10, 0, 0).unwrap(),
+            origin: "SFO".to_string(),
+            origin_name: None,
+            destination: "DEN".to_string(),
+            destination_name: None,
+            duration_minutes: 120,
+            cabin_class: None,
+        };
+        let segment2 = Segment {
+            carrier: "UA".to_string(),
+            carrier_name: None,
+            flight_number: None,
+            departure_time: Utc.with_ymd_and_hms(2026, 1, 1, 11, 0, 0).unwrap(),
+            arrival_time: Utc.with_ymd_and_hms(2026, 1, 1, 13, 0, 0).unwrap(),
+            origin: "DEN".to_string(),
+            origin_name: None,
+            destination: "LAX".to_string(),
+            destination_name: None,
+            duration_minutes: 120,
+            cabin_class: None,
+        };
+        let flight = Flight {
+            id: "f2".to_string(),
+            price: 200.0,
+            currency: "USD".to_string(),
+            departure_time: segment1.departure_time,
+            arrival_time: segment2.arrival_time,
+            origin: "SFO".to_string(),
+            origin_city: None,
+            destination: "LAX".to_string(),
+            destination_city: None,
+            duration_minutes: 300,
+            stops: 1,
+            segments: vec![segment1, segment2],
+            deep_link: None,
+        };
+
+        let carriers = flight.carriers();
+        assert_eq!(carriers.len(), 2);
+        assert!(carriers.contains(&"Airline".to_string()));
+        assert!(carriers.contains(&"UA".to_string()));
+
+        let layovers = flight.layover_airports();
+        assert_eq!(layovers, vec!["DEN".to_string()]);
+        assert_eq!(flight.stops_label(), "1 stop");
+    }
+
+    #[test]
+    fn round_trip_helpers() {
+        let outbound = Flight {
+            id: "out".to_string(),
+            price: 100.0,
+            currency: "USD".to_string(),
+            departure_time: Utc.with_ymd_and_hms(2026, 1, 1, 8, 0, 0).unwrap(),
+            arrival_time: Utc.with_ymd_and_hms(2026, 1, 1, 10, 0, 0).unwrap(),
+            origin: "SFO".to_string(),
+            origin_city: None,
+            destination: "LAX".to_string(),
+            destination_city: None,
+            duration_minutes: 120,
+            stops: 0,
+            segments: vec![],
+            deep_link: None,
+        };
+        let inbound = Flight {
+            id: "in".to_string(),
+            price: 100.0,
+            currency: "USD".to_string(),
+            departure_time: Utc.with_ymd_and_hms(2026, 1, 5, 8, 0, 0).unwrap(),
+            arrival_time: Utc.with_ymd_and_hms(2026, 1, 5, 10, 0, 0).unwrap(),
+            origin: "LAX".to_string(),
+            origin_city: None,
+            destination: "SFO".to_string(),
+            destination_city: None,
+            duration_minutes: 120,
+            stops: 0,
+            segments: vec![],
+            deep_link: None,
+        };
+        let trip = RoundTrip {
+            id: "rt".to_string(),
+            price: 200.0,
+            currency: "USD".to_string(),
+            outbound,
+            inbound,
+            booking_url: None,
+            checked_bag_price: Some(30.0),
+            destination_country: None,
+            destination_city: None,
+        };
+
+        assert_eq!(trip.trip_days(), 4);
+        assert_eq!(trip.price_with_bag(), 230.0);
+        assert_eq!(trip.destination(), "LAX");
+        assert_eq!(trip.origin(), "SFO");
+    }
+
+    #[test]
+    fn cabin_class_and_sort_as_str() {
+        assert_eq!(CabinClass::Economy.as_str(), "ECONOMY");
+        assert_eq!(CabinClass::Business.as_str(), "BUSINESS");
+        assert_eq!(SortBy::Price.as_str(), "PRICE");
+        assert_eq!(SortBy::Duration.as_str(), "DURATION");
+    }
+}

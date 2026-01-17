@@ -1,0 +1,36 @@
+//! Data models for {{display_name}}.
+//!
+//! # CHANGELOG (recent first, max 5 entries)
+//! {{date}} - Initial implementation ({{author}})
+
+use serde::{Deserialize, Serialize};
+
+/// Represents an item from the {{display_name}} API.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Item {
+    pub id: String,
+    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+}
+
+/// Request to create a new item.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateItemRequest {
+    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+/// Request to update an existing item.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateItemRequest {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}

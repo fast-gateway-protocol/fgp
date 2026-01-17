@@ -1,5 +1,10 @@
 # FGP Notion Daemon
 
+## Doctrine
+
+See [DOCTRINE.md](./DOCTRINE.md).
+
+
 Fast Notion pages, databases, and blocks via FGP protocol.
 
 ## Quick Start

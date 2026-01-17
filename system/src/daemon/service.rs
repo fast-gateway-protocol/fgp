@@ -303,3 +303,55 @@ impl FgpService for SystemService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_param_helpers() {
+        let mut params = HashMap::new();
+        params.insert("limit".to_string(), Value::from(42));
+        params.insert("query".to_string(), Value::String("Safari".to_string()));
+
+        assert_eq!(SystemService::get_param_u32(&params, "limit", 20), 42);
+        assert_eq!(SystemService::get_param_u32(&params, "missing", 20), 20);
+        assert_eq!(SystemService::get_param_str(&params, "query"), Some("Safari"));
+        assert_eq!(SystemService::get_param_str(&params, "missing"), None);
+    }
+
+    #[test]
+    fn test_method_list_defaults() {
+        let service = SystemService::new().expect("service");
+        let methods = service.method_list();
+
+        let processes = methods.iter().find(|m| m.name == "processes").expect("processes");
+        let limit = processes
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit param");
+        assert_eq!(
+            limit.default.as_ref().and_then(Value::as_i64),
+            Some(20)
+        );
+
+        let bundle = methods.iter().find(|m| m.name == "bundle").expect("bundle");
+        let include = bundle
+            .params
+            .iter()
+            .find(|p| p.name == "include")
+            .expect("include param");
+        assert_eq!(
+            include.default.as_ref().and_then(Value::as_str),
+            Some("hardware,stats,battery")
+        );
+    }
+
+    #[test]
+    fn test_dispatch_unknown_method() {
+        let service = SystemService::new().expect("service");
+        let result = service.dispatch("system.unknown", HashMap::new());
+        assert!(result.is_err());
+    }
+}

@@ -1,0 +1,5 @@
+//! API client module for {{display_name}}.
+
+mod client;
+
+pub use client::{{service_struct}}Client;

@@ -362,3 +362,42 @@ pub fn rich_text(text: &str) -> Vec<Value> {
         "text": { "content": text }
     })]
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{normalize_id, rich_text, text_block};
+    use serde_json::Value;
+
+    #[test]
+    fn normalize_id_strips_dashes() {
+        let id = normalize_id("1234-5678-90ab-cdef");
+        assert_eq!(id, "1234567890abcdef");
+    }
+
+    #[test]
+    fn text_block_contains_content() {
+        let block = text_block("Hello");
+        let content = block
+            .get("paragraph")
+            .and_then(|p| p.get("rich_text"))
+            .and_then(|r| r.get(0))
+            .and_then(|t| t.get("text"))
+            .and_then(|t| t.get("content"))
+            .and_then(Value::as_str);
+
+        assert_eq!(content, Some("Hello"));
+    }
+
+    #[test]
+    fn rich_text_builds_array() {
+        let items = rich_text("Hi");
+        assert_eq!(items.len(), 1);
+        assert_eq!(
+            items[0]
+                .get("text")
+                .and_then(|t| t.get("content"))
+                .and_then(Value::as_str),
+            Some("Hi")
+        );
+    }
+}

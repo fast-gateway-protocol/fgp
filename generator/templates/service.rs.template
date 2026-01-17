@@ -1,0 +1,248 @@
+//! FGP service implementation for {{display_name}}.
+//!
+//! # CHANGELOG (recent first, max 5 entries)
+//! {{date}} - Initial implementation ({{author}})
+
+use anyhow::Result;
+use fgp_daemon::service::{HealthStatus, MethodInfo, ParamInfo};
+use fgp_daemon::FgpService;
+use serde_json::Value;
+use std::collections::HashMap;
+use std::sync::Arc;
+use tokio::runtime::Runtime;
+
+use crate::api::{{service_struct}}Client;
+
+/// FGP service for {{display_name}} operations.
+pub struct {{service_struct}}Service {
+    client: Arc<{{service_struct}}Client>,
+    runtime: Runtime,
+}
+
+impl {{service_struct}}Service {
+    /// Create a new {{service_struct}}Service.
+    ///
+    /// Token is resolved from:
+    /// 1. Explicit token parameter
+    /// 2. {{env_token}} environment variable
+    /// 3. Config file (if applicable)
+    pub fn new(token: Option<String>) -> Result<Self> {
+        let client = {{service_struct}}Client::new(token)?;
+        let runtime = Runtime::new()?;
+
+        Ok(Self {
+            client: Arc::new(client),
+            runtime,
+        })
+    }
+
+    // ========================================================================
+    // Parameter helpers
+    // ========================================================================
+
+    /// Get a string parameter from the params map.
+    fn get_str<'a>(params: &'a HashMap<String, Value>, key: &str) -> Option<&'a str> {
+        params.get(key).and_then(|v| v.as_str())
+    }
+
+    /// Get an i32 parameter with a default value.
+    fn get_i32(params: &HashMap<String, Value>, key: &str, default: i32) -> i32 {
+        params
+            .get(key)
+            .and_then(|v| v.as_i64())
+            .map(|v| v as i32)
+            .unwrap_or(default)
+    }
+
+    /// Get a bool parameter with a default value.
+    fn get_bool(params: &HashMap<String, Value>, key: &str, default: bool) -> bool {
+        params
+            .get(key)
+            .and_then(|v| v.as_bool())
+            .unwrap_or(default)
+    }
+
+    // ========================================================================
+    // Method implementations
+    // ========================================================================
+
+    fn health(&self) -> Result<Value> {
+        let client = self.client.clone();
+        let ok = self.runtime.block_on(async move { client.ping().await })?;
+
+        Ok(serde_json::json!({
+            "status": if ok { "healthy" } else { "unhealthy" },
+            "api_connected": ok,
+            "version": env!("CARGO_PKG_VERSION"),
+        }))
+    }
+
+    fn list(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let limit = Self::get_i32(&params, "limit", 10);
+        let client = self.client.clone();
+
+        let items = self
+            .runtime
+            .block_on(async move { client.list(limit).await })?;
+
+        Ok(serde_json::json!({
+            "items": items,
+            "count": items.len(),
+        }))
+    }
+
+    fn get(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let id = Self::get_str(&params, "id")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: id"))?;
+
+        let client = self.client.clone();
+        let id = id.to_string();
+
+        let item = self
+            .runtime
+            .block_on(async move { client.get(&id).await })?;
+
+        Ok(serde_json::json!(item))
+    }
+
+    fn create(&self, params: HashMap<String, Value>) -> Result<Value> {
+        let name = Self::get_str(&params, "name")
+            .ok_or_else(|| anyhow::anyhow!("Missing required parameter: name"))?;
+        let description = Self::get_str(&params, "description");
+
+        let client = self.client.clone();
+        let name = name.to_string();
+        let description = description.map(|s| s.to_string());
+
+        let item = self.runtime.block_on(async move {
+            client.create(&name, description.as_deref()).await
+        })?;
+
+        Ok(serde_json::json!({
+            "created": true,
+            "item": item,
+        }))
+    }
+}
+
+impl FgpService for {{service_struct}}Service {
+    fn name(&self) -> &str {
+        "{{service_name}}"
+    }
+
+    fn version(&self) -> &str {
+        env!("CARGO_PKG_VERSION")
+    }
+
+    fn dispatch(&self, method: &str, params: HashMap<String, Value>) -> Result<Value> {
+        match method {
+            "health" => self.health(),
+            "list" | "{{service_name}}.list" => self.list(params),
+            "get" | "{{service_name}}.get" => self.get(params),
+            "create" | "{{service_name}}.create" => self.create(params),
+            _ => anyhow::bail!("Unknown method: {}", method),
+        }
+    }
+
+    fn method_list(&self) -> Vec<MethodInfo> {
+        vec![
+            MethodInfo {
+                name: "{{service_name}}.list".into(),
+                description: "List items".into(),
+                params: vec![ParamInfo {
+                    name: "limit".into(),
+                    param_type: "integer".into(),
+                    required: false,
+                    default: Some(serde_json::json!(10)),
+                }],
+            },
+            MethodInfo {
+                name: "{{service_name}}.get".into(),
+                description: "Get item by ID".into(),
+                params: vec![ParamInfo {
+                    name: "id".into(),
+                    param_type: "string".into(),
+                    required: true,
+                    default: None,
+                }],
+            },
+            MethodInfo {
+                name: "{{service_name}}.create".into(),
+                description: "Create a new item".into(),
+                params: vec![
+                    ParamInfo {
+                        name: "name".into(),
+                        param_type: "string".into(),
+                        required: true,
+                        default: None,
+                    },
+                    ParamInfo {
+                        name: "description".into(),
+                        param_type: "string".into(),
+                        required: false,
+                        default: None,
+                    },
+                ],
+            },
+        ]
+    }
+
+    fn on_start(&self) -> Result<()> {
+        tracing::info!("{{service_struct}}Service starting, verifying API connection...");
+        let client = self.client.clone();
+        self.runtime.block_on(async move {
+            match client.ping().await {
+                Ok(true) => {
+                    tracing::info!("{{display_name}} API connection verified");
+                    Ok(())
+                }
+                Ok(false) => {
+                    tracing::warn!("{{display_name}} API returned unexpected response");
+                    Ok(())
+                }
+                Err(e) => {
+                    tracing::error!("Failed to connect to {{display_name}} API: {}", e);
+                    Err(e)
+                }
+            }
+        })
+    }
+
+    fn on_stop(&self) -> Result<()> {
+        tracing::info!("{{service_struct}}Service stopping");
+        Ok(())
+    }
+
+    fn health_check(&self) -> HashMap<String, HealthStatus> {
+        let mut checks = HashMap::new();
+
+        let client = self.client.clone();
+        let start = std::time::Instant::now();
+        let result = self.runtime.block_on(async move { client.ping().await });
+
+        let latency = start.elapsed().as_secs_f64() * 1000.0;
+
+        match result {
+            Ok(true) => {
+                checks.insert(
+                    "{{service_name}}_api".into(),
+                    HealthStatus::healthy_with_latency(latency),
+                );
+            }
+            Ok(false) => {
+                checks.insert(
+                    "{{service_name}}_api".into(),
+                    HealthStatus::unhealthy("Unexpected API response"),
+                );
+            }
+            Err(e) => {
+                checks.insert(
+                    "{{service_name}}_api".into(),
+                    HealthStatus::unhealthy(e.to_string()),
+                );
+            }
+        }
+
+        checks
+    }
+}

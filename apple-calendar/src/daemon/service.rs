@@ -329,3 +329,85 @@ impl FgpService for CalendarService {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::CalendarService;
+    use fgp_daemon::service::FgpService;
+    use serde_json::json;
+    use std::collections::HashMap;
+
+    #[test]
+    fn get_param_helpers_read_values() {
+        let mut params = HashMap::new();
+        params.insert("days".to_string(), json!(3));
+        params.insert("query".to_string(), json!("demo"));
+
+        assert_eq!(CalendarService::get_param_u32(&params, "days", 7), 3);
+        assert_eq!(CalendarService::get_param_u32(&params, "missing", 7), 7);
+        assert_eq!(CalendarService::get_param_str(&params, "query"), Some("demo"));
+        assert_eq!(CalendarService::get_param_str(&params, "missing"), None);
+    }
+
+    #[test]
+    fn method_list_includes_defaults_and_required_fields() {
+        let methods = CalendarService::new().expect("service").method_list();
+
+        let upcoming = methods.iter().find(|m| m.name == "upcoming").expect("upcoming");
+        let days_param = upcoming
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days");
+        let limit_param = upcoming
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert_eq!(days_param.default, Some(json!(7)));
+        assert_eq!(limit_param.default, Some(json!(50)));
+
+        let events = methods.iter().find(|m| m.name == "events").expect("events");
+        let start_param = events
+            .params
+            .iter()
+            .find(|p| p.name == "start")
+            .expect("start");
+        let end_param = events
+            .params
+            .iter()
+            .find(|p| p.name == "end")
+            .expect("end");
+        assert!(start_param.required);
+        assert!(end_param.required);
+
+        let search = methods.iter().find(|m| m.name == "search").expect("search");
+        let search_query = search
+            .params
+            .iter()
+            .find(|p| p.name == "query")
+            .expect("query");
+        let search_days = search
+            .params
+            .iter()
+            .find(|p| p.name == "days")
+            .expect("days");
+        let search_limit = search
+            .params
+            .iter()
+            .find(|p| p.name == "limit")
+            .expect("limit");
+        assert!(search_query.required);
+        assert_eq!(search_days.default, Some(json!(30)));
+        assert_eq!(search_limit.default, Some(json!(20)));
+    }
+
+    #[test]
+    fn dispatch_rejects_unknown_method() {
+        let service = CalendarService::new().expect("service");
+        let err = service
+            .dispatch("apple-calendar.nope", HashMap::new())
+            .expect_err("unknown method");
+        assert!(err.to_string().contains("Unknown method"));
+    }
+}
