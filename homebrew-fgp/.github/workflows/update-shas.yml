@@ -1,0 +1,105 @@
+name: Update SHA256 Hashes
+
+on:
+  repository_dispatch:
+    types: [daemon-release]
+  workflow_dispatch:
+    inputs:
+      daemon:
+        description: 'Daemon name (e.g., browser, gmail)'
+        required: true
+      version:
+        description: 'Version (e.g., 0.1.0)'
+        required: true
+
+jobs:
+  update-shas:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine daemon and version
+        id: info
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "daemon=${{ github.event.inputs.daemon }}" >> $GITHUB_OUTPUT
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "daemon=${{ github.event.client_payload.daemon }}" >> $GITHUB_OUTPUT
+            echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download and calculate SHA256
+        id: shas
+        run: |
+          DAEMON="${{ steps.info.outputs.daemon }}"
+          VERSION="${{ steps.info.outputs.version }}"
+          BASE_URL="https://github.com/fast-gateway-protocol/${DAEMON}/releases/download/v${VERSION}"
+
+          echo "Calculating SHA256 for fgp-${DAEMON} v${VERSION}..."
+
+          # Download and hash each platform
+          for platform in macos-arm64 macos-x64 linux-x64; do
+            url="${BASE_URL}/fgp-${DAEMON}-${platform}.tar.gz"
+            echo "Downloading $url..."
+
+            if curl -fsSL "$url" -o "temp.tar.gz" 2>/dev/null; then
+              sha=$(sha256sum temp.tar.gz | cut -d' ' -f1)
+              echo "${platform}_sha=${sha}" >> $GITHUB_OUTPUT
+              echo "  $platform: $sha"
+            else
+              echo "  $platform: not found (skipping)"
+            fi
+            rm -f temp.tar.gz
+          done
+
+      - name: Update formula
+        run: |
+          DAEMON="${{ steps.info.outputs.daemon }}"
+          VERSION="${{ steps.info.outputs.version }}"
+          FORMULA="Formula/fgp-${DAEMON}.rb"
+
+          if [ ! -f "$FORMULA" ]; then
+            echo "Formula not found: $FORMULA"
+            exit 1
+          fi
+
+          echo "Updating $FORMULA..."
+
+          # Update version
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" "$FORMULA"
+
+          # Update SHA256 hashes if available
+          if [ -n "${{ steps.shas.outputs.macos-arm64_sha }}" ]; then
+            # Find and replace arm64 sha256
+            sed -i "/on_arm/,/sha256/ s/sha256 \"[^\"]*\"/sha256 \"${{ steps.shas.outputs.macos-arm64_sha }}\"/" "$FORMULA"
+          fi
+
+          if [ -n "${{ steps.shas.outputs.macos-x64_sha }}" ]; then
+            # Find and replace x64 sha256 for macOS
+            sed -i "/on_intel/,/sha256/ s/sha256 \"[^\"]*\"/sha256 \"${{ steps.shas.outputs.macos-x64_sha }}\"/" "$FORMULA"
+          fi
+
+          echo "Updated $FORMULA"
+          cat "$FORMULA"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update fgp-${{ steps.info.outputs.daemon }} to v${{ steps.info.outputs.version }}"
+          title: "Update fgp-${{ steps.info.outputs.daemon }} to v${{ steps.info.outputs.version }}"
+          body: |
+            Automated update of fgp-${{ steps.info.outputs.daemon }} formula.
+
+            - Version: ${{ steps.info.outputs.version }}
+            - SHA256 (macos-arm64): ${{ steps.shas.outputs.macos-arm64_sha || 'N/A' }}
+            - SHA256 (macos-x64): ${{ steps.shas.outputs.macos-x64_sha || 'N/A' }}
+            - SHA256 (linux-x64): ${{ steps.shas.outputs.linux-x64_sha || 'N/A' }}
+
+            Triggered by: ${{ github.event_name }}
+          branch: update-fgp-${{ steps.info.outputs.daemon }}-${{ steps.info.outputs.version }}
+          delete-branch: true

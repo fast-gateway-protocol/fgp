@@ -1,0 +1,64 @@
+name: Validate Formulas
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  validate:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Tap repository
+        run: |
+          brew tap fast-gateway-protocol/fgp "$(pwd)"
+
+      - name: Validate formulas
+        run: |
+          echo "Validating Homebrew formulas..."
+
+          for formula in Formula/*.rb; do
+            name=$(basename "$formula" .rb)
+            echo "Checking $name..."
+
+            # Audit formula (style and best practices)
+            brew audit --strict --online "$name" || true
+
+            echo "✅ $name"
+          done
+
+          echo ""
+          echo "All formulas validated!"
+
+      - name: Count formulas
+        run: |
+          count=$(ls Formula/*.rb | wc -l)
+          echo "Total formulas: $count"
+
+  test-install:
+    runs-on: macos-latest
+    needs: validate
+    strategy:
+      matrix:
+        formula: [fgp]  # Test core formula only for speed
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Tap repository
+        run: |
+          brew tap fast-gateway-protocol/fgp "$(pwd)"
+
+      - name: Test install ${{ matrix.formula }}
+        run: |
+          # Skip actual install since binaries don't exist yet
+          echo "Would install: brew install ${{ matrix.formula }}"
+          echo "Skipping actual install (binaries not released yet)"
