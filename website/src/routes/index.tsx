@@ -84,10 +84,30 @@ function PackageCard({ pkg }: { pkg: typeof packages[0] }) {
 }
 
 function HomePage() {
-  const featuredPackages = packages.filter(p => p.featured).slice(0, 4);
+  const featuredPackages = packages.filter(p => p.featured).slice(0, 6);
 
   return (
     <>
+      {/* v1.0.0 Release Banner */}
+      <div className="bg-gradient-to-r from-[var(--color-accent)]/10 via-[var(--color-accent-secondary)]/10 to-[var(--color-accent)]/10 border-b border-[var(--color-border)]">
+        <div className="container py-3 flex items-center justify-center gap-3 text-sm">
+          <span className="px-2 py-0.5 rounded-full bg-[var(--color-accent)] text-white text-xs font-semibold">
+            NEW
+          </span>
+          <span className="text-[var(--color-text-secondary)]">
+            FGP v1.0.0 released with <strong className="text-[var(--color-text-primary)]">34 daemons</strong> and Vercel agent-skills compatibility
+          </span>
+          <a
+            href="https://github.com/fast-gateway-protocol/fgp-skills/releases/tag/v1.0.0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--color-accent)] hover:underline font-medium"
+          >
+            View release →
+          </a>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="section pt-24 md:pt-32 pb-20 overflow-hidden">
         <div className="container">
@@ -143,9 +163,9 @@ function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
               >
-                <StatCard value="3ms" label="FGP latency" />
-                <StatCard value="0ms" label="Cold start" />
-                <StatCard value="3-12×" label="Warm speedup" />
+                <StatCard value="34" label="Daemons" />
+                <StatCard value="<10ms" label="Latency" />
+                <StatCard value="10-100×" label="Speedup" />
               </motion.div>
 
               <motion.div
