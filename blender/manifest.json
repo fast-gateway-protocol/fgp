@@ -1,0 +1,299 @@
+{
+  "name": "blender",
+  "version": "0.1.0",
+  "description": "Fast Blender automation daemon with 55+ methods for 3D modeling, rendering, and animation",
+  "protocol": "fgp@1",
+  "author": "Fast Gateway Protocol",
+  "license": "MIT",
+  "repository": "https://github.com/fast-gateway-protocol/blender",
+  "homepage": "https://fgp.dev/marketplace/blender",
+  "daemon": {
+    "entrypoint": "fgp-blender start",
+    "socket": "blender/daemon.sock",
+    "language": "python",
+    "dependencies": ["bpy"]
+  },
+  "methods": [
+    {
+      "name": "session.new",
+      "description": "Create a new isolated session",
+      "params": [
+        {"name": "name", "type": "string", "required": false, "default": "Untitled"}
+      ]
+    },
+    {
+      "name": "session.list",
+      "description": "List all sessions",
+      "params": []
+    },
+    {
+      "name": "session.switch",
+      "description": "Switch to a session",
+      "params": [
+        {"name": "session_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "scene.new",
+      "description": "Create a new scene",
+      "params": [
+        {"name": "name", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "scene.load",
+      "description": "Load a .blend file",
+      "params": [
+        {"name": "filepath", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "scene.save",
+      "description": "Save current scene",
+      "params": [
+        {"name": "filepath", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "scene.info",
+      "description": "Get scene information",
+      "params": []
+    },
+    {
+      "name": "object.create",
+      "description": "Create primitive object (CUBE, SPHERE, CYLINDER, etc.)",
+      "params": [
+        {"name": "type", "type": "string", "required": false, "default": "CUBE"},
+        {"name": "name", "type": "string", "required": false},
+        {"name": "location", "type": "array", "required": false},
+        {"name": "rotation", "type": "array", "required": false},
+        {"name": "scale", "type": "array", "required": false}
+      ]
+    },
+    {
+      "name": "object.delete",
+      "description": "Delete objects by name",
+      "params": [
+        {"name": "names", "type": "array", "required": true}
+      ]
+    },
+    {
+      "name": "object.list",
+      "description": "List objects in scene",
+      "params": [
+        {"name": "type", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "object.transform",
+      "description": "Transform object (location, rotation, scale)",
+      "params": [
+        {"name": "name", "type": "string", "required": true},
+        {"name": "location", "type": "array", "required": false},
+        {"name": "rotation", "type": "array", "required": false},
+        {"name": "scale", "type": "array", "required": false}
+      ]
+    },
+    {
+      "name": "mesh.modifier.add",
+      "description": "Add modifier to mesh",
+      "params": [
+        {"name": "object", "type": "string", "required": true},
+        {"name": "type", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "mesh.boolean",
+      "description": "Boolean operation between meshes",
+      "params": [
+        {"name": "object", "type": "string", "required": true},
+        {"name": "target", "type": "string", "required": true},
+        {"name": "operation", "type": "string", "required": false, "default": "DIFFERENCE"}
+      ]
+    },
+    {
+      "name": "mesh.subdivide",
+      "description": "Add subdivision surface",
+      "params": [
+        {"name": "object", "type": "string", "required": true},
+        {"name": "levels", "type": "integer", "required": false, "default": 2}
+      ]
+    },
+    {
+      "name": "material.create",
+      "description": "Create a new material",
+      "params": [
+        {"name": "name", "type": "string", "required": false},
+        {"name": "color", "type": "array", "required": false},
+        {"name": "metallic", "type": "number", "required": false},
+        {"name": "roughness", "type": "number", "required": false}
+      ]
+    },
+    {
+      "name": "material.assign",
+      "description": "Assign material to object",
+      "params": [
+        {"name": "object", "type": "string", "required": true},
+        {"name": "material", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "shader.node.add",
+      "description": "Add shader node",
+      "params": [
+        {"name": "material", "type": "string", "required": true},
+        {"name": "type", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "shader.node.connect",
+      "description": "Connect shader nodes",
+      "params": [
+        {"name": "material", "type": "string", "required": true},
+        {"name": "from_node", "type": "string", "required": true},
+        {"name": "from_socket", "type": "string", "required": true},
+        {"name": "to_node", "type": "string", "required": true},
+        {"name": "to_socket", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "render.image",
+      "description": "Render single image (async)",
+      "params": [
+        {"name": "output", "type": "string", "required": false},
+        {"name": "wait", "type": "boolean", "required": false, "default": false}
+      ]
+    },
+    {
+      "name": "render.animation",
+      "description": "Render animation (async)",
+      "params": [
+        {"name": "output", "type": "string", "required": false},
+        {"name": "frame_start", "type": "integer", "required": false},
+        {"name": "frame_end", "type": "integer", "required": false}
+      ]
+    },
+    {
+      "name": "render.settings",
+      "description": "Get or set render settings",
+      "params": [
+        {"name": "engine", "type": "string", "required": false},
+        {"name": "resolution", "type": "array", "required": false},
+        {"name": "samples", "type": "integer", "required": false}
+      ]
+    },
+    {
+      "name": "job.status",
+      "description": "Get async job status",
+      "params": [
+        {"name": "job_id", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "camera.create",
+      "description": "Create camera",
+      "params": [
+        {"name": "name", "type": "string", "required": false},
+        {"name": "location", "type": "array", "required": false},
+        {"name": "lens", "type": "number", "required": false}
+      ]
+    },
+    {
+      "name": "camera.look_at",
+      "description": "Point camera at target",
+      "params": [
+        {"name": "camera", "type": "string", "required": false},
+        {"name": "target", "type": "any", "required": true}
+      ]
+    },
+    {
+      "name": "light.create",
+      "description": "Create light (POINT, SUN, SPOT, AREA)",
+      "params": [
+        {"name": "type", "type": "string", "required": false, "default": "POINT"},
+        {"name": "location", "type": "array", "required": false},
+        {"name": "energy", "type": "number", "required": false}
+      ]
+    },
+    {
+      "name": "light.hdri",
+      "description": "Set HDRI environment",
+      "params": [
+        {"name": "filepath", "type": "string", "required": true},
+        {"name": "strength", "type": "number", "required": false, "default": 1.0}
+      ]
+    },
+    {
+      "name": "animation.keyframe.insert",
+      "description": "Insert keyframe",
+      "params": [
+        {"name": "object", "type": "string", "required": true},
+        {"name": "data_path", "type": "string", "required": false, "default": "location"},
+        {"name": "frame", "type": "integer", "required": false}
+      ]
+    },
+    {
+      "name": "animation.set_frame",
+      "description": "Set current frame",
+      "params": [
+        {"name": "frame", "type": "integer", "required": true}
+      ]
+    },
+    {
+      "name": "armature.create",
+      "description": "Create armature for rigging",
+      "params": [
+        {"name": "name", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "import",
+      "description": "Import file (FBX, OBJ, GLTF, USD, STL)",
+      "params": [
+        {"name": "filepath", "type": "string", "required": true}
+      ]
+    },
+    {
+      "name": "export",
+      "description": "Export scene (FBX, OBJ, GLTF, USD, STL)",
+      "params": [
+        {"name": "filepath", "type": "string", "required": true},
+        {"name": "selected_only", "type": "boolean", "required": false}
+      ]
+    },
+    {
+      "name": "assets.polyhaven.search",
+      "description": "Search Poly Haven assets (HDRIs, textures)",
+      "params": [
+        {"name": "query", "type": "string", "required": false},
+        {"name": "category", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "viewport.screenshot",
+      "description": "Capture viewport screenshot",
+      "params": [
+        {"name": "output", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "python.exec",
+      "description": "Execute Python code in Blender",
+      "params": [
+        {"name": "code", "type": "string", "required": true}
+      ]
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "setup": "No authentication required. Blender must be installed."
+  },
+  "platforms": ["darwin", "linux", "win32"],
+  "categories": ["3d", "modeling", "rendering", "automation"],
+  "keywords": ["blender", "3d", "modeling", "rendering", "animation", "bpy"],
+  "benchmark": {
+    "avg_latency_ms": 10,
+    "vs_mcp_speedup": "20-50x",
+    "note": "Cold start elimination + local SQLite operations"
+  }
+}
